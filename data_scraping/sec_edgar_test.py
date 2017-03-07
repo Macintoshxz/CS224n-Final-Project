@@ -2,24 +2,26 @@ from crawler import SecCrawler
 import time 
 
 def get_filings(): 
-	t1 = time.time() 
-
 	# create object 
 	seccrawler = SecCrawler() 
+	date = '20170307' # date from which filings should be downloaded 
+	date = '20160922'
 
-	companyCode = 'AAPL' # company code for apple 
-	cik = '0000320193' # cik code for apple 
-	date = '20010227' # date from which filings should be downloaded 
-	count = '1' # no of filings 
+	count = '1' # no of filings
 
-	seccrawler.filing_10Q(str(companyCode), str(cik), str(date), str(count))
-	seccrawler.filing_10K(str(companyCode), str(cik), str(date), str(count))
-	# seccrawler.filing_8K(str(companyCode), str(cik), str(date), str(count)) 
-	# seccrawler.filing_13F(str(companyCode), str(cik), str(date), str(count)) 
+	sp_500 = open('sp_500.txt')
+	lines = sp_500.readlines()
+	sp_500.close()
+	companies = [line.split('\t')[1:3] for line in lines]
 
-	t2 = time.time() 
-	print "Total Time taken: ", 
-	print (t2-t1) 
+	for companyCode, cik in companies:
+		t1 = time.time() 
+		seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "10-K")
+		# seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "10-Q")
+		# seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "8-K") 
+		t2 = time.time() 
+		print "Total Time taken for ", companyCode, ": ", str(t2-t1)
+		break
 
 if __name__ == '__main__': 
 	get_filings()

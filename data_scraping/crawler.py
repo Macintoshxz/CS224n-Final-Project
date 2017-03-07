@@ -5,13 +5,14 @@ from bs4 import BeautifulSoup
 import re
 import requests
 import os
+import time
 
 class SecCrawler():
 
 	def __init__(self):
 		self.hello = "Welcome to Sec Cralwer!"
 
-	def make_directory(self, companyCode, cik, priorto, filing_type):
+	def make_directory(self, companyCode, cik, priorto, filingType):
 		# Making the directory to save comapny filings
 		if not os.path.exists("SEC-Edgar-data/"):
 			os.makedirs("SEC-Edgar-data/")
@@ -19,195 +20,103 @@ class SecCrawler():
 			os.makedirs("SEC-Edgar-data/"+str(companyCode))
 		if not os.path.exists("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)):
 			os.makedirs("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik))
-		print 'what'
-		if not os.path.exists("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filing_type)):
-			print 'making dir?'
-			os.makedirs("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filing_type))
+		if not os.path.exists("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType)):
+			os.makedirs("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType))
+
+	def parseData(self, soup):
+		decomposeList = ["table"]
+		for toDecompose in soup.find_all(decomposeList):
+			toDecompose.decompose()
+		return soup
 	
-	def save_in_directory(self, companyCode, cik, priorto, docList, docNameList, filing_type):
+
+	def save_in_directory(self, companyCode, cik, priorto, filingURLList, docNameList, filingType):
 		# Save every text document into its respective folder
-		for j in range(len(docList)):
-			base_url = docList[j]
-			r = requests.get(base_url)
+		for i in range(len(filingURLList)):
+			t1 = time.time()
+			target_url = filingURLList[i]
+
+			r = requests.get(target_url)
 			data = r.text
-			# data = BeautifulSoup(data, "lxml")
-			# for div in soup.find_all("div", {'class':'DOCUMENT'}): 
-			    # div.decompose()
-			# data = data.get_text()
-			path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filing_type)+"/"+str(docNameList[j])
+			soup = BeautifulSoup(data, "lxml")
+
+			parsedData = self.parseData(soup)
+			parsedData = parsedData.get_text()
+			parsedData= parsedData.encode('ascii', 'ignore')
+			parsedData = re.sub(r'\n+', ' ', parsedData)
+
+			path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType)+"/"+str(docNameList[i])
 			filename = open(path,"w+")
-			filename.write(data.encode('ascii', 'ignore'))	
+			filename.write(parsedData)
+			t2 = time.time()
+			print "Downloaded " + companyCode + "'s " + filingType + "s: " + str(i) + "/" + str(len(filingURLList)) + ". Time: " + str(t2-t1)
 
 
-	def filing_10Q(self, companyCode, cik, priorto, count):
+	#filingType must be "10-K", "10-Q", "8-K", "13F"
+
+	def getFiling(self, companyCode, cik, priorto, count, filingType):
 		try:
-			self.make_directory(companyCode,cik, priorto, '10-Q')
+			self.make_directory(companyCode,cik, priorto, filingType)
 		except:
 			print "Not able to create directory"
 		
-		#generate the url to crawl
-		base_url = "http://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK="+str(cik)+"&type=10-Q&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)	
-		print ("started 10-Q"+str(companyCode))
-		r = requests.get(base_url)
+		#generate the url to crawl 
+		base_url = "http://www.sec.gov"
+		target_url = base_url + "/cgi-bin/browse-edgar?action=getcompany&CIK="+str(cik)+"&type="+filingType+"&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)	
+		print ("Now trying to download "+ filingType + " forms for " + str(companyCode))
+		r = requests.get(target_url)
 		data = r.text
-		print data
 		soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
 		linkList=[] # List of all links from the CIK page
 
 		# If the link is .htm convert it to .html
 		for link in soup.find_all('filinghref'):
 			URL = link.string
+			print link
 			if link.string.split(".")[len(link.string.split("."))-1] == "htm":
 				URL+="l"
 	    		linkList.append(URL)
 		linkListFinal = linkList
 		
-		print "Number of files to download: ", len(linkListFinal)
+		numFiles = min(len(linkListFinal), count)
+		print "Number of files to download: ", numFiles
 		print "Starting download...."
 
-		docList = [] # List of URL to the text documents
+		filingURLList = [] # List of URLs scraped from index.
 		docNameList = [] # List of document names
-
-		# Get all the doc
-		for k in range(len(linkListFinal)):
-			requiredURL = str(linkListFinal[k])[0:len(linkListFinal[k])-11]
-			txtdoc = requiredURL+".txt"
-			docname = txtdoc.split("/")[len(txtdoc.split("/"))-1]
-			docList.append(txtdoc)
-			docNameList.append(docname)
-		
-		try:
-			self.save_in_directory(companyCode, cik, priorto, docList, docNameList, '10-Q')
-		except:
-			print "Not able to save the file :( "
-
-		print "Successfully downloaded all the files"
+		print linkListFinal
 
 
-	def filing_10K(self, companyCode, cik, priorto, count):
-		try:
-			self.make_directory(companyCode,cik, priorto, '10-K')
-		except:
-			print "Not able to create directory"
-		
-		#generate the url to crawl 
-		base_url = "http://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK="+str(cik)+"&type=10-K&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)	
-		print ("started !0-K"+str(companyCode))
-		r = requests.get(base_url)
-		data = r.text
-		soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
-		linkList=[] # List of all links from the CIK page
+		for link in linkListFinal:
+			r = requests.get(link)
+			data = r.text
+			newSoup = BeautifulSoup(data, "lxml") # Initializing to crawl again
+			linkList=[] # List of all links from the CIK page
 
-		# If the link is .htm convert it to .html
-		for link in soup.find_all('filinghref'):
-			URL = link.string
-			if link.string.split(".")[len(link.string.split("."))-1] == "htm":
-				URL+="l"
-	    		linkList.append(URL)
-		linkListFinal = linkList
-		
-		print "Number of files to download: ", len(linkListFinal)
-		print "Starting download...."
+			# Finds the filing date for this set of documents
+			grouping = newSoup.find('div', {'class': 'formGrouping'})
+			filingDate = grouping.find('div', {'class': 'info'}).string
+			docName = companyCode + "_" + filingDate + "_" + filingType + ".txt"
+			docNameList.append(docName)
 
-		docList = [] # List of URL to the text documents
-		docNameList = [] # List of document names
+			# Finds filingType documents from the index page
+			for linkedDoc in newSoup.find_all('a'):
+				URL = linkedDoc['href']
+				if '/Archives/' in URL and (filingType.lower() + '.htm') in URL:
+					filingURLList.append(base_url + URL)
 
-		for k in range(len(linkListFinal)):
-			requiredURL = str(linkListFinal[k])[0:len(linkListFinal[k])-11]
-			txtdoc = requiredURL+".txt"
-			docname = txtdoc.split("/")[len(txtdoc.split("/"))-1]
-			docList.append(txtdoc)
-			docNameList.append(docname)
-		
-		try:
-			self.save_in_directory(companyCode, cik, priorto, docList, docNameList, '10-K')
-		except:
-			print "Not able to save the file :( "
+		for url in filingURLList:
+			print url
 
-		print "Successfully downloaded all the files"
+			# soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
+			# requiredURL = str(linkListFinal[i])[0:len(linkListFinal[i])-11]
+			# print requiredURL
+			# txtdoc = requiredURL+".txt"
+			# docname = txtdoc.split("/")[len(txtdoc.split("/"))-1]
+			# docList.append(txtdoc)
+			# docNameList.append(docname)
 
-	def filing_8K(self, companyCode, cik, priorto, count):
-		try:
-			self.make_directory(companyCode,cik, priorto, '8-K')
-		except:
-			print "Not able to create directory"
-		
-		#generate the url to crawl 
-		base_url = "http://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK="+str(cik)+"&type=8-K&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)	
-		print ("started 8-K" + str(companyCode))
-		r = requests.get(base_url)
-		data = r.text
-		soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
-		linkList=[] # List of all links from the CIK page
-
-		# If the link is .htm convert it to .html
-		for link in soup.find_all('filinghref'):
-			URL = link.string
-			if link.string.split(".")[len(link.string.split("."))-1] == "htm":
-				URL+="l"
-	    		linkList.append(URL)
-		linkListFinal = linkList
-		
-		print ("Number of files to download %s", len(linkListFinal))
-		print ("Starting download....")
-
-		docList = [] # List of URL to the text documents
-		docNameList = [] # List of document names
-
-		for k in range(len(linkListFinal)):
-			requiredURL = str(linkListFinal[k])[0:len(linkListFinal[k])-11]
-			txtdoc = requiredURL+".txt"
-			docname = txtdoc.split("/")[len(txtdoc.split("/"))-1]
-			docList.append(txtdoc)
-			docNameList.append(docname)
-		
-		try:
-			self.save_in_directory(companyCode, cik, priorto, docList, docNameList, '8-K')
-		except:
-			print "Not able to save the file :( "
-
-		print "Successfully downloaded all the files"
-
-	def filing_13F(self, companyCode, cik, priorto, count):
-		try:
-			self.make_directory(companyCode,cik, priorto, '13-F')
-		except:
-			print "Not able to create directory"
-		
-		#generate the url to crawl 
-		base_url = "http://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK="+str(cik)+"&type=13F&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)	
-		print ("started 10-Q"+str(companyCode))
-		r = requests.get(base_url)
-		data = r.text
-		soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
-		linkList=[] # List of all links from the CIK page
-
-		# If the link is .htm convert it to .html
-		for link in soup.find_all('filinghref'):
-			URL = link.string
-			if link.string.split(".")[len(link.string.split("."))-1] == "htm":
-				URL+="l"
-	    		linkList.append(URL)
-		linkListFinal = linkList
-		
-		print ("Number of files to download %s", len(linkListFinal))
-		print ("Starting download....")
-
-		docList = [] # List of URL to the text documents
-		docNameList = [] # List of document names
-
-		# Get all the doc
-		for k in range(len(linkListFinal)):
-			requiredURL = str(linkListFinal[k])[0:len(linkListFinal[k])-11]
-			txtdoc = requiredURL+".txt"
-			docname = txtdoc.split("/")[len(txtdoc.split("/"))-1]
-			docList.append(txtdoc)
-			docNameList.append(docname)
-
-		try:
-			self.save_in_directory(companyCode, cik, priorto, docList, docNameList, '13-F')
-		except:
-			print "Not able to save the file :( "
-
-		print "Successfully downloaded all the files"
-
+		# try:
+		self.save_in_directory(companyCode, cik, priorto, filingURLList, docNameList, filingType)
+		# except:
+			# print "Not able to save " + filingType + " files for " + companyCode
