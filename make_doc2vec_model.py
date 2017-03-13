@@ -65,19 +65,20 @@ class LabeledLineSentence(object):
             with utils.smart_open(source) as fin:
                 for item_no, line in enumerate(fin):
                 	print line
-                	yield LabeledSentence(word_tokenize(line.strip()), [prefix + '_%s' % item_no])
+                	yield LabeledSentence(word_tokenize(line.strip()), [source]) #prefix + '_%s' % item_no
     
     def to_array(self):
         self.sentences = []
         for source, prefix in self.sources.items():
             with utils.smart_open(source) as fin:
                 for item_no, line in enumerate(fin):
-                    self.sentences.append(LabeledSentence(word_tokenize(line.strip()), [prefix + '_%s' % item_no]))
+                    self.sentences.append(LabeledSentence(word_tokenize(line.strip()), [source])) #prefix + '_%s' % item_no
         return self.sentences
     
     def sentences_perm(self):
         shuffle(self.sentences)
         return self.sentences
+
 
 	
 
@@ -94,9 +95,9 @@ if __name__ == '__main__':
 	sources = {superfile_path: "TEST" } #fill with one superfile per company, gives us word embeddings in the context of particular company.
 	sentences = LabeledLineSentence(sources)
 
-	model = Doc2Vec(min_count=1, window=10, size=100, sample=1e-4, negative=5, workers=8)
+	model = Doc2Vec(min_count=1, window=10, size=300, sample=1e-4, negative=5, workers=8, dm = 1)
 	t0 = time.time()
-	print sentences.to_array()
+	#print sentences.to_array()
 	model.build_vocab(sentences.to_array())
 	t1 = time.time()
 	print "Time is " + str(t1-t0)
@@ -110,7 +111,17 @@ if __name__ == '__main__':
 		model.train(sentences.sentences_perm())
 		t1 = time.time()
 		print "Epoch time: " + str(t1-t0)
-	model.save('./MSFT.d2v')
+	model.save('./SP500.d2v')
+
+	with open("/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/SP500_vocab.txt", 'w') as outfile:
+		for word in model.wv.vocab:
+			outfile.write(word)
+
+
+	with open("/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/SP500_wordvecs.txt", 'w') as outfile:
+		for word in model.wv.vocab:
+			outfile.write(model[word])
+
 
 
 
