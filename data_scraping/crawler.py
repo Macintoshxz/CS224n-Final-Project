@@ -112,6 +112,7 @@ class SecCrawler():
             if len(found) != 0:
                 # if 'therapeutic' in curLine:
                 #     print curLine
+                curLine = curLine.replace("?", " ")
                 curLine = curLine.replace("\n", " ")
                 outArray.append(curLine)
                 curLine = ""
