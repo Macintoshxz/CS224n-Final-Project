@@ -10,7 +10,7 @@ import time
 
 class SecCrawler():
 
-    REQUEST_SLEEP_TIME = 300
+    REQUEST_SLEEP_TIME = 600
     HTTP_OKAY = 200
 
     def __init__(self):

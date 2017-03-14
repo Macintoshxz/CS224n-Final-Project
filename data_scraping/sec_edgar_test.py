@@ -33,8 +33,8 @@ def get_filings(num_threads):
 	sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
 	sp_500.close()
-	companies = [line.split('\t')[1:3] for line in lines[0:4]]
-	# companies = [line.split('\t')[1:3] for line in lines]
+	# companies = [line.split('\t')[1:3] for line in lines[0:4]]
+	companies = [line.split('\t')[1:3] for line in lines]
 	print 'GETTING THESE COMPANIES:' , companies
 
 	companiesToDownload = 10
@@ -42,6 +42,7 @@ def get_filings(num_threads):
 	blocking = True
 	scrapeCount = 0
 	queries = [[companyCode, cik] for companyCode, cik in companies]
+
 	results = calculateParallel(queries, num_threads)
 	end = time.time()
 	print '\n\n\n FINAL TIME:'
