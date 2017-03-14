@@ -18,7 +18,7 @@ def getSingleCompanyFiling(inputData):
 	print logString
 	return logString
 
-def calculateParallel(inputs, threads=4):
+def calculateParallel(inputs, threads=128):
     pool = ThreadPool(threads)
     results = pool.map(getSingleCompanyFiling, inputs)
     pool.close()
@@ -33,9 +33,9 @@ def get_filings():
 	sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
 	sp_500.close()
-	companies = [line.split('\t')[1:3] for line in lines[0:3]]
+	# companies = [line.split('\t')[1:3] for line in lines[0:3]]
 	print 'GETTING THESE COMPANIES:' , companies
-	# companies = [line.split('\t')[1:3] for line in lines]
+	companies = [line.split('\t')[1:3] for line in lines]
 
 
 	companiesToDownload = 10
@@ -43,7 +43,7 @@ def get_filings():
 	blocking = True
 	scrapeCount = 0
 	queries = [[companyCode, cik] for companyCode, cik in companies]
-	squaredNumbers = calculateParallel(queries, 4)
+	squaredNumbers = calculateParallel(queries, 128)
 	end = time.time()
 	print '\n\n\n FINAL TIME:'
 	print end - start
