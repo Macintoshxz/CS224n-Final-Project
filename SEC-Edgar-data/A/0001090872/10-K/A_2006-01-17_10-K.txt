@@ -1,5 +1,5 @@
-http://www.sec.gov/Archives/edgar/data/1090872/000104746906000516/a2166540z10-k.htm
-A2006-01-1710-K9439000000.0
+http://www.sec.gov/Archives/edgar/data/1090872/000104746906000516/a2166540z10-k.html
+9439000000.0
 A_2006-01-17_10-K.txt
 
 10-K 1 a2166540z10-k.htm 10-K QuickLinks -- Click here to rapidly navigate through this document UNITED STATES SECURITIES AND EXCHANGE COMMISSION Washington, D.C. 20549 Form10-K (Mark One)  ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 For the fiscal year ended October31, 2005 or o TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 For the transition period fromto Commission File Number: 001-15405 Agilent Technologies,Inc.
