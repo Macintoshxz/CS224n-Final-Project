@@ -1,11 +1,11 @@
 from crawler import SecCrawler
 # import crawler
-from multiprocessing.dummy import Pool as ThreadPool
+from multiprocessing import Pool as ThreadPool
 import time 
 
 def getSingleCompanyFiling(inputData):
 	date = '20170313' # date from which filings should be downloaded 
-	count = '1' # no of filings
+	count = '100' # no of filings
 
 	seccrawler = SecCrawler() 
 	companyCode, cik = inputData
@@ -18,7 +18,7 @@ def getSingleCompanyFiling(inputData):
 	print logString
 	return logString
 
-def calculateParallel(inputs, threads=128):
+def calculateParallel(inputs, threads=4):
     pool = ThreadPool(threads)
     results = pool.map(getSingleCompanyFiling, inputs)
     pool.close()
@@ -33,7 +33,7 @@ def get_filings():
 	sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
 	sp_500.close()
-	# companies = [line.split('\t')[1:3] for line in lines[0:3]]
+	# companies = [line.split('\t')[1:3] for line in lines[0:4]]
 	companies = [line.split('\t')[1:3] for line in lines]
 	print 'GETTING THESE COMPANIES:' , companies
 

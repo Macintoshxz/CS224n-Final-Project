@@ -39,8 +39,8 @@ class SecCrawler():
                     line = line[idx:]
                 snippets = self.findPotentialMarketCapSentences(line)
                 if len(snippets) > 0:
-                    print 'Trimmed line: ', line
-                    print 'Snippets: ', snippets
+                    # print 'Trimmed line: ', line
+                    # print 'Snippets: ', snippets
                     return snippets[0]
         for line in strings:
             line = line.lower()
@@ -50,12 +50,12 @@ class SecCrawler():
                     line = line[idx:]
                 snippets = self.findPotentialMarketCapSentences(line)
                 if len(snippets) > 0:
-                    print line
+                    # print line
                     return snippets[0]
         return None
 
     def convertTextToAmount(self, text):
-        print "TEXT IS: "
+        # print "TEXT IS: "
         if isinstance(text, tuple):
             text = text[0]
         amount = re.findall('[\d\,*\.*]+', text)
@@ -63,7 +63,7 @@ class SecCrawler():
             return -1
         amount = amount[0].strip().replace(',','')
         amount = amount.strip('.')
-        print 'Amount: ', amount
+        # print 'Amount: ', amount
         multiplier = 1
         if 'billion' in text:
             multiplier = 1000000000
@@ -74,28 +74,28 @@ class SecCrawler():
     def findPotentialMarketCapSentences(self, sentence):
         potentialMarketCaps = re.findall(r'was\s*\$?((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
         if len(potentialMarketCaps) is 0:
-            print 1
+            # print 1
             potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            print 2
+            # print 2
             potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            print 3
+            # print 3
             potentialMarketCaps = re.findall(r'approximately\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
         if len(potentialMarketCaps) is 0:
-            print 4
+            # print 4
             potentialMarketCaps = re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            print 5
+            # print 5
             potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            print 3
+            # print 3
             potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
         if len(potentialMarketCaps) is 0:
-            print 4
+            # print 4
             potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            print 5
+            # print 5
             potentialMarketCaps = re.findall(r'\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         return potentialMarketCaps
             
@@ -123,7 +123,7 @@ class SecCrawler():
         for i in range(len(filingURLList)):
             t1 = time.time()
             target_url = filingURLList[i]
-            print target_url
+            # print target_url
 
             r = requests.get(target_url)
             data = r.text
@@ -194,7 +194,7 @@ class SecCrawler():
             if link.string.split(".")[len(link.string.split("."))-1] == "htm":
                 URL+="l"
                 linkList.append(URL)
-                print URL
+                # print URL
         linkListFinal = linkList
         
         numFiles = min(len(linkListFinal), count)
