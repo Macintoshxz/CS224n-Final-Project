@@ -1,0 +1,7 @@
+http://www.sec.gov/Archives/edgar/data/277948/000091664102000350/d10k.txt
+-1.0
+CSX
+2006-01-12
+10-K
+CSX_2006-01-12_10-K.txt
+

@@ -5,6 +5,7 @@ import numpy
 from random import shuffle
 #from sklearn.linear_model import LogisticRegression
 import argparse
+import os
 from os import listdir
 from os.path import isfile, join
 from split import split_into_sentences
@@ -62,47 +63,71 @@ class LabeledLineSentence(object):
     
     def __iter__(self):
         for source, prefix in self.sources.items():
+            print "Iter over " + prefix
             with utils.smart_open(source) as fin:
                 for item_no, line in enumerate(fin):
-                	print line
-                	yield LabeledSentence(word_tokenize(line.strip()), [source]) #prefix + '_%s' % item_no
+                	yield LabeledSentence(word_tokenize(line.strip()), [prefix]) #prefix + '_%s' % item_no
     
     def to_array(self):
         self.sentences = []
         for source, prefix in self.sources.items():
+            print "Extracting vocabulary from: " + prefix
             with utils.smart_open(source) as fin:
                 for item_no, line in enumerate(fin):
-                    self.sentences.append(LabeledSentence(word_tokenize(line.strip()), [source])) #prefix + '_%s' % item_no
+                    self.sentences.append(LabeledSentence(word_tokenize(line.strip()), [prefix])) #prefix + '_%s' % item_no
         return self.sentences
     
     def sentences_perm(self):
         shuffle(self.sentences)
         return self.sentences
 
-
+def get_documents(path):
+	documents = {}
+	for subdir, dirs, files in os.walk(path):
+		for f in files:
+			docPath = os.path.join(subdir, f)
+			filename, file_extension = os.path.splitext(f)
+			if docPath not in documents and filename != ".DS_Store":
+				documents[docPath] = filename
+				print "Added file " + str(filename) + " to document list."
+	return documents
 	
 
 if __name__ == '__main__':
 
 	parser = argparse.ArgumentParser(description='Reads directory of financial documents and outputs a model with document word bindings.')
 	parser.add_argument('-d','--directory', help='Directory containing financial documents', required=True)
-	parser.add_argument('-c','--company', help='Name of Company associate with documents', required=True)
 	parser.add_argument('-t','--type', help='10K, 8K, or 10Q', required=True)
+	parser.add_argument('-c','--company', help='Name of Company associate with documents', required=False)
+	
 	args = vars(parser.parse_args())
-	superfile_path = "/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/Superfiles/" + "_" + args['company'] + '_' + args['type']
+	#superfile_path = "/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/Superfiles/" + "_" + args['company'] + '_' + args['type']
 
 	#concatenateFiles(args['directory'], args['company'], args['type'])
-	sources = {superfile_path: "TEST" } #fill with one superfile per company, gives us word embeddings in the context of particular company.
-	sentences = LabeledLineSentence(sources)
+	t0 = time.time()
+	sources = get_documents(args['directory'])
+	t1 = time.time()
+	print "Time to get documents: " + str(t1-t0)
 
-	model = Doc2Vec(min_count=1, window=10, size=300, sample=1e-4, negative=5, workers=8, dm = 1)
+	t0 = time.time()
+	sentences = LabeledLineSentence(sources)
+	t1 = time.time()
+	print "Time to get sentences: " + str(t1-t0)
+
+	t0 = time.time()
+	model = Doc2Vec(min_count=1, window=10, size=300, sample=1e-4, negative=5, workers=8)	#dm=1
+	t1 = time.time()
+	print "Time to build model: " + str(t1-t0)
+
 	t0 = time.time()
 	#print sentences.to_array()
 	model.build_vocab(sentences.to_array())
 	t1 = time.time()
-	print "Time is " + str(t1-t0)
+	print "Time to build vocab: " + str(t1-t0)
 
 	#print sentences.'''
+
+
 
 	for epoch in range(20):
 		print "Training Model"
@@ -111,8 +136,11 @@ if __name__ == '__main__':
 		model.train(sentences.sentences_perm())
 		t1 = time.time()
 		print "Epoch time: " + str(t1-t0)
-	model.save('./SP500.d2v')
+	model.save('./SP155.d2v')
 
+
+
+'''
 	with open("/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/SP500_vocab.txt", 'w') as outfile:
 		for word in model.wv.vocab:
 			outfile.write(word)
@@ -122,10 +150,7 @@ if __name__ == '__main__':
 		for word in model.wv.vocab:
 			outfile.write(model[word])
 
-
-
-
-
+'''
 
 
 
