@@ -1,0 +1,9 @@
+http://www.sec.gov/Archives/edgar/data/1491675/000149167516000061/ex12-201510k.htm
+-1.0
+CCE
+2016-02-11
+10-K
+CCE_2016-02-11_10-K.txt
+
+EX-12 4 ex12-201510k.htm EARNINGS TO FIXED CHARGES Exhibit EXHIBIT 12 COCA-COLA ENTERPRISES, INC.
+EARNINGS TO FIXED CHARGES (in millions; except ratios) Year-ended December 31, 2015 2014 2013 2012 2011 Computation of Earnings: Income before income taxes $ 744 $ 893 $ 805 $ 837 $ 945 Add: Interest expense 117 120 107 101 90 Amortization of debt premium/discount and expenses 3 3 2 1 1 Interest portion of rent expense 23 29 30 29 29 Earnings as adjusted $ 887 $ 1,045 $ 944 $ 968 $ 1,065 Computation of Fixed Charges: Interest expense $ 117 $ 120 $ 107 $ 101 $ 90 Capitalized interest   1   Amortization of debt premium/discount and expenses 3 3 2 1 1 Interest portion of rent expense 23 29 30 29 29 Fixed charges $ 143 $ 152 $ 140 $ 131 $ 120 Ratio of Earnings to Fixed Charges (A) 6.20 6.90 6.73 7.38 8.89 ___________________________ (A) Ratios were calculated prior to rounding to millions.

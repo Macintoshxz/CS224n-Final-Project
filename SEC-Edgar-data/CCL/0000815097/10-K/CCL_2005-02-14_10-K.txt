@@ -1,0 +1,7 @@
+http://www.sec.gov/Archives/edgar/data/815097/000116923204001307/d58480_10-k.txt
+-1.0
+CCL
+2005-02-14
+10-K
+CCL_2005-02-14_10-K.txt
+
