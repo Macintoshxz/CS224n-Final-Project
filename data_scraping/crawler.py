@@ -7,10 +7,23 @@ import requests
 import os
 import time
 
+
 class SecCrawler():
+
+    REQUEST_SLEEP_TIME = 300
+    HTTP_OKAY = 200
 
     def __init__(self):
         self.hello = "Welcome to Sec Cralwer!"
+
+    def repeatRequest(self, target_url):
+        r = requests.get(target_url)
+        while r.status_code != self.HTTP_OKAY:
+            print r.status_code, " received for request: ", target_url, ".  Sleeping for ", self.REQUEST_SLEEP_TIME, "..."
+            time.sleep(self.REQUEST_SLEEP_TIME)
+            r = requests.get(target_url)
+        print r.status_code, " received for request: ", target_url, ".  Onwards!"    
+        return r
 
     def make_directory(self, companyCode, cik, priorto, filingType):
         # Making the directory to save comapny filings
@@ -123,9 +136,9 @@ class SecCrawler():
         for i in range(len(filingURLList)):
             t1 = time.time()
             target_url = filingURLList[i]
-            # print target_url
+            print "Saving ", target_url, "..."
 
-            r = requests.get(target_url)
+            r = self.repeatRequest(target_url)
             data = r.text
             soup = BeautifulSoup(data, "lxml")
             soup = BeautifulSoup(soup.prettify(), "lxml")
@@ -182,7 +195,7 @@ class SecCrawler():
         base_url = "http://www.sec.gov"
         target_url = base_url + "/cgi-bin/browse-edgar?action=getcompany&CIK="+str(cik)+"&type="+filingType+"&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)    
         print "Now trying to download "+ filingType + " forms for " + str(companyCode) + ' from target url:\n' + target_url
-        r = requests.get(target_url)
+        r = self.repeatRequest(target_url)
         data = r.text
         soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
         linkList=[] # List of all links from the CIK page
@@ -208,13 +221,16 @@ class SecCrawler():
 
 
         for link in linkListFinal:
-            r = requests.get(link)
+            r = self.repeatRequest(link)
             data = r.text
             newSoup = BeautifulSoup(data, "lxml") # Initializing to crawl again
             linkList=[] # List of all links from the CIK page
 
             # Finds the filing date for this set of documents
-            grouping = newSoup.find('div', {'class': 'formGrouping'})
+            # if newSoup == None:
+            #     print 'Shit there aint no soup'
+            grouping = newSoup.findAll('div', {'class': 'formGrouping'})[1]
+            # print grouping
             filingDate = grouping.find('div', {'class': 'info'}).string
             docName = companyCode + "_" + filingDate + "_" + filingType + ".txt"
             docNameList.append(docName)
