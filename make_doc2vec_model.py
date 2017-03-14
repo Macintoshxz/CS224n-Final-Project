@@ -14,6 +14,7 @@ import string
 from nltk.tokenize import word_tokenize
 #nltk.download()
 import time
+import re
 
 
 
@@ -70,8 +71,10 @@ class LabeledLineSentence(object):
     
     def to_array(self):
         self.sentences = []
+        count = 0
         for source, prefix in self.sources.items():
-            print "Extracting vocabulary from: " + prefix
+            count = count+1
+            print "Extracting vocabulary from: " + prefix + " ::: Document " + str(count) + " of " + str(len(self.sources.items())) 
             with utils.smart_open(source) as fin:
                 for item_no, line in enumerate(fin):
                     self.sentences.append(LabeledSentence(word_tokenize(line.strip()), [prefix])) #prefix + '_%s' % item_no
@@ -92,16 +95,40 @@ def get_documents(path):
 				print "Added file " + str(filename) + " to document list."
 	return documents
 	
+def sqeaky_clean(path):
+	replace_punctuation = string.maketrans(string.punctuation, ' '*len(string.punctuation))
+	replace_digits = string.maketrans(string.digits, ' '*len(string.digits))
+	for subdir, dirs, files in os.walk(path):
+		for f in files:
+			docPath = os.path.join(subdir, f)
+			infile = open(docPath, 'r')
+			if f != ".DS_Store":
+				with open(docPath+".tmp", 'w') as tmpfile:
+					for line in infile:
+						sentences = line.split(". ")
+						for s in sentences:
+							newline = s.translate(replace_punctuation)
+							newline = newline.translate(replace_digits)
+							newline = newline.lower()
+							print tmpfile
+							tmpfile.write(newline + '\n')
+					#filename, file_extension = os.path.splitext(f)
+					os.rename(docPath+".tmp", "/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/SEC/" + f)
 
 if __name__ == '__main__':
 
 	parser = argparse.ArgumentParser(description='Reads directory of financial documents and outputs a model with document word bindings.')
 	parser.add_argument('-d','--directory', help='Directory containing financial documents', required=True)
+	parser.add_argument('-m','--model', help='Name of Model to train', required=True)
 	parser.add_argument('-t','--type', help='10K, 8K, or 10Q', required=True)
+	parser.add_argument('-e','--epochs', help='Number of Training Epochs', required=True)
 	parser.add_argument('-c','--company', help='Name of Company associate with documents', required=False)
+	parser.add_argument('-s','--squeaky', help="option to clean data files", required=False)
 	
 	args = vars(parser.parse_args())
 	#superfile_path = "/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/Superfiles/" + "_" + args['company'] + '_' + args['type']
+	if args['squeaky'] == "yes" or args['squeaky'] == "y":
+		sqeaky_clean(args['directory'])
 
 	#concatenateFiles(args['directory'], args['company'], args['type'])
 	t0 = time.time()
@@ -115,7 +142,7 @@ if __name__ == '__main__':
 	print "Time to get sentences: " + str(t1-t0)
 
 	t0 = time.time()
-	model = Doc2Vec(min_count=1, window=10, size=300, sample=1e-4, negative=5, workers=8)	#dm=1
+	model = Doc2Vec(min_count=1, window=5, size=300, sample=1e-4, negative=5, workers=16)	#dm=1
 	t1 = time.time()
 	print "Time to build model: " + str(t1-t0)
 
@@ -129,18 +156,18 @@ if __name__ == '__main__':
 
 
 
-	for epoch in range(20):
-		print "Training Model"
+	for epoch in range(int(args['epochs'])):
+		print "Training Model on Epoch " + str(epoch) + " out of " + args['epochs']
 		t0 = time.time()
 		#print sentences.sentences
 		model.train(sentences.sentences_perm())
 		t1 = time.time()
 		print "Epoch time: " + str(t1-t0)
-	model.save('./SP155.d2v')
+	model.save(args['model'])
 
 
 
-'''
+
 	with open("/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/SP500_vocab.txt", 'w') as outfile:
 		for word in model.wv.vocab:
 			outfile.write(word)
@@ -150,7 +177,7 @@ if __name__ == '__main__':
 		for word in model.wv.vocab:
 			outfile.write(model[word])
 
-'''
+
 
 
 
