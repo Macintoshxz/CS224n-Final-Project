@@ -34,9 +34,8 @@ def get_filings():
 	lines = sp_500.readlines()
 	sp_500.close()
 	# companies = [line.split('\t')[1:3] for line in lines[0:3]]
-	print 'GETTING THESE COMPANIES:' , companies
 	companies = [line.split('\t')[1:3] for line in lines]
-
+	print 'GETTING THESE COMPANIES:' , companies
 
 	companiesToDownload = 10
 	curDownloaded = 0
