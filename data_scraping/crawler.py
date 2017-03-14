@@ -30,45 +30,77 @@ class SecCrawler():
         return soup
 
     #Takes in an array of strings from BS4 and identifies the sentence with the market cap
-    def findMarketCapSentence(self, strings):
+    def findMarketCapText(self, strings):
         for line in strings:
+            line = line.lower()
             if "aggregate" in line and "market" in line and "value" in line:
                 idx = line.find('aggregate')
-                return line[idx:]
+                if idx != -1:
+                    line = line[idx:]
+                snippets = self.findPotentialMarketCapSentences(line)
+                if len(snippets) > 0:
+                    print 'Trimmed line: ', line
+                    print 'Snippets: ', snippets
+                    return snippets[0]
+        for line in strings:
+            line = line.lower()
+            if "common stock" in line and "$" in line:
+                idx = line.find("common stock")
+                if idx != -1:
+                    line = line[idx:]
+                snippets = self.findPotentialMarketCapSentences(line)
+                if len(snippets) > 0:
+                    print line
+                    return snippets[0]
         return None
 
-    def isolateDollarSign(self, sentence):
-        dollarSignIdx = sentence.find("$")
-        if dollarSignIdx is not -1:
-            sentence = sentence[dollarSignIdx:]
-        return sentence
-
     def convertTextToAmount(self, text):
-        amount = re.findall('[\d\,*\.*]+', text)[0].replace(',','')
-        print amount
+        print "TEXT IS: "
+        if isinstance(text, tuple):
+            text = text[0]
+        amount = re.findall('[\d\,*\.*]+', text)
+        if len(amount) == 0:
+            return -1
+        amount = amount[0].strip().replace(',','')
+        amount = amount.strip('.')
+        print 'Amount: ', amount
         multiplier = 1
         if 'billion' in text:
             multiplier = 1000000000
         if 'million' in text:
             multiplier = 1000000
         return float(amount)*multiplier
-            
-    def marketCapFromSentence(self, sentence):
-        potentialMarketCaps = re.findall(r'was\s*\$?[\d+\,*\.*]+ *[mb]illion(?i)', sentence)
-        if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'was\s*\$[\d+\,*\.*]+', sentence)
-        if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'was\s*\$?[\d+\,*\.*]+', sentence)
-        if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'\$?[\d+\,*\.*]+ *[mb]illion(?i)', sentence)
-        if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'\$[\d+\,*\.*]+', sentence)
-        
 
-        marketCap = -1
-        if len(potentialMarketCaps) is not 0:
-            marketCapText = potentialMarketCaps[0]
-            marketCap = self.convertTextToAmount(marketCapText)
+    def findPotentialMarketCapSentences(self, sentence):
+        potentialMarketCaps = re.findall(r'was\s*\$?((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
+        if len(potentialMarketCaps) is 0:
+            print 1
+            potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        if len(potentialMarketCaps) is 0:
+            print 2
+            potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        if len(potentialMarketCaps) is 0:
+            print 3
+            potentialMarketCaps = re.findall(r'approximately\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
+        if len(potentialMarketCaps) is 0:
+            print 4
+            potentialMarketCaps = re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        if len(potentialMarketCaps) is 0:
+            print 5
+            potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        if len(potentialMarketCaps) is 0:
+            print 3
+            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
+        if len(potentialMarketCaps) is 0:
+            print 4
+            potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        if len(potentialMarketCaps) is 0:
+            print 5
+            potentialMarketCaps = re.findall(r'\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        return potentialMarketCaps
+            
+    def marketCapFromText(self, marketCapText):
+        marketCap = self.convertTextToAmount(marketCapText)
         return marketCap
 
     def getCombinedLineArray(self, lines):
@@ -78,7 +110,9 @@ class SecCrawler():
             found = re.findall('\.\s*$', line)
             curLine += line.strip() + " "
             if len(found) != 0:
-                curLine = curLine.replace("\n", " ").strip()
+                # if 'therapeutic' in curLine:
+                #     print curLine
+                curLine = curLine.replace("\n", " ")
                 outArray.append(curLine)
                 curLine = ""
         return outArray
@@ -98,33 +132,30 @@ class SecCrawler():
             # parsedData = parsedData.get_text()
             # parsedData= parsedData.encode('ascii', 'ignore')
             # parsedData = re.sub(r'(?<!\n)\n', '\n', parsedData)
-            # parsedData = re.sub(r'[0-9]+\n', '\n', parsedData)
+            # parsedData = re.sub(r'\d+\n', '\n', parsedData)
             # parsedData = re.sub('(?<![\r\n])(\r?\n|\n?\r)(?![\r\n])', ' ', parsedData)
             # parsedData = re.sub(r'\s*\n\n+\s*', '\n\n', parsedData)
             # parsedData = re.sub(r'\s*\n\n+\s*', '\n\n', parsedData)
             
             path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType)+"/"+str(docNameList[i])
 
-            filename = open(path,"w+")
-            strings = [s.encode('ascii', 'ignore') for s in soup.strings if s.strip() != '']
+            strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
 
             outArray = self.getCombinedLineArray(strings)
 
             header = outArray[0:50]
-            # for line in header:
-            #     print line + '\n\n'
-            marketCapSentence = self.findMarketCapSentence(header)
-            print marketCapSentence
-
+           
+            marketCapText = self.findMarketCapText(header)
+            # print marketCapText
             marketCap = -1
-            if marketCapSentence is not None:
-                marketCap = self.marketCapFromSentence(marketCapSentence)
+            if marketCapText is not None:
+                marketCap = self.marketCapFromText(marketCapText)
             print marketCap
 
             outString = '\n'.join(outArray)
             outString = re.sub(r'(?<!\n)\n', '\n', outString)
 
-
+            filename = open(path,"w+")
             filename.write(target_url + '\n')
             filename.write(str(float(marketCap)) + '\n')
             infoArray = docNameList[i].strip(".txt").split('_')
@@ -133,7 +164,7 @@ class SecCrawler():
                 filename.write(info + '\n')
             filename.write(str(docNameList[i]) + '\n\n')
             filename.write(outString)
-
+            filename.close()
             t2 = time.time()
             print "Downloaded " + companyCode + "'s " + filingType + "s: " + str(i) + "/" + str(len(filingURLList)) + ". Time: " + str(t2-t1) + "\n"
 
@@ -149,7 +180,7 @@ class SecCrawler():
         #generate the url to crawl 
         base_url = "http://www.sec.gov"
         target_url = base_url + "/cgi-bin/browse-edgar?action=getcompany&CIK="+str(cik)+"&type="+filingType+"&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)    
-        print ("Now trying to download "+ filingType + " forms for " + str(companyCode))
+        print "Now trying to download "+ filingType + " forms for " + str(companyCode) + ' from target url:\n' + target_url
         r = requests.get(target_url)
         data = r.text
         soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
@@ -190,10 +221,15 @@ class SecCrawler():
             # Finds filingType documents from the index page
             def isFiling(filingType, URL):
                 # print URL
+                filingType = filingType.lower()
                 if '/Archives/' in URL:
-                    if (filingType.lower() + '.htm') in URL:
+                    if (filingType + '.htm') in URL:
                         return True
                     if (filingType.replace('-', '').lower() + '.htm') in URL:
+                        return True
+                    if (filingType + '.txt') in URL:
+                        return True
+                    if (filingType.replace('-', '').lower() + '.txt') in URL:
                         return True
                 return False
 
@@ -203,10 +239,11 @@ class SecCrawler():
                 # print URL
                 if isFiling(filingType, URL):
                     filingURLList.append(base_url + URL)
+                    break
 
-        print 'Printing filingURLList'
-        for url in filingURLList:
-            print url
+        # print 'Printing filingURLList'
+        # for url in filingURLList:
+        #     print url
 
             # soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
             # requiredURL = str(linkListFinal[i])[0:len(linkListFinal[i])-11]
