@@ -41,7 +41,7 @@ class Config:
 	max_length = 83 # SEC begins requiring financial disclosure in 1934, 83 years before present day.
 	n_classes = 5
 	dropout = 0.5
-	embed_size = 300 #must get from docvecs
+	embed_size = 300 #from Doc2Vec; will be pulled automatically from pretrained embeddings
 	hidden_size = 300 #probs between 300 and 1
 	batch_size = 32
 	n_epochs = 10
@@ -99,9 +99,9 @@ class RNNModel(NERModel):
 		(Don't change the variable names)
 		"""
 		### YOUR CODE HERE (~4-6 lines)
-		self.input_placeholder = tf.placeholder(tf.int32, shape=(None, self.max_length, Config.n_features))
-		self.labels_placeholder = tf.placeholder(tf.int32, shape=(None, self.max_length))
-		self.mask_placeholder = tf.placeholder(tf.bool, shape=(None, self.max_length))
+		self.input_placeholder = tf.placeholder(tf.int32, shape=(None, self.max_length)) #int32 because integer tokens to index into word embeddings
+		self.labels_placeholder = tf.placeholder(tf.float32, shape=(None, self.max_length))
+		self.mask_placeholder = tf.placeholder(tf.bool, shape=(None, self.max_length)) 
 		self.dropout_placeholder = tf.placeholder(tf.float32)
 		### END YOUR CODE
 
@@ -270,10 +270,9 @@ class RNNModel(NERModel):
 			loss: A 0-d tensor (scalar)
 		"""
 		### YOUR CODE HERE (~2-4 lines)
-		logits_mask = tf.boolean_mask(preds, self.mask_placeholder)
+		preds_mask = tf.boolean_mask(preds, self.mask_placeholder)
 		labels_mask = tf.boolean_mask(self.labels_placeholder, self.mask_placeholder)
-		loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits_mask, labels=labels_mask)
-		loss = tf.reduce_mean(loss)
+		loss = tf.losses.mean_squared_error(labels_mask, preds, weights = 1.0)
 		### END YOUR CODE
 		return loss
 
@@ -305,7 +304,7 @@ class RNNModel(NERModel):
 		super(RNNModel, self).__init__(helper, config, report)
 		self.max_length = min(Config.max_length, helper.max_length)
 		Config.max_length = self.max_length # Just in case people make a mistake.
-		self.pretrained_embeddings = pretrained_embeddings
+		self.pretrained_embeddings = pretrained_embeddings #doc2vecs
 
 		# Defining placeholders.
 		self.input_placeholder = None
