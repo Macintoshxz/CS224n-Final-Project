@@ -4,7 +4,7 @@ from multiprocessing import Pool as ThreadPool
 import time 
 
 def getSingleCompanyFiling(inputData):
-	date = '20170313' # date from which filings should be downloaded 
+	date = '20170315' # date from which filings should be downloaded 
 	count = '100' # no of filings
 
 	seccrawler = SecCrawler() 
@@ -33,7 +33,7 @@ def get_filings(num_threads):
 	sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
 	sp_500.close()
-	# companies = [line.split('\t')[1:3] for line in lines[0:4]]
+	# companies = [line.split('\t')[1:3] for line in lines[0:2]]
 	companies = [line.split('\t')[1:3] for line in lines]
 	print 'GETTING THESE COMPANIES:' , companies
 
@@ -74,12 +74,12 @@ def nonthreaded_get_filings():
 	date = '20170313' # date from which filings should be downloaded 
 	# date = '20160922'
 
-	count = '1' # no of filings
+	count = '100' # no of filings
 
 	sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
 	sp_500.close()
-	companies = [line.split('\t')[1:3] for line in lines]
+	companies = [line.split('\t')[1:3] for line in lines[2:4]]
 
 
 	companiesToDownload = 10

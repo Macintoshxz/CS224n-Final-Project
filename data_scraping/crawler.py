@@ -18,7 +18,11 @@ class SecCrawler():
 
     def repeatRequest(self, target_url):
         r = requests.get(target_url)
+        acceptable_errors = [404]
         while r.status_code != self.HTTP_OKAY:
+            if r.status_code in acceptable_errors:
+                print r.status_code, " received for request: ", target_url, ".  Moving on."
+                return Nones
             print r.status_code, " received for request: ", target_url, ".  Sleeping for ", self.REQUEST_SLEEP_TIME, "..."
             time.sleep(self.REQUEST_SLEEP_TIME)
             r = requests.get(target_url)
@@ -134,11 +138,22 @@ class SecCrawler():
     def save_in_directory(self, companyCode, cik, priorto, filingURLList, docNameList, filingType):
         # Save every text document into its respective folder
         for i in range(len(filingURLList)):
+            path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType)+"/"+str(docNameList[i])
+            #Don't overwrite existing files.
+            if os.path.isfile(path):
+                print "ALREADY EXISTS: ", path, ', moving on...'
+                continue
+
             t1 = time.time()
             target_url = filingURLList[i]
             print "Saving ", target_url, "..."
 
             r = self.repeatRequest(target_url)
+            if r is None:
+                errorFile = open('error_log.txt', 'a+')
+                errorFile.write(target_url + '\n')
+                errorFile.close()
+                continue
             data = r.text
             soup = BeautifulSoup(data, "lxml")
             soup = BeautifulSoup(soup.prettify(), "lxml")
@@ -151,7 +166,6 @@ class SecCrawler():
             # parsedData = re.sub(r'\s*\n\n+\s*', '\n\n', parsedData)
             # parsedData = re.sub(r'\s*\n\n+\s*', '\n\n', parsedData)
             
-            path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType)+"/"+str(docNameList[i])
 
             strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
 
@@ -193,7 +207,7 @@ class SecCrawler():
         
         #generate the url to crawl 
         base_url = "http://www.sec.gov"
-        target_url = base_url + "/cgi-bin/browse-edgar?action=getcompany&CIK="+str(cik)+"&type="+filingType+"&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)    
+        target_url = base_url + "/cgi-bin/browse-edgar?action=getcompany&CIK="+str(companyCode)+"&type="+filingType+"&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)    
         print "Now trying to download "+ filingType + " forms for " + str(companyCode) + ' from target url:\n' + target_url
         r = self.repeatRequest(target_url)
         data = r.text
@@ -201,13 +215,17 @@ class SecCrawler():
         linkList=[] # List of all links from the CIK page
 
         # If the link is .htm convert it to .html
+        print "Printing all seen URLs\n\n"
         for link in soup.find_all('filinghref'):
             URL = link.string
-            # print link
-            if link.string.split(".")[len(link.string.split("."))-1] == "htm":
+            # print URL
+            extension = link.string.split(".")[len(link.string.split("."))-1]
+            if extension == "htm":
                 URL+="l"
                 linkList.append(URL)
-                # print URL
+                print URL
+            if extension == "html":
+                linkList.append(URL)
         linkListFinal = linkList
         
         numFiles = min(len(linkListFinal), count)
@@ -238,8 +256,10 @@ class SecCrawler():
             # Finds filingType documents from the index page
             def isFiling(filingType, URL):
                 # print URL
+                URL = URL.lower()
                 filingType = filingType.lower()
-                if '/Archives/' in URL:
+                # print 'TESTING URL:', URL
+                if '/archives/' in URL:
                     if (filingType + '.htm') in URL:
                         return True
                     if (filingType.replace('-', '').lower() + '.htm') in URL:
@@ -250,13 +270,26 @@ class SecCrawler():
                         return True
                 return False
 
-
+            # print "Link was: ", link
+            foundFiling = False
             for linkedDoc in newSoup.find_all('a'):
                 URL = linkedDoc['href']
                 # print URL
                 if isFiling(filingType, URL):
                     filingURLList.append(base_url + URL)
+                    print 'FOUND FILING: ', URL
+                    foundFiling = True
                     break
+
+            ''' If no filings found, THEN go look for .txt file'''
+            if not foundFiling:
+                linkID = link.split('/')[-1].strip('-index.html')
+                for linkedDoc in newSoup.find_all('a'):
+                    URL = linkedDoc['href']
+                    if linkID in URL and '.txt' in URL.lower():
+                        filingURLList.append(base_url + URL)
+                        print 'FOUND FILING: ', URL
+                        break
 
         # print 'Printing filingURLList'
         # for url in filingURLList:
