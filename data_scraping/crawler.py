@@ -155,19 +155,13 @@ class SecCrawler():
                 errorFile.close()
                 continue
             data = r.text
-            soup = BeautifulSoup(data, "lxml")
-            soup = BeautifulSoup(soup.prettify(), "lxml")
-            # parsedData = self.parseData(soup)
-            # parsedData = parsedData.get_text()
-            # parsedData= parsedData.encode('ascii', 'ignore')
-            # parsedData = re.sub(r'(?<!\n)\n', '\n', parsedData)
-            # parsedData = re.sub(r'\d+\n', '\n', parsedData)
-            # parsedData = re.sub('(?<![\r\n])(\r?\n|\n?\r)(?![\r\n])', ' ', parsedData)
-            # parsedData = re.sub(r'\s*\n\n+\s*', '\n\n', parsedData)
-            # parsedData = re.sub(r'\s*\n\n+\s*', '\n\n', parsedData)
-            
-
-            strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+            strings = None
+            if '.txt' not in target_url:
+                soup = BeautifulSoup(data, "lxml")
+                soup = BeautifulSoup(soup.prettify(), "lxml")
+                strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+            else:
+                strings = [s.encode('ascii', 'replace') for s in data.split('\n') if s.strip() != '']
 
             outArray = self.getCombinedLineArray(strings)
 
