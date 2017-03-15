@@ -16,7 +16,7 @@ from nltk.tokenize import word_tokenize
 import time
 import re
 from multiprocessing import Pool as ThreadPool
-import time 
+
 
 
 class LabeledLineSentence(object):
@@ -121,6 +121,8 @@ if __name__ == '__main__':
 	model = Doc2Vec(min_count=1, window=5, size=300, sample=1e-4, negative=5, workers=16)	#dm=1
 	t1 = time.time()
 	print "Time to build model: " + str(t1-t0)
+
+	#print models.doc2vec.FAST_VERSION
 
 	t0 = time.time()
 	#print sentences.to_array()
