@@ -15,38 +15,8 @@ from nltk.tokenize import word_tokenize
 #nltk.download()
 import time
 import re
-
-
-
-
-def concatenateFiles(path, company, secType):
-	filenames = [f for f in listdir(path) if isfile(join(path, f))]
-	superfile = str(path + "/_" + company + '_' + secType)
-	superfname = str("_" + company + '_' + secType)
-	if superfname in filenames:
-		filenames.remove(superfname)
-	print filenames
-
-	with open(path + "/_" + company + '_' + secType, 'w') as outfile:
-	    for fname in filenames:
-	        with open(path + "/" + fname) as infile:
-	            for line in infile:
-	                outfile.write(line)
-	formatSuperfile(superfile, superfname)
-
-
-
-def formatSuperfile(superfile, superfname):
-	tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-	fp = open(superfile)
-	data = fp.read()
-	with open("/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/Superfiles/" + superfname, 'w') as outfile:
-		formatted = []
-		for sentence in tokenizer.tokenize(data):		
-			formatted.append(sentence.translate(None, string.punctuation).lower())
-		outfile.write('\n'.join(formatted))
-
-	fp.close()
+from multiprocessing import Pool as ThreadPool
+import time 
 
 
 class LabeledLineSentence(object):
@@ -95,25 +65,27 @@ def get_documents(path):
 				print "Added file " + str(filename) + " to document list."
 	return documents
 	
-def sqeaky_clean(path):
+def sqeaky_clean(path, squeakypath):
 	replace_punctuation = string.maketrans(string.punctuation, ' '*len(string.punctuation))
 	replace_digits = string.maketrans(string.digits, ' '*len(string.digits))
 	for subdir, dirs, files in os.walk(path):
 		for f in files:
 			docPath = os.path.join(subdir, f)
+			newDocPath = os.path.join(squeakypath, f)
 			infile = open(docPath, 'r')
+			print newDocPath
 			if f != ".DS_Store":
-				with open(docPath+".tmp", 'w') as tmpfile:
+				with open(newDocPath+".tmp", 'w') as tmpfile:
 					for line in infile:
 						sentences = line.split(". ")
 						for s in sentences:
 							newline = s.translate(replace_punctuation)
 							newline = newline.translate(replace_digits)
 							newline = newline.lower()
-							print tmpfile
+							#print tmpfile
 							tmpfile.write(newline + '\n')
-					#filename, file_extension = os.path.splitext(f)
-					os.rename(docPath+".tmp", "/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/SEC/" + f)
+					#filename, file_extension = os.path.splitext(f)	
+					os.rename(newDocPath+".tmp", newDocPath)
 
 if __name__ == '__main__':
 
@@ -122,17 +94,21 @@ if __name__ == '__main__':
 	parser.add_argument('-m','--model', help='Name of Model to train', required=True)
 	parser.add_argument('-t','--type', help='10K, 8K, or 10Q', required=True)
 	parser.add_argument('-e','--epochs', help='Number of Training Epochs', required=True)
+	parser.add_argument('-w','--workers', help='Number of Threads to use when training d2v', required=True)
 	parser.add_argument('-c','--company', help='Name of Company associate with documents', required=False)
-	parser.add_argument('-s','--squeaky', help="option to clean data files", required=False)
+	parser.add_argument('-s','--squeaky', help="Path to directory to create squeaky clean files.", required=False)
 	
 	args = vars(parser.parse_args())
 	#superfile_path = "/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/Superfiles/" + "_" + args['company'] + '_' + args['type']
-	if args['squeaky'] == "yes" or args['squeaky'] == "y":
-		sqeaky_clean(args['directory'])
+	if args['squeaky']:
+		sqeaky_clean(args['directory'], args['squeaky'])
 
 	#concatenateFiles(args['directory'], args['company'], args['type'])
 	t0 = time.time()
-	sources = get_documents(args['directory'])
+	if args['squeaky']:
+		sources = get_documents(args['squeaky'])
+	else:
+		sources = get_documents(args['directory'])
 	t1 = time.time()
 	print "Time to get documents: " + str(t1-t0)
 
@@ -167,7 +143,7 @@ if __name__ == '__main__':
 
 
 
-
+'''
 	with open("/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/SP500_vocab.txt", 'w') as outfile:
 		for word in model.wv.vocab:
 			outfile.write(word)
@@ -177,8 +153,37 @@ if __name__ == '__main__':
 		for word in model.wv.vocab:
 			outfile.write(model[word])
 
+def concatenateFiles(path, company, secType):
+	filenames = [f for f in listdir(path) if isfile(join(path, f))]
+	superfile = str(path + "/_" + company + '_' + secType)
+	superfname = str("_" + company + '_' + secType)
+	if superfname in filenames:
+		filenames.remove(superfname)
+	print filenames
+
+	with open(path + "/_" + company + '_' + secType, 'w') as outfile:
+	    for fname in filenames:
+	        with open(path + "/" + fname) as infile:
+	            for line in infile:
+	                outfile.write(line)
+	formatSuperfile(superfile, superfname)
 
 
+
+def formatSuperfile(superfile, superfname):
+	tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+	fp = open(superfile)
+	data = fp.read()
+	with open("/Users/kaikuspa/tensorflow/final/CS224n-Final-Project/Superfiles/" + superfname, 'w') as outfile:
+		formatted = []
+		for sentence in tokenizer.tokenize(data):		
+			formatted.append(sentence.translate(None, string.punctuation).lower())
+		outfile.write('\n'.join(formatted))
+
+	fp.close()
+
+
+'''
 
 
 
