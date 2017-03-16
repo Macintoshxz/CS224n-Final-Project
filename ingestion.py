@@ -58,7 +58,6 @@ def getMarketCap(path, inflationDict):
                 filename = filename.split("_")
                 ticker = filename[0]
                 # print filename
-                print ticker
                 year = int(filename[1].split("-")[0])
                 marketCap[(ticker, year)] = float(mc)*inflationDict[year]
                 #print mc
@@ -82,31 +81,68 @@ def createInflationDict():
 def construct_data(filename, path):
     '''
     Constructs data in the format requried by TFLearn
+    TODO Check for correctness
     '''
     inflationDict = createInflationDict()
     orderedd2v, X = Doc2VecMapping(filename)
     marketCap = getMarketCap(path, inflationDict)
-    print len(marketCap)
-    Y = []
-    prevCompany = ''
-    prevCap = 1
+
+    #sliding window with current fixed window size of 5
+    newX = []
     for key in orderedd2v:
-        print key
+        ticker = key[0]
+        year = key[1]
+        if (ticker, year + 4) in orderedd2v:
+            newX.append([[orderedd2v[(ticker, year)],
+                        orderedd2v[(ticker, year+1)]],
+                        orderedd2v[(ticker, year+2)],
+                        orderedd2v[(ticker, year+3)],
+                        orderedd2v[(ticker, year+4)]])
+
+    change = {}
+    newY = []
+
+    #label data for sliding window with fixed window size 5
+    #EX x = (1,2,3,4,5,6,7)
+    #EX new_x = ((1,2,3,4,5)
+    #             2,3,4,5,6))
+    #EX new_y = (y_5, y_6)
+
+    for key in orderedd2v:
         company, year = key
-
-        cap = marketCap[key] if key in marketCap else 1
-
-        #Make sure we offset one for predictions - we don't add until the next year
-        if prevCompany == company:
-            if key in marketCap:
-                percentChange = (cap - prevCap)/prevCap
-                Y.append(percentChange)
+        cap = marketCap[key]
+        nextCap = marketCap.get((company, year + 1))
+        #Offset of one. Percentage change for FY2015 is (Cap_2016 - Cap_2015)/Cap_2015
+        if prevCompany == company and (company, year - 1) in orderedd2v:
+            if nextCap is None:
+                change[key] = -1 #sentinel to indicate last year
             else:
-                Y.append(None)
-        prevCap = cap
-        prevCompany = company
-    return X, Y
+                percentChange = (cap - nextCap)/cap
+                change[key] = percentChange
 
+    for key in orderedd2v:
+        ticker = key[0]
+        year = key[1]
+        if (ticker, year + 4) in orderedd2v:
+            percentChange = change[(ticker, year + 4)]
+            if percentChange != -1: #last year
+                newY.append(change[(ticker, year + 4)])
+
+    return newX, newY
+
+def test_contiguous_data():
+    '''
+    Make sure that all years in data are adjacent to each other by year per company
+    '''
+    dict, val = Doc2VecMapping("fleet_model.d2v")
+    test = True
+    for key in dict:
+        ticker, year = key
+        if (ticker, year + 1) not in dict and ((ticker, year + 2) in dict or (ticker, year + 3) in dict):
+            print key
+            test = False
+    if not test:
+        print "CONTIGUOUS DATA CHECK FAILED!"
 
 
 if __name__ == '__main__':
@@ -116,8 +152,7 @@ if __name__ == '__main__':
     # mc = get_market_cap(args['directory'])
     # print mc
     # pickle.dump(mc, open("market_labels", "w"))
-    X, Y = construct_data("fleet_model.d2v", "data_scraping/SEC-Edgar-data")
-    print Y
+    # X, Y = construct_data("fleet_model.d2v", "data_scraping/SEC-Edgar-data")
     import pdb; pdb.set_trace()
 
 
