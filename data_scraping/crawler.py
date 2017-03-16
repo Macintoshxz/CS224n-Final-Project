@@ -199,16 +199,16 @@ class SecCrawler():
             path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"+str(docNameList[i])
 
             # Don't overwrite existing, non-text root files
-            # if os.path.isfile(path):
+            if os.path.isfile(path):
             #     #Fixing weird .txt downloads
                 # f = open(path, 'r')
                 # original_filetype = f.readline().split('.')[-1]
                 # f.close()
             #     ##TODO: Remove the following after we actually fix things
             #     print 'Original filetype:', original_filetype
-            #     if 'txt' not in original_filetype:
-                # print "ALREADY EXISTS: ", path, ', moving on...'
-                # continue
+                # if 'txt' not in original_filetype:
+                print "ALREADY EXISTS: ", path, ', moving on...'
+                continue
 
             t1 = time.time()
             target_url = filingURLList[i]
@@ -437,7 +437,7 @@ class SecCrawler():
                         if td.string:
                             s = str((td.string).encode('ascii', 'replace')).lower().strip()
                             #Ignore 10k-ish filingss
-                            if '10-k' in s and '10-k/a' not in s and '10-k405' not in s:
+                            if '10-k405' in s and '10-k/a' not in s and '10-k405/a' not in s:
                                 URL = str(tr.find('a')['href'])
                                 if URL is not None:
                                     if '.htm' in URL.lower() or '.txt' in URL.lower():
@@ -446,6 +446,8 @@ class SecCrawler():
                                         print 'FOUND ROW FILING!!!!: ', base_url + URL
                                 break
 
+            '''
+            TEMPORARILY COMMENTED OUT - AL 3-16-2017 10:12 AM - TO REPLACE ALL 10-K405's
             #If we can't identify, use naive link checking method
             if not foundFiling:
                 for linkedDoc in newSoup.find_all('a'):
@@ -457,7 +459,7 @@ class SecCrawler():
                         foundFiling = True
                         break
 
-            ''' If no filings found, THEN go look for complete submission .txt file'''
+            #If no filings found, THEN go look for complete submission .txt file
             if not foundFiling:
                 linkID = link.split('/')[-1].strip('-index.html')
                 for linkedDoc in newSoup.find_all('a'):
@@ -467,6 +469,7 @@ class SecCrawler():
                         foundFiling = True
                         print 'FOUND COMPLETE FILING: ', URL
                         break
+            '''
 
             if foundFiling:
                 indexURLList.append(link)
