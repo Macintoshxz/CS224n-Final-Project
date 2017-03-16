@@ -108,23 +108,23 @@ class SecCrawler():
     def findPotentialMarketCapSentences(self, sentence):
         potentialMarketCaps = re.findall(r'was\s*\$?((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
         if len(potentialMarketCaps) is 0:
+            # print 3
+            potentialMarketCaps = re.findall(r'approximately\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
+        if len(potentialMarketCaps) is 0:
+            # print 6
+            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
+        if len(potentialMarketCaps) is 0:
             # print 1
             potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
             # print 2
             potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 3
-            potentialMarketCaps = re.findall(r'approximately\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
-        if len(potentialMarketCaps) is 0:
             # print 4
             potentialMarketCaps = re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
             # print 5
             potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        if len(potentialMarketCaps) is 0:
-            # print 6
-            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
         if len(potentialMarketCaps) is 0:
             # print 7
             potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
@@ -235,7 +235,7 @@ class SecCrawler():
             if marketCap < 100000000:
                 print 'BAD MARKET CAP DETECTED: ', str(marketCap), '\n', target_url, companyCode
                 errorFile = open(self.ERROR_FILENAME, 'a+')
-                errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n' + 'Market cap text was: ', marketCapText)
+                errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n' + 'Market cap text was: ' + marketCapText)
                 errorFile.close()
 
             outString = '\n'.join(outArray)
@@ -374,9 +374,10 @@ class SecCrawler():
                         #Ignore 10k-ish filingss
                         if '10-k' in s and '10-k/a' not in s and '10-k405' not in s:
                             URL = str(tr.find('a')['href'])
-                            filingURLList.append(base_url + URL)
-                            foundFiling = True
-                            print 'FOUND ROW FILING!!!!: ', base_url + URL
+                            if URL is not None:
+                                filingURLList.append(base_url + URL)
+                                foundFiling = True
+                                print 'FOUND ROW FILING!!!!: ', base_url + URL
                             break
 
             #If we can't identify, use naive link checking method
