@@ -68,6 +68,7 @@ class SecCrawler():
         for searchList in SEARCH_TERMS:
             for i in xrange(len(strings)):
                 line = strings[i].lower()
+                # print line
                 searchFound = True
                 for term in searchList:
                     if term not in line:
@@ -119,24 +120,45 @@ class SecCrawler():
         #Consolidate all the likely cases for finding the market cap.
         #If you're wondering why 'illion' is split up - some fuckers put newlines in the middle of
         #the motherfucking goddamn word.
-        potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
-        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        potentialMarketCaps.append(re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        # potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
+        # potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        # potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        # potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        # potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        # potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        # potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        # potentialMarketCaps.append(re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+
+        #New spacing between dots
+        potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r'\$? *((\d{1,3}(\s*,\d{3})*(\.\d+)?))', sentence))
 
         #If we still have nothing, check more unlikely cases
+        # if len(potentialMarketCaps) is 0:
+        #     potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
+        # if len(potentialMarketCaps) is 0:
+        #     potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        # if len(potentialMarketCaps) is 0:
+        #     potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        # if len(potentialMarketCaps) is 0:
+        #     potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+
+        #New spacing between dots
         if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
+            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
         if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+            potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+            potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+            potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence)
+
         potentialMarketCaps = [item for sublist in potentialMarketCaps for item in sublist]
         return potentialMarketCaps
 
@@ -259,7 +281,7 @@ class SecCrawler():
                 errorFile.write('SOMETHING PARSE FUCKED: ' + target_url + ' ' + companyCode +  '\n')
                 errorFile.close()
                 continue
-            header = self.getCombinedLineArray(rawStrings, 50)
+            header = self.getCombinedLineArray(rawStrings, -1)
             marketCapText = self.findMarketCapText(header)
 
             marketCap = -1
