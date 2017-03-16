@@ -120,22 +120,13 @@ class SecCrawler():
         #If you're wondering why 'illion' is split up - some fuckers put newlines in the middle of
         #the motherfucking goddamn word.
         potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
-        if len(potentialMarketCaps) is 0:        
-            potentialMarketCaps = re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
-        else:
-            potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        if len(potentialMarketCaps) is 0:        
-            re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        else:
-            potentialMarketCaps = potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-        if len(potentialMarketCaps) is 0:        
-            potentialMarketCaps = re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        else:
-            potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-        if len(potentialMarketCaps) is 0:        
-            potentialMarketCaps = re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        else:
-            potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+
         #If we still have nothing, check more unlikely cases
         if len(potentialMarketCaps) is 0:
             potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
@@ -147,6 +138,7 @@ class SecCrawler():
             potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
             potentialMarketCaps = re.findall(r'\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        potentialMarketCaps = [item for sublist in potentialMarketCaps for item in sublist]
         return potentialMarketCaps
 
     def getCombinedLineArray(self, lines, numLines=-1):
@@ -199,6 +191,8 @@ class SecCrawler():
 
             t1 = time.time()
             target_url = filingURLList[i]
+            #Removes interactive XBRL
+            target_url = target_url.replace('ix?doc=/', '')
             index_url = indexURLList[i]
             print "Saving", target_url
             print "From index:", index_url
@@ -256,11 +250,16 @@ class SecCrawler():
                         errorFile = open(self.ERROR_FILENAME, 'a+')
                         errorFile.write('SOUP CONVERSION FAILED: ' + target_url + ' ' + companyCode +  '\n')
                         errorFile.close()
-                        return None, None
+                        return None, None, None
                 return soup, rawStrings, parsedStrings
 
             #Use raw (with tables) strings to find the market cap text
             soup, rawStrings, parsedStrings = ingestSoup(data)
+            if soup is None or rawStrings is None or parsedStrings is None:
+                errorFile = open(self.ERROR_FILENAME, 'a+')
+                errorFile.write('SOMETHING PARSE FUCKED: ' + target_url + ' ' + companyCode +  '\n')
+                errorFile.close()
+                continue
             header = self.getCombinedLineArray(rawStrings, 50)
             marketCapText = self.findMarketCapText(header)
 
@@ -420,7 +419,7 @@ class SecCrawler():
                             if '10-k' in s and '10-k/a' not in s and '10-k405' not in s:
                                 URL = str(tr.find('a')['href'])
                                 if URL is not None:
-                                    if '.htm' in URL.lower() or '.txt' in URL.lower(): 
+                                    if '.htm' in URL.lower() or '.txt' in URL.lower():
                                         filingURLList.append(base_url + URL)
                                         foundFiling = True
                                         print 'FOUND ROW FILING!!!!: ', base_url + URL

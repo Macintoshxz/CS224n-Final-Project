@@ -56,7 +56,7 @@ def nonthreaded_get_filings():
 
 	count = '100' # no of filings
 
-	sp_500 = open('missed_companies.txt')
+	sp_500 = open('missed_companies2.txt')
 
 	# sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
@@ -64,7 +64,7 @@ def nonthreaded_get_filings():
 	companies = [line.split('\t')[1:3] for line in lines]
 
 	# companies = [line.split('\t')[1:3] for line in lines[2:4]]
-	companies = [['ZION', 'ZION']]
+	companies = [['CMI', 'CMI']]
 
 	companiesToDownload = 10
 	curDownloaded = 0
