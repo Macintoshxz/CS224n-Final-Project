@@ -63,7 +63,8 @@ class SecCrawler():
             return snippets, line
 
         SEARCH_TERMS = [["aggregate market value"], ["common stock", "market value"], \
-            ["aggregate", "market", "value", "$"], ["common stock", "$"],  ["aggregate", "market", "value"], ["common stock"]]
+            ["aggregate", "market", "value", "$"], ["aggregate", "value", "$"], ["aggregate", "value", "$"], \
+            ["common stock", "$"],  ["aggregate", "market", "value"], ["common stock"]]
 
         for searchList in SEARCH_TERMS:
             for i in xrange(len(strings)):
@@ -130,9 +131,9 @@ class SecCrawler():
         # potentialMarketCaps.append(re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
 
         #New spacing between dots
-        potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
+        potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence)
         potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence))
         potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
         potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
         potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
@@ -151,7 +152,7 @@ class SecCrawler():
 
         #New spacing between dots
         if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
+            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence)
         if len(potentialMarketCaps) is 0:
             potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
@@ -199,16 +200,16 @@ class SecCrawler():
             path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"+str(docNameList[i])
 
             # Don't overwrite existing, non-text root files
-            if os.path.isfile(path):
-            #     #Fixing weird .txt downloads
-                # f = open(path, 'r')
-                # original_filetype = f.readline().split('.')[-1]
-                # f.close()
-            #     ##TODO: Remove the following after we actually fix things
-            #     print 'Original filetype:', original_filetype
-                # if 'txt' not in original_filetype:
-                print "ALREADY EXISTS: ", path, ', moving on...'
-                continue
+            # if os.path.isfile(path):
+            # #     #Fixing weird .txt downloads
+            #     # f = open(path, 'r')
+            #     # original_filetype = f.readline().split('.')[-1]
+            #     # f.close()
+            # #     ##TODO: Remove the following after we actually fix things
+            # #     print 'Original filetype:', original_filetype
+            #     # if 'txt' not in original_filetype:
+            #     print "ALREADY EXISTS: ", path, ', moving on...'
+            #     continue
 
             t1 = time.time()
             target_url = filingURLList[i]
@@ -291,7 +292,7 @@ class SecCrawler():
             if marketCap < 100000000:
                 print 'BAD MARKET CAP DETECTED: ', str(marketCap), companyCode, target_url
                 errorFile = open(self.ERROR_FILENAME, 'a+')
-                errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n' + 'Market cap text was: ' + str(marketCapText))
+                errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n')# + 'Market cap text was: ' + str(marketCapText))
                 errorFile.close()
 
             #Use parsed strings (no tables) to create actual output
