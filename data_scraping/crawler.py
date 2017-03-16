@@ -50,13 +50,15 @@ class SecCrawler():
     def findMarketCapText(self, strings):
         MAX_DOT_LOOKAHEAD = 10
         MAX_DOT_LOOKBEHIND = 5
+        MAX_LINES_LOOKAHEAD = 5
+        MAX_LINES_LOOKBEHIND = 3
 
         def createSnippets(lineParts, strings, i):
-            nextLines = ' '.join(strings[min(i + 1, len(strings) - 1): min(i + 3, len(strings) - 1)]).split('.')
+            nextLines = ' '.join(strings[min(i + 1, len(strings) - 1): min(i + MAX_LINES_LOOKAHEAD, len(strings) - 1)]).split('.')
             nextLines = nextLines[:min(MAX_DOT_LOOKAHEAD, len(nextLines) - 1)]
-            prevLines = ' '.join(strings[max(0, i-3)]).split('.')
+            prevLines = ' '.join(strings[max(0, i-MAX_LINES_LOOKBEHIND)]).split('.')
             prevLines = prevLines[min(-MAX_DOT_LOOKBEHIND, -(len(prevLines)-1)):]
-            line = '.'.join(prevLines + lineParts + nextLines)
+            line = ' '.join(prevLines + lineParts + nextLines)
             snippets = self.findPotentialMarketCapSentences(line.lower())
             return snippets
 
@@ -79,6 +81,8 @@ class SecCrawler():
                     marketCapSnippets = createSnippets(lineParts, strings, i)
                     if len(marketCapSnippets) > 0:
                         print "Pulling from searchList:", searchList
+                        print line
+                        print marketCapSnippets
                         return marketCapSnippets
         return None
 
@@ -116,10 +120,22 @@ class SecCrawler():
         #If you're wondering why 'illion' is split up - some fuckers put newlines in the middle of
         #the motherfucking goddamn word.
         potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
-        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-
+        if len(potentialMarketCaps) is 0:        
+            potentialMarketCaps = re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
+        else:
+            potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        if len(potentialMarketCaps) is 0:        
+            re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        else:
+            potentialMarketCaps = potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        if len(potentialMarketCaps) is 0:        
+            potentialMarketCaps = re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        else:
+            potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        if len(potentialMarketCaps) is 0:        
+            potentialMarketCaps = re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        else:
+            potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
         #If we still have nothing, check more unlikely cases
         if len(potentialMarketCaps) is 0:
             potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
@@ -133,9 +149,10 @@ class SecCrawler():
             potentialMarketCaps = re.findall(r'\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         return potentialMarketCaps
 
-    def getCombinedLineArray(self, lines):
+    def getCombinedLineArray(self, lines, numLines=-1):
         curLine = ""
         outArray= []
+        lineCounter = 0
         for line in lines:
             found = re.findall('\.\s*$', line)
             curLine += line.strip() + " "
@@ -145,6 +162,9 @@ class SecCrawler():
                 curLine = curLine.replace("\n", " ")
                 outArray.append(curLine)
                 curLine = ""
+                lineCounter += 1
+                if lineCounter > numLines and numLines != -1:
+                    break
         return outArray
 
     def truncateDocumentData(self, data):
@@ -195,17 +215,23 @@ class SecCrawler():
             #If this fails AGAIN, just ignore it completely.
             def ingestSoup(data, shouldParse=False):
                 soup = None
-                strings = None
+                rawStrings = None
+                parsedStrings = None
 
                 try:
                     soup = BeautifulSoup(data, "lxml")
                     soup = BeautifulSoup(soup.prettify(), "lxml")
-                    if shouldParse:
-                        soup = self.parseData(soup)
                     if '.txt' in target_url:
-                        strings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                        rawStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
                     else:
-                        strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+                        rawStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+
+                    soup = self.parseData(soup)
+                    if '.txt' in target_url:
+                        parsedStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                    else:
+                        parsedStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+
                 except:
                     # print 'Initial soup load failed'
                     errorFile = open(self.ERROR_FILENAME, 'a+')
@@ -215,45 +241,41 @@ class SecCrawler():
                         data = self.truncateDocumentData(data)
                         soup = BeautifulSoup(data, "lxml")
                         soup = BeautifulSoup(soup.prettify(), "lxml")
-                        if shouldParse:
-                            soup = self.parseData(soup)
                         if '.txt' in target_url:
-                            strings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                            rawStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
                         else:
-                            strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+                            rawStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+
+                        soup = self.parseData(soup)
+                        if '.txt' in target_url:
+                            parsedStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                        else:
+                            parsedStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
                     except:
                         # print 'Soup conversion failed.  Running as text.'
                         errorFile = open(self.ERROR_FILENAME, 'a+')
                         errorFile.write('SOUP CONVERSION FAILED: ' + target_url + ' ' + companyCode +  '\n')
                         errorFile.close()
                         return None, None
-                return soup, strings
-            # if None in strings:
-            #     errorFile = open(self.ERROR_FILENAME, 'a+')
-            #     errorFile.write('ENCODING ERROR: ' + target_url + ' ' + companyCode +  '\n')
-            #     errorFile.close()
-            #     continue
+                return soup, rawStrings, parsedStrings
 
-            #Don't remove tables to find the market cap text
-            soup, strings = ingestSoup(data)
-            outArray = self.getCombinedLineArray(strings)
-            header = outArray[0:50]
+            #Use raw (with tables) strings to find the market cap text
+            soup, rawStrings, parsedStrings = ingestSoup(data)
+            header = self.getCombinedLineArray(rawStrings, 50)
             marketCapText = self.findMarketCapText(header)
 
-            #Remove tables after you've gotten it
-            soup, strings = ingestSoup(data, True)
-
-            # print marketCapText
             marketCap = -1
             if marketCapText is not None:
                 marketCap = self.convertTextToAmount(marketCapText)
             print 'Market Cap: ', marketCap, companyCode
-            if marketCap < 100000000:
+            if marketCap < 500000000:
                 print 'BAD MARKET CAP DETECTED: ', str(marketCap), companyCode, target_url
                 errorFile = open(self.ERROR_FILENAME, 'a+')
                 errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n' + 'Market cap text was: ' + str(marketCapText))
                 errorFile.close()
 
+            #Use parsed strings (no tables) to create actual output
+            outArray = self.getCombinedLineArray(parsedStrings, -1)
             outString = '\n'.join(outArray)
             outString = re.sub(r'(?<!\n)\n', '\n', outString)
 

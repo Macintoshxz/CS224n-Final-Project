@@ -64,7 +64,7 @@ def nonthreaded_get_filings():
 	companies = [line.split('\t')[1:3] for line in lines]
 
 	# companies = [line.split('\t')[1:3] for line in lines[2:4]]
-	# companies = [['ACN', 'ACN']]
+	companies = [['ZION', 'ZION']]
 
 	companiesToDownload = 10
 	curDownloaded = 0
