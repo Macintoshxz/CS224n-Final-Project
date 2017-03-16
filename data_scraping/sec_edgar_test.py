@@ -28,6 +28,7 @@ def calculateParallel(inputs, threads=1):
 def get_filings(num_threads): 
 	# create object 
 	# date = '20160922'
+	print 'GETTING FILINGS USING ', num_threads, 'THREADS!!!!!'
 
 	start = time.time()
 	sp_500 = open('sp_500.txt')
@@ -70,6 +71,7 @@ def get_filings(num_threads):
 
 def nonthreaded_get_filings():
 	# create object 
+	print 'getting filings using a single lonely execution thread :(s'
 	seccrawler = SecCrawler() 
 	date = '20170313' # date from which filings should be downloaded 
 	# date = '20160922'
@@ -80,7 +82,7 @@ def nonthreaded_get_filings():
 	lines = sp_500.readlines()
 	sp_500.close()
 	companies = [line.split('\t')[1:3] for line in lines[2:4]]
-	companies = [['MSFT', 'MSFT']]
+	companies = [['ABC', 'ABC']]
 
 	companiesToDownload = 10
 	curDownloaded = 0
@@ -112,5 +114,11 @@ def nonthreaded_get_filings():
 	print end - start
 	
 if __name__ == '__main__':
-	get_filings(int(sys.argv[1]))
-	# nonthreaded_get_filings()
+	threading = sys.argv[1]
+	if threading == '-t':
+		get_filings(int(sys.argv[2]))
+	elif threading == '-nt':
+		nonthreaded_get_filings()
+	else:
+		print 'Incorrect arguments.  Should have flag (-t, -nt) for threaded vs. nonthreaded, then numThreads\n' + \
+			'Nonthreaded is test mode and may not pull everything'
