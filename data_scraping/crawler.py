@@ -60,8 +60,8 @@ class SecCrawler():
             snippets = self.findPotentialMarketCapSentences(line)
             return snippets
 
-        SEARCH_TERMS = [["aggregate market value", "$"], ["common stock", "market value", "$"], \
-            ["aggregate", "market", "value", "$"], ["common stock", "$"]]
+        SEARCH_TERMS = [["aggregate market value"], ["common stock", "market value"], \
+            ["aggregate", "market", "value", "$"], ["common stock", "$"],  ["aggregate", "market", "value"], ["common stock"]]
 
         for searchList in SEARCH_TERMS:
             for i in xrange(len(strings)):
@@ -144,7 +144,6 @@ class SecCrawler():
                 curLine = re.sub(r'\s\s+', ' ', curLine)
                 curLine = curLine.replace("\n", " ")
                 outArray.append(curLine)
-                curLine = ""
         return outArray
 
     def truncateDocumentData(self, data):
@@ -235,7 +234,7 @@ class SecCrawler():
             if marketCap < 100000000:
                 print 'BAD MARKET CAP DETECTED: ', str(marketCap), '\n', target_url, companyCode
                 errorFile = open(self.ERROR_FILENAME, 'a+')
-                errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n' + 'Market cap text was: ' + marketCapText)
+                errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n' + 'Market cap text was: ' + str(marketCapText))
                 errorFile.close()
 
             outString = '\n'.join(outArray)
