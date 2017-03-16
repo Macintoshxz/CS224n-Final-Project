@@ -2,3 +2,4 @@ tensorflow>=0.7
 matplotlib
 sklearn
 gensim
+ps4
