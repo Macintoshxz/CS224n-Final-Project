@@ -114,5 +114,5 @@ def nonthreaded_get_filings():
 	print end - start
 	
 if __name__ == '__main__':
-	# get_filings(int(sys.argv[1]))
-	nonthreaded_get_filings()
+	get_filings(int(sys.argv[1]))
+	# nonthreaded_get_filings()

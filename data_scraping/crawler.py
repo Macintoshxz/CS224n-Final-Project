@@ -48,13 +48,13 @@ class SecCrawler():
 
     #Takes in an array of strings from BS4 and identifies the sentence with the market cap
     def findMarketCapText(self, strings):
-        MAX_DOT_LOOKAHEAD = 10
-        MAX_DOT_LOOKBEHIND = 4
+        MAX_DOT_LOOKAHEAD = 15
+        MAX_DOT_LOOKBEHIND = 10
 
         def createSnippets(lineParts, strings, i):
-            nextLines = ' '.join(strings[i + 1: i + 2]).split('.')
+            nextLines = ' '.join(strings[i + 1: i + 3]).split('.')
             nextLines = nextLines[:min(MAX_DOT_LOOKAHEAD, len(nextLines) - 1)]
-            prevLines = ' '.join(strings[i-1]).split('.')
+            prevLines = ' '.join(strings[i-2]).split('.')
             prevLines = prevLines[min(-MAX_DOT_LOOKBEHIND, -(len(prevLines)-1)):]
             line = '.'.join(prevLines + lineParts + nextLines)
             snippets = self.findPotentialMarketCapSentences(line)
@@ -78,7 +78,7 @@ class SecCrawler():
                     lineParts = [lineStart, lineEnd]
                     marketCapSnippets = createSnippets(lineParts, strings, i)
                     if len(marketCapSnippets) > 0:
-                        print "Pulling from searchList:", searchList
+                        print "Pulling from searchList:", searchListp
                         return marketCapSnippets
         return None
 
@@ -100,7 +100,7 @@ class SecCrawler():
                 multiplier = 1000000
             finalAmount = float(amount)*multiplier
             amounts.append(finalAmount)
-            print finalAmount
+            # print finalAmount
         if len(amounts) == 0:
             return -1
         return max(amounts)
