@@ -144,6 +144,7 @@ class SecCrawler():
                 curLine = re.sub(r'\s\s+', ' ', curLine)
                 curLine = curLine.replace("\n", " ")
                 outArray.append(curLine)
+                curLine = ""
         return outArray
 
     def truncateDocumentData(self, data):
@@ -193,14 +194,6 @@ class SecCrawler():
 
             #Attempt normal parsing.  If this fails, try truncating and parsing again
             #If this fails AGAIN, just ignore it completely.
-
-            # def encodeString(s):
-            #     try:
-            #         s = s.encode('ascii', 'replace')
-            #     except:
-            #         return None
-            #     return s
-
             try:
                 soup = BeautifulSoup(data, "lxml")
                 soup = BeautifulSoup(soup.prettify(), "lxml")
