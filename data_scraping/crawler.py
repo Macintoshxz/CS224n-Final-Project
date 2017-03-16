@@ -166,7 +166,7 @@ class SecCrawler():
             path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"+str(docNameList[i])
 
             # Don't overwrite existing, non-text root files
-            if os.path.isfile(path):
+            # if os.path.isfile(path):
             #     #Fixing weird .txt downloads
                 # f = open(path, 'r')
                 # original_filetype = f.readline().split('.')[-1]
@@ -174,8 +174,8 @@ class SecCrawler():
             #     ##TODO: Remove the following after we actually fix things
             #     print 'Original filetype:', original_filetype
             #     if 'txt' not in original_filetype:
-                print "ALREADY EXISTS: ", path, ', moving on...'
-                continue
+                # print "ALREADY EXISTS: ", path, ', moving on...'
+                # continue
 
             t1 = time.time()
             target_url = filingURLList[i]
