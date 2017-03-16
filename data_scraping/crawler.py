@@ -185,7 +185,7 @@ class SecCrawler():
             r = self.repeatRequest(target_url)
             if r is None:
                 errorFile = open(self.ERROR_FILENAME, 'a+')
-                errorFile.write('404 FROM: ', target_url + '\n')
+                errorFile.write('404 FROM: ' + target_url + '\n')
                 errorFile.close()
                 continue
             data = r.text
@@ -193,6 +193,14 @@ class SecCrawler():
 
             #Attempt normal parsing.  If this fails, try truncating and parsing again
             #If this fails AGAIN, just ignore it completely.
+
+            # def encodeString(s):
+            #     try:
+            #         s = s.encode('ascii', 'replace')
+            #     except:
+            #         return None
+            #     return s
+
             try:
                 soup = BeautifulSoup(data, "lxml")
                 soup = BeautifulSoup(soup.prettify(), "lxml")
@@ -201,9 +209,11 @@ class SecCrawler():
                     strings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
                 else:
                     strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
-                # print 'finished initial souping'
             except:
                 # print 'Initial soup load failed'
+                errorFile = open(self.ERROR_FILENAME, 'a+')
+                errorFile.write('INITIAL SOUPING FAILED: ' + target_url + ' ' + companyCode + '\n')
+                errorFile.close()
                 try:
                     data = self.truncateDocumentData(data)
                     soup = BeautifulSoup(data, "lxml")
@@ -216,9 +226,14 @@ class SecCrawler():
                 except:
                     # print 'Soup conversion failed.  Running as text.'
                     errorFile = open(self.ERROR_FILENAME, 'a+')
-                    errorFile.write('SOUP CONVERSION FAILED: ' + target_url + '\n')
+                    errorFile.write('SOUP CONVERSION FAILED: ' + target_url + ' ' + companyCode +  '\n')
                     errorFile.close()
                     continue
+            # if None in strings:
+            #     errorFile = open(self.ERROR_FILENAME, 'a+')
+            #     errorFile.write('ENCODING ERROR: ' + target_url + ' ' + companyCode +  '\n')
+            #     errorFile.close()
+            #     continue
 
             # print "Num strings:", len(strings)
             outArray = self.getCombinedLineArray(strings)
@@ -230,9 +245,9 @@ class SecCrawler():
             marketCap = -1
             if marketCapText is not None:
                 marketCap = self.convertTextToAmount(marketCapText)
-            print 'Market Cap: ', marketCap
+            print 'Market Cap: ', marketCap, companyCode
             if marketCap < 100000000:
-                print 'BAD MARKET CAP DETECTED: ', str(marketCap), '\n', target_url, companyCode
+                print 'BAD MARKET CAP DETECTED: ', str(marketCap), companyCode, target_url
                 errorFile = open(self.ERROR_FILENAME, 'a+')
                 errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n' + 'Market cap text was: ' + str(marketCapText))
                 errorFile.close()
@@ -368,16 +383,20 @@ class SecCrawler():
             for tr in trs:
                 if not foundFiling:
                     tds = tr.findAll('td')
+                    # print tds
                     for td in tds:
-                        s = str(td.string).lower().strip()
-                        #Ignore 10k-ish filingss
-                        if '10-k' in s and '10-k/a' not in s and '10-k405' not in s:
-                            URL = str(tr.find('a')['href'])
-                            if URL is not None:
-                                filingURLList.append(base_url + URL)
-                                foundFiling = True
-                                print 'FOUND ROW FILING!!!!: ', base_url + URL
-                            break
+                        print td
+                        if td.string:
+                            s = str((td.string).encode('ascii', 'replace')).lower().strip()
+                            #Ignore 10k-ish filingss
+                            if '10-k' in s and '10-k/a' not in s and '10-k405' not in s:
+                                URL = str(tr.find('a')['href'])
+                                if URL is not None:
+                                    if '.htm' in URL.lower() or '.txt' in URL.lower(): 
+                                        filingURLList.append(base_url + URL)
+                                        foundFiling = True
+                                        print 'FOUND ROW FILING!!!!: ', base_url + URL
+                                break
 
             #If we can't identify, use naive link checking method
             if not foundFiling:

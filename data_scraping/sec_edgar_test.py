@@ -81,8 +81,10 @@ def nonthreaded_get_filings():
 	sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
 	sp_500.close()
-	companies = [line.split('\t')[1:3] for line in lines[2:4]]
-	companies = [['ABC', 'ABC']]
+	companies = [line.split('\t')[1:3] for line in lines]
+
+	# companies = [line.split('\t')[1:3] for line in lines[2:4]]
+	companies = [['AAPL', 'AAPL']]
 
 	companiesToDownload = 10
 	curDownloaded = 0
