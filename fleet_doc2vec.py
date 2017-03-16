@@ -7,6 +7,7 @@ import argparse
 import os
 import time
 #, encoding="iso-8859-1"
+import logging
 
 def get_documents(path):
 	corpus = open(path+"/corpus.txt", 'w')
@@ -34,11 +35,13 @@ if __name__ == '__main__':
 	parser.add_argument('-d','--directory', help='Directory containing financial documents', required=True)
 	args = vars(parser.parse_args())
 
+	logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+
 	sources = get_documents(args['directory'])
 	train_corpus = list(read_corpus(sources))
 	#print train_corpus[:2]
 
-	model = gensim.models.doc2vec.Doc2Vec(size=300, min_count=2, iter=15, workers=8)
+	model = gensim.models.doc2vec.Doc2Vec(size=300, min_count=2, iter=1, workers=128)
 
 	t0 = time.time()
 	model.build_vocab(train_corpus)
