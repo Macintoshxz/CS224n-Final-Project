@@ -16,9 +16,11 @@ def Doc2VecMapping(filename):
     for i in range(len(model.docvecs)):
         doctag = model.docvecs.index_to_doctag(i)
         doctag = doctag.split("_")
-        ticker = doctag[0]
-        year = int(doctag[1].split("-")[0])
-        d2vdict[(ticker, year)] = i
+        if '.txt' in doctag[-1]:
+            ticker = doctag[0]
+            year = int(doctag[1].split("-")[0])
+            d2vdict[(ticker, year)] = i
+            # print doctag
 
     #sorts by ticker
     orderedd2v = OrderedDict(sorted(d2vdict.items(), key=lambda t: t[0])) 
@@ -36,7 +38,9 @@ def Doc2VecMapping(filename):
 
     return orderedd2v, sequenceDict.values()
 
-def getMarketCap(path):
+
+
+def getMarketCap(path, inflationDict):
     '''
     args: path is the path to the SEC filings
     Output: returns a dictionary mapping (ticker, year) : market capitalization
@@ -49,23 +53,58 @@ def getMarketCap(path):
             if docPath not in marketCap and filename != ".DS_Store":
                 infile = open(docPath, 'r')
                 lines=infile.readlines()
-                mc = lines[1].rstrip()
+                # print lines
+                mc = lines[2].rstrip()
                 filename = filename.split("_")
                 ticker = filename[0]
+                # print filename
+                print ticker
                 year = int(filename[1].split("-")[0])
-                marketCap[(ticker, year)] = float(mc) 
+                marketCap[(ticker, year)] = float(mc)*inflationDict[year]
                 #print mc
     return marketCap
+
+def createInflationDict():
+    '''
+    Loads the manual-entry inflation_table.txt into a dict to convert
+    the market caps to current day currency.
+    '''
+    path = 'inflation_table.txt'
+    f = open(path, 'r')
+    lines = f.readlines()
+    f.close()
+    inflationDict = {}
+    for line in lines:
+        year, rate =line.split('\t')
+        inflationDict[int(year)] = float(rate)
+    return inflationDict
 
 def construct_data(filename, path):
     '''
     Constructs data in the format requried by TFLearn
     '''
+    inflationDict = createInflationDict()
     orderedd2v, X = Doc2VecMapping(filename)
-    marketCap = getMarketCap(path)
+    marketCap = getMarketCap(path, inflationDict)
+    print len(marketCap)
     Y = []
+    prevCompany = ''
+    prevCap = 1
     for key in orderedd2v:
-        Y.append(marketCap[key])
+        print key
+        company, year = key
+
+        cap = marketCap[key] if key in marketCap else 1
+
+        #Make sure we offset one for predictions - we don't add until the next year
+        if prevCompany == company:
+            if key in marketCap:
+                percentChange = (cap - prevCap)/prevCap
+                Y.append(percentChange)
+            else:
+                Y.append(None)
+        prevCap = cap
+        prevCompany = company
     return X, Y
 
 
@@ -77,7 +116,8 @@ if __name__ == '__main__':
     # mc = get_market_cap(args['directory'])
     # print mc
     # pickle.dump(mc, open("market_labels", "w"))
-    X, Y = construct_data("fleet_model.d2v", "/Users/hoyincheung/Desktop/CS224n-final-project/SEC-Edgar-data")
+    X, Y = construct_data("fleet_model.d2v", "data_scraping/SEC-Edgar-data")
+    print Y
     import pdb; pdb.set_trace()
 
 

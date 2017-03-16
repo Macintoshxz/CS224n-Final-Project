@@ -48,16 +48,16 @@ class SecCrawler():
 
     #Takes in an array of strings from BS4 and identifies the sentence with the market cap
     def findMarketCapText(self, strings):
-        MAX_DOT_LOOKAHEAD = 20
-        MAX_DOT_LOOKBEHIND = 15
+        MAX_DOT_LOOKAHEAD = 10
+        MAX_DOT_LOOKBEHIND = 5
 
         def createSnippets(lineParts, strings, i):
-            nextLines = ' '.join(strings[i + 1: i + 3]).split('.')
+            nextLines = ' '.join(strings[min(i + 1, len(strings) - 1): min(i + 3, len(strings) - 1)]).split('.')
             nextLines = nextLines[:min(MAX_DOT_LOOKAHEAD, len(nextLines) - 1)]
-            prevLines = ' '.join(strings[i-3]).split('.')
+            prevLines = ' '.join(strings[max(0, i-3)]).split('.')
             prevLines = prevLines[min(-MAX_DOT_LOOKBEHIND, -(len(prevLines)-1)):]
             line = '.'.join(prevLines + lineParts + nextLines)
-            snippets = self.findPotentialMarketCapSentences(line)
+            snippets = self.findPotentialMarketCapSentences(line.lower())
             return snippets
 
         SEARCH_TERMS = [["aggregate market value"], ["common stock", "market value"], \
@@ -85,11 +85,17 @@ class SecCrawler():
     def convertTextToAmount(self, text):
         amounts = []
         for textElem in text:
+            if not textElem:
+                continue
+            if isinstance(textElem, list):
+                textElem = textElem[0]
             if isinstance(textElem, tuple):
                 textElem = textElem[0]
-            amount = re.findall(r'(\d{1,3}(,\d{3})*(\.\d+)?)', textElem)[0]
+            print 'TEXTELEM: ', textElem
+            amount = re.findall(r'(\d{1,3}(,\d{3})*(\.\d+)?)', textElem)
             if len(amount) == 0:
                 continue
+            amount = amount[0]
             amount = amount[0].strip().replace(',','')
             amount = amount.strip('.')
             # print 'Amount: ', amount
@@ -106,30 +112,24 @@ class SecCrawler():
         return max(amounts)
 
     def findPotentialMarketCapSentences(self, sentence):
-        potentialMarketCaps = re.findall(r'was\s*\$?((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
+        #Consolidate all the likely cases for finding the market cap.
+        #If you're wondering why 'illion' is split up - some fuckers put newlines in the middle of
+        #the motherfucking goddamn word.
+        potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
+
+        #If we still have nothing, check more unlikely cases
         if len(potentialMarketCaps) is 0:
-            # print 3
-            potentialMarketCaps = re.findall(r'approximately\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
+            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 6
-            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
-        if len(potentialMarketCaps) is 0:
-            # print 1
-            potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        if len(potentialMarketCaps) is 0:
-            # print 2
-            potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        if len(potentialMarketCaps) is 0:
-            # print 4
-            potentialMarketCaps = re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        if len(potentialMarketCaps) is 0:
-            # print 5
             potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 7
+            potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        if len(potentialMarketCaps) is 0:
             potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 8
             potentialMarketCaps = re.findall(r'\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         return potentialMarketCaps
 
@@ -165,17 +165,17 @@ class SecCrawler():
         for i in range(len(filingURLList)):
             path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"+str(docNameList[i])
 
-            #Don't overwrite existing, non-text root files
-            # if os.path.isfile(path):
+            # Don't overwrite existing, non-text root files
+            if os.path.isfile(path):
             #     #Fixing weird .txt downloads
-            #     f = open(path, 'r')
-            #     original_filetype = f.readline().split('.')[-1]
-            #     f.close()
+                # f = open(path, 'r')
+                # original_filetype = f.readline().split('.')[-1]
+                # f.close()
             #     ##TODO: Remove the following after we actually fix things
             #     print 'Original filetype:', original_filetype
             #     if 'txt' not in original_filetype:
-            #         print "ALREADY EXISTS: ", path, ', moving on...'
-            #         continue
+                print "ALREADY EXISTS: ", path, ', moving on...'
+                continue
 
             t1 = time.time()
             target_url = filingURLList[i]
@@ -190,50 +190,59 @@ class SecCrawler():
                 errorFile.close()
                 continue
             data = r.text
-            strings = None
 
             #Attempt normal parsing.  If this fails, try truncating and parsing again
             #If this fails AGAIN, just ignore it completely.
-            try:
-                soup = BeautifulSoup(data, "lxml")
-                soup = BeautifulSoup(soup.prettify(), "lxml")
-                soup = self.parseData(soup)
-                if '.txt' in target_url:
-                    strings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
-                else:
-                    strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
-            except:
-                # print 'Initial soup load failed'
-                errorFile = open(self.ERROR_FILENAME, 'a+')
-                errorFile.write('INITIAL SOUPING FAILED: ' + target_url + ' ' + companyCode + '\n')
-                errorFile.close()
+            def ingestSoup(data, shouldParse=False):
+                soup = None
+                strings = None
+
                 try:
-                    data = self.truncateDocumentData(data)
                     soup = BeautifulSoup(data, "lxml")
                     soup = BeautifulSoup(soup.prettify(), "lxml")
-                    soup = self.parseData(soup)
+                    if shouldParse:
+                        soup = self.parseData(soup)
                     if '.txt' in target_url:
                         strings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
                     else:
                         strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
                 except:
-                    # print 'Soup conversion failed.  Running as text.'
+                    # print 'Initial soup load failed'
                     errorFile = open(self.ERROR_FILENAME, 'a+')
-                    errorFile.write('SOUP CONVERSION FAILED: ' + target_url + ' ' + companyCode +  '\n')
+                    errorFile.write('INITIAL SOUPING FAILED: ' + target_url + ' ' + companyCode + '\n')
                     errorFile.close()
-                    continue
+                    try:
+                        data = self.truncateDocumentData(data)
+                        soup = BeautifulSoup(data, "lxml")
+                        soup = BeautifulSoup(soup.prettify(), "lxml")
+                        if shouldParse:
+                            soup = self.parseData(soup)
+                        if '.txt' in target_url:
+                            strings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                        else:
+                            strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+                    except:
+                        # print 'Soup conversion failed.  Running as text.'
+                        errorFile = open(self.ERROR_FILENAME, 'a+')
+                        errorFile.write('SOUP CONVERSION FAILED: ' + target_url + ' ' + companyCode +  '\n')
+                        errorFile.close()
+                        return None, None
+                return soup, strings
             # if None in strings:
             #     errorFile = open(self.ERROR_FILENAME, 'a+')
             #     errorFile.write('ENCODING ERROR: ' + target_url + ' ' + companyCode +  '\n')
             #     errorFile.close()
             #     continue
 
-            # print "Num strings:", len(strings)
+            #Don't remove tables to find the market cap text
+            soup, strings = ingestSoup(data)
             outArray = self.getCombinedLineArray(strings)
-
             header = outArray[0:50]
-           
             marketCapText = self.findMarketCapText(header)
+
+            #Remove tables after you've gotten it
+            soup, strings = ingestSoup(data, True)
+
             # print marketCapText
             marketCap = -1
             if marketCapText is not None:
@@ -269,7 +278,11 @@ class SecCrawler():
         try:
             self.make_directory(companyCode,cik, priorto, filingType)
         except:
+            errorFile = open(self.ERROR_FILENAME, 'a+')
+            errorFile.write('DIRERROR: ' + companyCode + '\n' + str(sys.exc_info()[0]))
+            errorFile.close()
             print "Not able to create directory"
+            return
         
         #generate the url to crawl 
         base_url = "http://www.sec.gov"

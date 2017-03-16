@@ -25,16 +25,14 @@ def calculateParallel(inputs, threads=1):
     pool.join()
     return results
 
-def get_filings(num_threads): 
-	# create object 
-	# date = '20160922'
+def get_filings(num_threads, path='sp_500.txt'):
 	print 'GETTING FILINGS USING ', num_threads, 'THREADS!!!!!'
 
 	start = time.time()
-	sp_500 = open('sp_500.txt')
-	lines = sp_500.readlines()
-	sp_500.close()
-	# companies = [line.split('\t')[1:3] for line in lines[0:2]]
+	companyFile = open(path, 'r')
+	lines = companyFile.readlines()
+	companyFile.close()
+
 	companies = [line.split('\t')[1:3] for line in lines]
 	print 'GETTING THESE COMPANIES:' , companies
 
@@ -48,26 +46,6 @@ def get_filings(num_threads):
 	end = time.time()
 	print '\n\n\n FINAL TIME:'
 	print end - start
-	# print queries
-	# for companyCode, cik in companies:
-	# 	# if companyCode != 'A' and blocking:
-	# 	# 	scrapeCount += 1
-	# 	# 	continue
-	# 	# print 'madeit'
-	# 	# blocking = False
-	# 	# if scrapeCount < curDownloaded:
-	# 		# scrapeCount += 1
-	# 		# continue
-
-	# 	t1 = time.time() 
-	# 	seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "10-K")
-	# 	# seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "10-Q")
-	# 	# seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "8-K") 
-	# 	t2 = time.time() 
-	# 	print "Total Time taken for ", companyCode, ": ", str(t2-t1)
-	# 	# scrapeCount += 1
-	# 	# if scrapeCount >= companiesToDownload:
-	# 		# break
 
 def nonthreaded_get_filings():
 	# create object 
@@ -78,13 +56,15 @@ def nonthreaded_get_filings():
 
 	count = '100' # no of filings
 
-	sp_500 = open('sp_500.txt')
+	sp_500 = open('missed_companies.txt')
+
+	# sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
 	sp_500.close()
 	companies = [line.split('\t')[1:3] for line in lines]
 
 	# companies = [line.split('\t')[1:3] for line in lines[2:4]]
-	companies = [['ACN', 'ACN']]
+	# companies = [['ACN', 'ACN']]
 
 	companiesToDownload = 10
 	curDownloaded = 0
@@ -118,7 +98,7 @@ def nonthreaded_get_filings():
 if __name__ == '__main__':
 	threading = sys.argv[1]
 	if threading == '-t':
-		get_filings(int(sys.argv[2]))
+		get_filings(int(sys.argv[2]), sys.argv[3])
 	elif threading == '-nt':
 		nonthreaded_get_filings()
 	else:
