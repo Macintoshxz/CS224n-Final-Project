@@ -60,7 +60,7 @@ class SecCrawler():
             prevLines = prevLines[min(-MAX_DOT_LOOKBEHIND, -(len(prevLines)-1)):]
             line = ' '.join(prevLines + lineParts + nextLines)
             snippets = self.findPotentialMarketCapSentences(line.lower())
-            return snippets
+            return snippets, line
 
         SEARCH_TERMS = [["aggregate market value"], ["common stock", "market value"], \
             ["aggregate", "market", "value", "$"], ["common stock", "$"],  ["aggregate", "market", "value"], ["common stock"]]
@@ -78,11 +78,11 @@ class SecCrawler():
                     lineStart = line[:idx]
                     lineEnd = line[idx:]
                     lineParts = [lineStart, lineEnd]
-                    marketCapSnippets = createSnippets(lineParts, strings, i)
+                    marketCapSnippets, searchedLine = createSnippets(lineParts, strings, i)
                     if len(marketCapSnippets) > 0:
                         print "Pulling from searchList:", searchList
-                        print line
-                        print marketCapSnippets
+                        print searchedLine
+                        # print marketCapSnippets
                         return marketCapSnippets
         return None
 
@@ -95,7 +95,7 @@ class SecCrawler():
                 textElem = textElem[0]
             if isinstance(textElem, tuple):
                 textElem = textElem[0]
-            print 'TEXTELEM: ', textElem
+            # print 'TEXTELEM: ', textElems
             amount = re.findall(r'(\d{1,3}(,\d{3})*(\.\d+)?)', textElem)
             if len(amount) == 0:
                 continue
@@ -126,6 +126,7 @@ class SecCrawler():
         potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
         potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
         potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
 
         #If we still have nothing, check more unlikely cases
         if len(potentialMarketCaps) is 0:
@@ -136,8 +137,6 @@ class SecCrawler():
             potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
             potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         potentialMarketCaps = [item for sublist in potentialMarketCaps for item in sublist]
         return potentialMarketCaps
 
@@ -267,7 +266,7 @@ class SecCrawler():
             if marketCapText is not None:
                 marketCap = self.convertTextToAmount(marketCapText)
             print 'Market Cap: ', marketCap, companyCode
-            if marketCap < 500000000:
+            if marketCap < 100000000:
                 print 'BAD MARKET CAP DETECTED: ', str(marketCap), companyCode, target_url
                 errorFile = open(self.ERROR_FILENAME, 'a+')
                 errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n' + 'Market cap text was: ' + str(marketCapText))
