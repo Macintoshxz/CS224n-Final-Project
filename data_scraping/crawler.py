@@ -27,7 +27,7 @@ class SecCrawler():
             print r.status_code, ": ", target_url, ".  Sleeping for ", self.REQUEST_SLEEP_TIME, "..."
             time.sleep(self.REQUEST_SLEEP_TIME)
             r = requests.get(target_url)
-        print r.status_code, ": ", target_url,   
+        print r.status_code, ": ", target_url
         return r
 
     def make_directory(self, companyCode, cik, priorto, filingType):
@@ -359,7 +359,9 @@ class SecCrawler():
         for i in xrange(len(hrefs)):
             link = hrefs[i].string
             curType = types[i].string
-            if curType != '10-K':
+
+            #TOOD: REMOVE THIS WHEN DONE DOWNLOADING 405s
+            if curType != '10-K405':
                 continue
         # for link in soup.find_all('filinghref')
             URL = link.string
@@ -437,7 +439,8 @@ class SecCrawler():
                         if td.string:
                             s = str((td.string).encode('ascii', 'replace')).lower().strip()
                             #Ignore 10k-ish filingss
-                            if '10-k405' in s and '10-k/a' not in s and '10-k405/a' not in s:
+                            # print s
+                            if '10-k' in s and '10-k/a' not in s and '10-k405/a' not in s:
                                 URL = str(tr.find('a')['href'])
                                 if URL is not None:
                                     if '.htm' in URL.lower() or '.txt' in URL.lower():
@@ -445,9 +448,7 @@ class SecCrawler():
                                         foundFiling = True
                                         print 'FOUND ROW FILING!!!!: ', base_url + URL
                                 break
-
-            '''
-            TEMPORARILY COMMENTED OUT - AL 3-16-2017 10:12 AM - TO REPLACE ALL 10-K405's
+            
             #If we can't identify, use naive link checking method
             if not foundFiling:
                 for linkedDoc in newSoup.find_all('a'):
@@ -469,7 +470,7 @@ class SecCrawler():
                         foundFiling = True
                         print 'FOUND COMPLETE FILING: ', URL
                         break
-            '''
+            
 
             if foundFiling:
                 indexURLList.append(link)
