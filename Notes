@@ -1,0 +1,27 @@
+Notes:
+    Data 
+        Some market capitalizations are rounded to billion. 
+        Market Capitalization is for non-affiliates based on closing price on last business day of second quarter 
+
+        Construct isomorphism: 10ks <-> integer id <-> embeddings
+        Construct training and development data in the form .conll file with structure
+        integerid marketcap
+        integerid marketcap
+        integerid marketcap
+
+        Args specifies path to training, development data & type of cell to be used 
+
+        Market Caps are nominal - need to adjust for inflation
+        Some market caps are non-USD denominated
+
+
+    Tensorflow
+        apply dropout to between layers not horizontally between steps
+        probably don't need n_features  - we only have one feature: the doc vector.
+        Max length refers to the length of "sentence", in our case the length of the sequence of the doc vectors aka the number of 10ks availaible for a company. 
+        ""the optimal size of the hidden layer is usually between the size of the input and size of the output layers"
+        "the situations in which performance improves with a second (or third, etc.) hidden layer are very small. One hidden layer is sufficient for the large majority of problems."
+    NER_Model
+        Need to change NER_Model for with numeric prediction
+
+
