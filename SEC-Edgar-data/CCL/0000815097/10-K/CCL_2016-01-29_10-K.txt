@@ -1,9 +1,0 @@
-http://www.sec.gov/Archives/edgar/data/815097/000081509716000030/exhibit4110-k.htm
--1.0
-CCL
-2016-01-29
-10-K
-CCL_2016-01-29_10-K.txt
-
-EX-4.1 2 exhibit4110-k.htm EX-4.1 Exhibit Exhibit 4.1 January 22, 2015 Securities and Exchange Commission 450 Fifth Street, N.W.
-Judiciary Plaza Washington, DC 20549 RE:  Carnival Corporation, Commission File No. 001-9610, and Carnival plc, Commission File No. 001-15136 Gentlemen: Pursuant to Item 601(b) (4) (iii) of Regulation S-K promulgated under the Securities Exchange Act of 1934, as amended, Carnival Corporation and Carnival plc (the Companies) hereby agree to furnish copies of certain long-term debt instruments to the Securities and Exchange Commission upon the request of the Commission and, in accordance with such regulation, such instruments are not being filed as part of the joint Annual Report on Form 10-K of the Companies for their year ended November 30, 2014.
