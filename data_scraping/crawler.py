@@ -78,7 +78,7 @@ class SecCrawler():
                     lineParts = [lineStart, lineEnd]
                     marketCapSnippets = createSnippets(lineParts, strings, i)
                     if len(marketCapSnippets) > 0:
-                        print "Pulling from searchList:", searchListp
+                        print "Pulling from searchList:", searchList
                         return marketCapSnippets
         return None
 
