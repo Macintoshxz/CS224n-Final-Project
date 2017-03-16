@@ -78,7 +78,7 @@ class SecCrawler():
                     lineParts = [lineStart, lineEnd]
                     marketCapSnippets = createSnippets(lineParts, strings, i)
                     if len(marketCapSnippets) > 0:
-                        print "Pulling from searchList:", searchListp
+                        print "Pulling from searchList:", searchList
                         return marketCapSnippets
         return None
 
@@ -365,18 +365,18 @@ class SecCrawler():
 
             foundFiling = False
             #Use the table search method to locate table rows with '10k'
-            trs = soup.findAll('tr')
+            trs = newSoup.findAll('tr')
             for tr in trs:
                 if not foundFiling:
                     tds = tr.findAll('td')
                     for td in tds:
                         s = str(td.string).lower().strip()
-                        #Ignore 10k-ish filings
+                        #Ignore 10k-ish filingss
                         if '10-k' in s and '10-k/a' not in s and '10-k405' not in s:
-                            URL = str(tr.find('a').string)
+                            URL = str(tr.find('a')['href'])
                             filingURLList.append(base_url + URL)
                             foundFiling = True
-                            print 'FOUND FILING: ', URL
+                            print 'FOUND ROW FILING!!!!: ', base_url + URL
                             break
 
             #If we can't identify, use naive link checking method
@@ -386,7 +386,7 @@ class SecCrawler():
                     # print URL
                     if isFiling(filingType, URL):
                         filingURLList.append(base_url + URL)
-                        print 'FOUND FILING: ', URL
+                        print 'FOUND NAIVE FILING: ', URL
                         foundFiling = True
                         break
 
@@ -398,7 +398,7 @@ class SecCrawler():
                     if linkID in URL.lower() and '.txt' in URL.lower():
                         filingURLList.append(base_url + URL)
                         foundFiling = True
-                        print 'FOUND FILING: ', URL
+                        print 'FOUND COMPLETE FILING: ', URL
                         break
 
             if foundFiling:
