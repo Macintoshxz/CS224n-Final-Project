@@ -385,7 +385,7 @@ class SecCrawler():
                     tds = tr.findAll('td')
                     # print tds
                     for td in tds:
-                        print td
+                        # print td
                         if td.string:
                             s = str((td.string).encode('ascii', 'replace')).lower().strip()
                             #Ignore 10k-ish filingss
