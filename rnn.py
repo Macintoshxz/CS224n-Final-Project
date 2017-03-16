@@ -1,59 +1,87 @@
 # -*- coding: utf-8 -*-
 """
-Simple example using LSTM recurrent neural network to classify IMDB
-sentiment dataset.
-References:
-    - Long Short Term Memory, Sepp Hochreiter & Jurgen Schmidhuber, Neural
-    Computation 9(8): 1735-1780, 1997.
-    - Andrew L. Maas, Raymond E. Daly, Peter T. Pham, Dan Huang, Andrew Y. Ng,
-    and Christopher Potts. (2011). Learning Word Vectors for Sentiment
-    Analysis. The 49th Annual Meeting of the Association for Computational
-    Linguistics (ACL 2011).
-Links:
-    - http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf
-    - http://ai.stanford.edu/~amaas/data/sentiment/
+LSTM Recurrent Neural Network
 """
-from __future__ import division, print_function, absolute_import
-
 import tflearn
 from tflearn.data_utils import to_categorical, pad_sequences
 from tflearn.datasets import imdb
 from ingestion import construct_data
-import numpy as np
+import random
+
+def one_layer_LSTM():
+    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+    net = tflearn.lstm(net, 300, dropout=0.8, weights_init = "xavier") #300 refers to size of h_t = Embedding length
+    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+                             loss='mean_square', metric = 'R2')
+    return net
+
+def two_layer_LSTM():
+    '''
+    WARNING: CANNOT HAVE MORE THAN ONE DYNAMIC LAYER AT THE LAYER CLOSEST TO THE INPUT
+    '''
+    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier", dynamic = True, return_seq = True)
+    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier") #300 refers to size of h_t = Embedding length
+    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+                             loss='mean_square', metric = 'R2')
+    return net
+
+def three_layer_LSTM():
+    '''
+    WARNING: CANNOT HAVE MORE THAN ONE DYNAMIC LAYER AT THE LAYER CLOSEST TO THE INPUT
+    '''
+    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier", dynamic = True, return_seq = True)
+    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier", return_seq = True) #300 refers to size of h_t = Embedding length
+    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier") #300 refers to size of h_t = Embedding length
+    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+                             loss='mean_square', metric = 'R2')
+    return net
+
+def fat_one_layer_LSTM():
+    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+    net = tflearn.lstm(net, 512, dropout=0.8, weights_init = "xavier") #512 refers to size of h_t
+    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+                             loss='mean_square', metric = 'R2')
+    return net
+
+def one_layer_GRU():
+    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+    net = tflearn.gru(net, 300, dropout=0.8, weights_init = "xavier") #512 refers to size of h_t
+    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+                             loss='mean_square', metric = 'R2')
 
 #load data
 X, Y, embedding= construct_data("fleet_model.d2v", "/Users/hoyincheung/Desktop/CS224n-final-project/SEC-Edgar-data")
 
 # Data preprocessing
 # Sequence padding
-trainX = pad_sequences(X, maxlen=20, value=0.)
-
-# Converting labels to binary vectors
-trainY = Y
-
-
-# Network building
-net = tflearn.input_data([None, 20])
-net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]))
-net = tflearn.lstm(net, 300, dropout=0.8)
-net = tflearn.fully_connected(net, 1, activation='linear')
-net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
-                         loss='mean_square', metric = 'R2')
+random.seed(1234)
+trainX = pad_sequences(X, maxlen=5, value=0.)
+trainY = [[random.uniform(-1, 1)] for i in range(len(X))] #PROOF OF CONCEPT
 
 # Training
+net = fat_one_layer_LSTM()
 model = tflearn.DNN(net, tensorboard_verbose=3)
 
-# embeddingWeights = tflearn.get_layer_variables_by_name('Embedding')[0]
-# # Assign your own weights (for example, a numpy array [input_dim, output_dim])
-# model.set_weights(embeddingWeights, embedding)
+#insert our doc2vec embeddings here
+embeddingWeights = tflearn.get_layer_variables_by_name('Embedding')[0]
+model.set_weights(embeddingWeights, embedding)
 
 
-# model.fit(trainX, trainY, show_metric=True,
-#           batch_size=32, n_epoch = 10)
+model.fit(trainX, trainY, validation_set= (trainX, trainY), show_metric=True,
+          batch_size=32, n_epoch = 100)
+
+print(trainY)
+print(model.predict(trainX))
 # model.save("rnn")
-
-model.load("rnn")
-a = [1,2,3,4,5,6,7,8,9,10,0,0,0,0,0,0,0,0,0,0]
-a = np.array(a)
-a = a.reshape((-1,20))
-print(model.predict(a))
