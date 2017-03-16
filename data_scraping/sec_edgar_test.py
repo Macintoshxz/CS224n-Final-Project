@@ -80,7 +80,7 @@ def nonthreaded_get_filings():
 	lines = sp_500.readlines()
 	sp_500.close()
 	companies = [line.split('\t')[1:3] for line in lines[2:4]]
-
+	companies = [['MSFT', 'MSFT']]
 
 	companiesToDownload = 10
 	curDownloaded = 0

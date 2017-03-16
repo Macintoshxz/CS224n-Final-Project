@@ -12,6 +12,7 @@ class SecCrawler():
 
     REQUEST_SLEEP_TIME = 600
     HTTP_OKAY = 200
+    ERROR_FILENAME = 'error_log.txt'
 
     def __init__(self):
         self.hello = "Welcome to Sec Cralwer!"
@@ -35,29 +36,31 @@ class SecCrawler():
             os.makedirs("SEC-Edgar-data/")
         if not os.path.exists("SEC-Edgar-data/"+str(companyCode)):
             os.makedirs("SEC-Edgar-data/"+str(companyCode))
-        if not os.path.exists("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)):
-            os.makedirs("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik))
-        if not os.path.exists("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType)):
-            os.makedirs("SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType))
+        if not os.path.exists("SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)):
+            os.makedirs("SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType))
 
     def parseData(self, soup):
         decomposeList = ["table", "a"]
-        for toDecompose in soup.find_all(decomposeList):
+        for toDecompose in soup.findAll(decomposeList):
             toDecompose.decompose()
+            toDecompose.extract()
         return soup
 
     #Takes in an array of strings from BS4 and identifies the sentence with the market cap
     def findMarketCapText(self, strings):
+        MAX_DOT_LOOKAHEAD = 5
+
         for line in strings:
             line = line.lower()
             if "aggregate" in line and "market" in line and "value" in line:
                 idx = line.find('aggregate')
                 if idx != -1:
                     line = line[idx:]
+                    lineArray = line.split('.')
+                    line = '.'.join(lineArray[:min(MAX_DOT_LOOKAHEAD, len(lineArray) - 1)])
                 snippets = self.findPotentialMarketCapSentences(line)
                 if len(snippets) > 0:
-                    # print 'Trimmed line: ', line
-                    # print 'Snippets: ', snippets
+                    # print line
                     return snippets[0]
         for line in strings:
             line = line.lower()
@@ -65,6 +68,8 @@ class SecCrawler():
                 idx = line.find("common stock")
                 if idx != -1:
                     line = line[idx:]
+                    lineArray = line.split('.')
+                    line = '.'.join(lineArray[:min(MAX_DOT_LOOKAHEAD, len(lineArray) - 1)])
                 snippets = self.findPotentialMarketCapSentences(line)
                 if len(snippets) > 0:
                     # print line
@@ -91,29 +96,30 @@ class SecCrawler():
     def findPotentialMarketCapSentences(self, sentence):
         potentialMarketCaps = re.findall(r'was\s*\$?((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 1
+            print 1
             potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 2
+            print 2
             potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 3
+            print 3
             potentialMarketCaps = re.findall(r'approximately\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 4
+            print 4
             potentialMarketCaps = re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 5
+            print 5
             potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 3
+            print 6
             potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]illion(?i))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 4
+            print 7
             potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            # print 5
+            print 8
             potentialMarketCaps = re.findall(r'\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
+        print potentialMarketCaps
         return potentialMarketCaps
             
     def marketCapFromText(self, marketCapText):
@@ -126,55 +132,94 @@ class SecCrawler():
         for line in lines:
             found = re.findall('\.\s*$', line)
             curLine += line.strip() + " "
-            if len(found) != 0:
-                # if 'therapeutic' in curLine:
-                #     print curLine
+            if len(found) != 0:                
                 curLine = curLine.replace("?", " ")
+                curLine = re.sub(r'\s\s+', ' ', curLine)
                 curLine = curLine.replace("\n", " ")
                 outArray.append(curLine)
                 curLine = ""
         return outArray
 
-    def save_in_directory(self, companyCode, cik, priorto, filingURLList, docNameList, filingType):
+    def truncateDocumentData(self, data):
+        strings = data.split('\n')
+        endIdx = len(strings)
+        for i in xrange(len(strings)):
+            s = strings[i]
+            if '</DOCUMENT>' in s:
+                endIdx = i
+                break
+        strings = strings[:endIdx]
+        newData = '\n'.join(strings)
+
+        return newData
+
+    def save_in_directory(self, companyCode, cik, priorto, filingURLList, docNameList, indexURLList, filingType):
         # Save every text document into its respective folder
         for i in range(len(filingURLList)):
-            path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType)+"/"+str(docNameList[i])
+            path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"+str(docNameList[i])
 
-            #Don't overwrite existing files.
-            if os.path.isfile(path):
-                #Fixing weird .txt downloads
-                f = open(path, 'r')
-                original_filetype = f.readline().split('.')[-1]
-                f.close()
-                if original_filetype != 'txt':
-                    print "ALREADY EXISTS: ", path, ', moving on...'
-                    continue
+            #Don't overwrite existing, non-text root files
+            # if os.path.isfile(path):
+            #     #Fixing weird .txt downloads
+            #     f = open(path, 'r')
+            #     original_filetype = f.readline().split('.')[-1]
+            #     f.close()
+            #     ##TODO: Remove the following after we actually fix things
+            #     print 'Original filetype:', original_filetype
+            #     if 'txt' not in original_filetype:
+            #         print "ALREADY EXISTS: ", path, ', moving on...'
+            #         continue
 
             t1 = time.time()
             target_url = filingURLList[i]
+            index_url = indexURLList[i]
             print "Saving ", target_url, "..."
 
             r = self.repeatRequest(target_url)
             if r is None:
-                errorFile = open('error_log.txt', 'a+')
+                errorFile = open(self.ERROR_FILENAME, 'a+')
                 errorFile.write(target_url + '\n')
                 errorFile.close()
                 continue
             data = r.text
             strings = None
-            # if '.txt' not in target_url:
-            soup = BeautifulSoup(data, "lxml")
-            soup = BeautifulSoup(soup.prettify(), "lxml")
-            strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
-            # else:
-            #     strings = [s.encode('ascii', 'replace') for s in data.split('\n') if s.strip() != '']
 
+            #Attempt normal parsing.  If this fails, try truncating and parsing again
+            #If this fails AGAIN, just ignore it completely.
+            try:
+                soup = BeautifulSoup(data, "lxml")
+                soup = BeautifulSoup(soup.prettify(), "lxml")
+                soup = self.parseData(soup)
+                if '.txt' in target_url:
+                    strings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                else:
+                    strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+                print 'finished initial souping'
+            except:
+                print 'Initial soup load failed'
+                try:
+                    data = self.truncateDocumentData(data)
+                    soup = BeautifulSoup(data, "lxml")
+                    soup = BeautifulSoup(soup.prettify(), "lxml")
+                    soup = self.parseData(soup)
+                    if '.txt' in target_url:
+                        strings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                    else:
+                        strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+                except:
+                    print 'Soup conversion failed.  Running as text.'
+                    errorFile = open(self.ERROR_FILENAME, 'a+')
+                    errorFile.write('SOUP CONVERSION FAILED: ' + target_url + '\n')
+                    errorFile.close()
+                    continue
+
+            print "Num strings:", len(strings)
             outArray = self.getCombinedLineArray(strings)
 
             header = outArray[0:50]
            
             marketCapText = self.findMarketCapText(header)
-            # print marketCapText
+            print marketCapText
             marketCap = -1
             if marketCapText is not None:
                 marketCap = self.marketCapFromText(marketCapText)
@@ -185,6 +230,7 @@ class SecCrawler():
 
             filename = open(path,"w+")
             filename.write(target_url + '\n')
+            filename.write(index_url + '\n')
             filename.write(str(float(marketCap)) + '\n')
             infoArray = docNameList[i].strip(".txt").split('_')
             for info in infoArray:
@@ -232,6 +278,7 @@ class SecCrawler():
         print "Number of files to download: ", numFiles
         print "Starting download...."
 
+        indexURLList = [] # List of index URLs used.
         filingURLList = [] # List of URLs scraped from index.
         docNameList = [] # List of document names
 
@@ -252,17 +299,31 @@ class SecCrawler():
                 # print URL
                 URL = URL.lower()
                 filingType = filingType.lower()
+                filingTypeFillerRegex = filingType.replace('-', '.')
+                filingTypeNoHyphenRegex = filingType.replace('-', '')
                 # print 'TESTING URL:', URL
                 if '/archives/' in URL:
-                    if (filingType + '.htm') in URL:
+                    if re.search(filingTypeFillerRegex + '\.htm', URL) != None:
                         return True
-                    if (filingType.replace('-', '').lower() + '.htm') in URL:
+                    if re.search(filingTypeNoHyphenRegex + '\.htm', URL) != None:
                         return True
-                    if (filingType + '.txt') in URL:
+                    if re.search(filingTypeFillerRegex + '\.txt', URL) != None:
                         return True
-                    if (filingType.replace('-', '').lower() + '.txt') in URL:
+                    if re.search(filingTypeNoHyphenRegex + '\.txt', URL) != None:
                         return True
                 return False
+
+                # if '/archives/' in URL:
+                #     if re.search(filingTypeFillerRegex + '\.htm', URL) != None
+                #         return True
+                #     if (filingType.replace('-', '') + '.htm') in URL:
+                #         return True
+                #     results = re.search(r'\.', URL)
+                #     if (filingType + '.txt') in URL:
+                #         return True
+                #     if (filingType.replace('-', '') + '.txt') in URL:
+                #         return True
+                # return False
 
             foundFiling = False
             #Use the table search method to locate table rows with '10k'
@@ -271,7 +332,9 @@ class SecCrawler():
                 if not foundFiling:
                     tds = tr.findAll('td')
                     for td in tds:
-                        s = str(td.string).lower().strip().st
+                        s = str(td.string).lower().strip()
+
+
                         #Ignore 10k-ish filings
                         if '10-k' in s and '10-k/a' not in s and '10-k405' not in s:
                             URL = str(tr.find('a').string)
@@ -302,7 +365,11 @@ class SecCrawler():
                         print 'FOUND FILING: ', URL
                         break
 
+            if foundFiling:
+                indexURLList.append(link)
+
+
         # try:
-        self.save_in_directory(companyCode, cik, priorto, filingURLList, docNameList, filingType)
+        self.save_in_directory(companyCode, cik, priorto, filingURLList, docNameList, indexURLList, filingType)
         # except:
             # print "Not able to save " + filingType + " files for " + companyCode
