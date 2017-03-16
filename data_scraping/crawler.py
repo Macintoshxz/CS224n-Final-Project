@@ -22,12 +22,12 @@ class SecCrawler():
         acceptable_errors = [404]
         while r.status_code != self.HTTP_OKAY:
             if r.status_code in acceptable_errors:
-                print r.status_code, " received for request: ", target_url, ".  Moving on."
-                return Nones
-            print r.status_code, " received for request: ", target_url, ".  Sleeping for ", self.REQUEST_SLEEP_TIME, "..."
+                print r.status_code, ": ", target_url, ""
+                return None
+            print r.status_code, ": ", target_url, ".  Sleeping for ", self.REQUEST_SLEEP_TIME, "..."
             time.sleep(self.REQUEST_SLEEP_TIME)
             r = requests.get(target_url)
-        print r.status_code, " received for request: ", target_url, ".  Onwards!"    
+        print r.status_code, ": ", target_url,   
         return r
 
     def make_directory(self, companyCode, cik, priorto, filingType):
@@ -48,13 +48,13 @@ class SecCrawler():
 
     #Takes in an array of strings from BS4 and identifies the sentence with the market cap
     def findMarketCapText(self, strings):
-        MAX_DOT_LOOKAHEAD = 15
-        MAX_DOT_LOOKBEHIND = 10
+        MAX_DOT_LOOKAHEAD = 20
+        MAX_DOT_LOOKBEHIND = 15
 
         def createSnippets(lineParts, strings, i):
             nextLines = ' '.join(strings[i + 1: i + 3]).split('.')
             nextLines = nextLines[:min(MAX_DOT_LOOKAHEAD, len(nextLines) - 1)]
-            prevLines = ' '.join(strings[i-2]).split('.')
+            prevLines = ' '.join(strings[i-3]).split('.')
             prevLines = prevLines[min(-MAX_DOT_LOOKBEHIND, -(len(prevLines)-1)):]
             line = '.'.join(prevLines + lineParts + nextLines)
             snippets = self.findPotentialMarketCapSentences(line)
@@ -186,7 +186,7 @@ class SecCrawler():
             r = self.repeatRequest(target_url)
             if r is None:
                 errorFile = open(self.ERROR_FILENAME, 'a+')
-                errorFile.write(target_url + '\n')
+                errorFile.write('404 FROM: ', target_url + '\n')
                 errorFile.close()
                 continue
             data = r.text
@@ -233,9 +233,9 @@ class SecCrawler():
                 marketCap = self.convertTextToAmount(marketCapText)
             print 'Market Cap: ', marketCap
             if marketCap < 100000000:
-                print 'BAD MARKET CAP DETECTED: ', str(marketCap), '\n', target_url
+                print 'BAD MARKET CAP DETECTED: ', str(marketCap), '\n', target_url, companyCode
                 errorFile = open(self.ERROR_FILENAME, 'a+')
-                errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + '\n')
+                errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n' + 'Market cap text was: ', marketCapText)
                 errorFile.close()
 
             outString = '\n'.join(outArray)
