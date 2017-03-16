@@ -139,10 +139,16 @@ class SecCrawler():
         # Save every text document into its respective folder
         for i in range(len(filingURLList)):
             path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(cik)+"/"+str(filingType)+"/"+str(docNameList[i])
+
             #Don't overwrite existing files.
             if os.path.isfile(path):
-                print "ALREADY EXISTS: ", path, ', moving on...'
-                continue
+                #Fixing weird .txt downloads
+                f = open(path, 'r')
+                original_filetype = f.readline().split('.')[-1]
+                f.close()
+                if original_filetype != 'txt':
+                    print "ALREADY EXISTS: ", path, ', moving on...'
+                    continue
 
             t1 = time.time()
             target_url = filingURLList[i]
@@ -156,12 +162,12 @@ class SecCrawler():
                 continue
             data = r.text
             strings = None
-            if '.txt' not in target_url:
-                soup = BeautifulSoup(data, "lxml")
-                soup = BeautifulSoup(soup.prettify(), "lxml")
-                strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
-            else:
-                strings = [s.encode('ascii', 'replace') for s in data.split('\n') if s.strip() != '']
+            # if '.txt' not in target_url:
+            soup = BeautifulSoup(data, "lxml")
+            soup = BeautifulSoup(soup.prettify(), "lxml")
+            strings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+            # else:
+            #     strings = [s.encode('ascii', 'replace') for s in data.split('\n') if s.strip() != '']
 
             outArray = self.getCombinedLineArray(strings)
 
@@ -228,9 +234,6 @@ class SecCrawler():
 
         filingURLList = [] # List of URLs scraped from index.
         docNameList = [] # List of document names
-        
-        # print linkListFinal
-
 
         for link in linkListFinal:
             r = self.repeatRequest(link)
@@ -239,15 +242,12 @@ class SecCrawler():
             linkList=[] # List of all links from the CIK page
 
             # Finds the filing date for this set of documents
-            # if newSoup == None:
-            #     print 'Shit there aint no soup'
             grouping = newSoup.findAll('div', {'class': 'formGrouping'})[1]
-            # print grouping
             filingDate = grouping.find('div', {'class': 'info'}).string
             docName = companyCode + "_" + filingDate + "_" + filingType + ".txt"
             docNameList.append(docName)
 
-            # Finds filingType documents from the index page
+            # Finds filingType documents from the index page using link checking
             def isFiling(filingType, URL):
                 # print URL
                 URL = URL.lower()
@@ -264,38 +264,43 @@ class SecCrawler():
                         return True
                 return False
 
-            # print "Link was: ", link
             foundFiling = False
-            for linkedDoc in newSoup.find_all('a'):
-                URL = linkedDoc['href']
-                # print URL
-                if isFiling(filingType, URL):
-                    filingURLList.append(base_url + URL)
-                    print 'FOUND FILING: ', URL
-                    foundFiling = True
-                    break
+            #Use the table search method to locate table rows with '10k'
+            trs = soup.findAll('tr')
+            for tr in trs:
+                if not foundFiling:
+                    tds = tr.findAll('td')
+                    for td in tds:
+                        s = str(td.string).lower().strip().st
+                        #Ignore 10k-ish filings
+                        if '10-k' in s and '10-k/a' not in s and '10-k405' not in s:
+                            URL = str(tr.find('a').string)
+                            filingURLList.append(base_url + URL)
+                            foundFiling = True
+                            print 'FOUND FILING: ', URL
+                            break
 
-            ''' If no filings found, THEN go look for .txt file'''
+            #If we can't identify, use naive link checking method
+            if not foundFiling:
+                for linkedDoc in newSoup.find_all('a'):
+                    URL = linkedDoc['href']
+                    # print URL
+                    if isFiling(filingType, URL):
+                        filingURLList.append(base_url + URL)
+                        print 'FOUND FILING: ', URL
+                        foundFiling = True
+                        break
+
+            ''' If no filings found, THEN go look for complete submission .txt file'''
             if not foundFiling:
                 linkID = link.split('/')[-1].strip('-index.html')
                 for linkedDoc in newSoup.find_all('a'):
                     URL = linkedDoc['href']
-                    if linkID in URL and '.txt' in URL.lower():
+                    if linkID in URL.lower() and '.txt' in URL.lower():
                         filingURLList.append(base_url + URL)
+                        foundFiling = True
                         print 'FOUND FILING: ', URL
                         break
-
-        # print 'Printing filingURLList'
-        # for url in filingURLList:
-        #     print url
-
-            # soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
-            # requiredURL = str(linkListFinal[i])[0:len(linkListFinal[i])-11]
-            # print requiredURL
-            # txtdoc = requiredURL+".txt"
-            # docname = txtdoc.split("/")[len(txtdoc.split("/"))-1]
-            # docList.append(txtdoc)
-            # docNameList.append(docname)
 
         # try:
         self.save_in_directory(companyCode, cik, priorto, filingURLList, docNameList, filingType)
