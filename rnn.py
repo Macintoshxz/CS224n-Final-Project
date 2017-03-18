@@ -16,7 +16,7 @@ def feedforward(embedding):
     net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.fully_connected(net, 5, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.regression(net, optimizer='adam', learning_rate=0.000001,
+    net = tflearn.regression(net, optimizer='adam', learning_rate=1e-8,
                              loss='categorical_crossentropy', metric = 'Accuracy')
     return net
 
@@ -81,7 +81,7 @@ def splitData(arr, valPercentage, testPercentage):
 
 #load data
 # X, Y, embedding= construct_data("fleet_model.d2v", "/Users/hoyincheung/Desktop/CS224n-final-project/SEC-Edgar-data")
-X, Y, embedding = construct_single_feedforward_data("check.txt", 50)
+X, Y, embedding = construct_single_feedforward_data("check.txt", 300)
 Y = tflearn.data_utils.to_categorical (Y, max(Y) + 1)
 
 X = [[x] for x in X]
