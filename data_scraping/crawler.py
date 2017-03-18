@@ -19,7 +19,7 @@ class SecCrawler():
 
     def repeatRequest(self, target_url):
         r = requests.get(target_url)
-        acceptable_errors = [404, 503]
+        acceptable_errors = [404]
         REQUEST_THRESHOLD = 5
         requestCounter = 0
         while r.status_code != self.HTTP_OKAY:

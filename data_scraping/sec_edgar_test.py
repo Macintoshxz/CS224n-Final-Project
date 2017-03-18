@@ -61,7 +61,7 @@ def nonthreaded_get_filings():
 	sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
 	sp_500.close()
-	companies = [line.split('\t')[1:3] for line in lines]
+	companies = [line.split('\t')[1:3] for line in lines[100:]]
 
 	# OVERRIDES FOR TESTING
 	# companies = [line.split('\t')[1:3] for line in lines[2:4]]
