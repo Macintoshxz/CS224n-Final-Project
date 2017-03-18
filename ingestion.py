@@ -84,24 +84,37 @@ def get_glove_for_data():
     '''
 
 
-def construct_feedforward_data(filename):
+def construct_single_feedforward_data(filename, embeddingDim):
     '''
     For constructing data for feedforward nerual net for classificiation
     on five classes based on quintiles of percentage change. 
 
     Filename refers to the check file. Third column is the percentage change. 
     First column is the ticker. Second column is the year.
+
+    outDict is now [ticker, year, perChange, mc, date, filename, link, integerMapping]
+
     '''
     #dict of change : (ticker, year) mapping
+    embeddingBase = 'embeddingDicts/embeddingDict_'
+    embeddingFile = embeddingBase + str(embeddingDim) + '.pkl'
+
     dict = {}
+    integerToFilename = {}
     with open(filename) as check:
         lines = check.readlines()
         for line in lines:
             data = line.split("\t")
-            ticker = data[0]
-            year = data[1]
-            change = float(data[2])
-            dict[change] = (ticker, year)
+            ticker = data[0].strip()
+            year = data[1].strip()
+            integer = int(data[-1].strip())
+            data_filename = data[-3].strip()
+            change = data[2].strip()
+            if change == 'None':
+                continue
+            change = float(change)
+            dict[change] = integer
+            integerToFilename[integer] = data_filename
 
     #sort by change
     orderedList = dict.items()
@@ -114,12 +127,22 @@ def construct_feedforward_data(filename):
     fifth = int(listlen/5)
     labelsDict = {}
     for i in range(listlen):
-            labelsDict[orderedList[i][1]] = i/fifth if i/fifth <= 4 else 4 #backloading
-            if i % fifth == 0:
-                print(orderedList[i][0])
+        labelsDict[orderedList[i][1]] = i/fifth if i/fifth <= 4 else 4 #backloading
+        if i % fifth == 0:
+            print(orderedList[i][0])
 
+    embeddingDict = pickle.load(open(embeddingFile, "r"))
 
+    X = []
+    Y = []
+    for curInteger in sorted(labelsDict.keys()):
+        curFilename = integerToFilename[curInteger]
+        X.append(embeddingDict[curFilename])
+        Y.append(labelsDict[curInteger])
 
+    # print X[:5]
+    # print Y[:5]
+    return X, Y
 
 
 def construct_data(filename, path):
@@ -346,8 +369,8 @@ if __name__ == '__main__':
     # pickle.dump(mc, open("market_labels", "w"))
     # X, Y = construct_data("fleet_model.d2v", "data_scraping/SEC-Edgar-data")
 
-    # construct_feedforward_data("check.txt")
-    test_check("check.txt")
+    construct_single_feedforward_data("check.txt", 100)
+    # test_check("check.txt")
 
 # =======
 #     DATA_PATH = "data_scraping/SEC-Edgar-data"
