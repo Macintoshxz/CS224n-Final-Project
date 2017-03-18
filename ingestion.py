@@ -149,8 +149,7 @@ def createCheckFile(path, inflationDict, outPath):
     args: path is the path to the SEC filings
     Output: returns a dictionary mapping (ticker, year) : market capitalization
     '''
-    outFile = open(outPath, 'w+')
-    outDict = {}
+    filingDict = {}
     fileCounter = 0
     for subdir, dirs, files in os.walk(path):
         for f in files:
@@ -158,22 +157,26 @@ def createCheckFile(path, inflationDict, outPath):
                 print fileCounter, 'files processed.'
             docPath = os.path.join(subdir, f)
             filename, file_extension = os.path.splitext(f)
-            if file_extension == ".txt":     
+            if file_extension == ".txt" and 'embedding' not in filename:     
                 infile = open(docPath, 'r')
                 #Reading individual lines (so as to not open the entire thing), so ordering matters
                 file_html = infile.readline().strip()
                 index_html = infile.readline().strip()
-                mc = float(infile.readline().strip())
+                try:
+                    mc = float(infile.readline().strip())
+                except:
+                    print filename
+                    return
                 ticker = infile.readline().strip()
                 filingDate = infile.readline().strip()
                 infile.close()
                 filingYear = int(filingDate.split("-")[0])
                 mc = mc*inflationDict[filingYear]
 
-                if ticker not in outDict:
-                    outDict[ticker] = {}
-                if filingYear in outDict[ticker]:
-                    prevFiling = outDict[ticker][filingYear]
+                if ticker not in filingDict:
+                    filingDict[ticker] = {}
+                if filingYear in filingDict[ticker]:
+                    prevFiling = filingDict[ticker][filingYear]
                     curFiling = [ticker, str(filingYear), str(mc), filingDate, f, file_html]
                     prevDate = prevFiling[3]
                     if filingDate < prevDate:
@@ -183,50 +186,67 @@ def createCheckFile(path, inflationDict, outPath):
                         firstData = prevFiling
                         secondData = curFiling
                         
-                    if (filingYear - 1) not in outDict[ticker]:
+                    if (filingYear - 1) not in filingDict[ticker]:
                         firstData[1] = str(filingYear - 1)
-                        outDict[ticker][filingYear - 1] = firstData
-                        outDict[ticker][filingYear] = secondData
+                        filingDict[ticker][filingYear - 1] = firstData
+                        filingDict[ticker][filingYear] = secondData
                     else:
                         secondData[1] = str(filingYear + 1)
-                        outDict[ticker][filingYear] = firstData
-                        outDict[ticker][filingYear + 1] = secondData
+                        filingDict[ticker][filingYear] = firstData
+                        filingDict[ticker][filingYear + 1] = secondData
                 else:
-                    outDict[ticker][filingYear] = [ticker, str(filingYear), str(mc), filingDate, f, file_html]
+                    filingDict[ticker][filingYear] = [ticker, str(filingYear), str(mc), filingDate, f, file_html]
             fileCounter += 1
 
     #Reformat every line
     fileCounter = 0
-    for ticker in sorted(outDict.keys()):
+    outDict = {}
+    for ticker in sorted(filingDict.keys()):
+        outDict[ticker] = {}
         print ticker
-        tickerCounter = 0
-        years = sorted(outDict[ticker].keys())
+        years = sorted(filingDict[ticker].keys())
         
-        for yearIdx in range(len(outDict[ticker].keys())):
+        for yearIdx in range(len(years)):
             year = years[yearIdx]
-            filing = outDict[ticker][year]
+            filing = filingDict[ticker][year]
             curMC = float(filing[2])
 
             #Not the last entry
             if curMC != 0:
-                if yearIdx != len(outDict[ticker].keys()) - 1:
+                if yearIdx != len(filingDict[ticker].keys()) - 1:
                     nextYear = years[yearIdx + 1]
-                    nextMC = float(outDict[ticker][nextYear][2])
+                    nextMC = float(filingDict[ticker][nextYear][2])
                     perChange = (nextMC - curMC) / curMC
                 else:
                     perChange = None
             else:
                 perChange = None
-            outDict[ticker][year] = filing[:1] + [str(years[0]+tickerCounter)] + [str(perChange)] + filing[2:] + [str(tickerCounter)]
+            outDict[ticker][yearIdx] = filing[:1] + [str(years[0]+yearIdx)] + [str(perChange)] + filing[2:] + [str(fileCounter)]
+            fileCounter += 1
 
-            tickerCounter += 1
-        fileCounter += 1
-    
+    # outDict is now [company, year, perChange, mc, date, filename, link, integerMapping]
+
+    integerToFilenamePerChange = {}
+    filenameToInteger = {}
+    outFile = open(outPath, 'w+')
+
     for ticker in sorted(outDict.keys()):
-        for date in sorted(outDict[ticker].keys()):
-            outString = '\t'.join(outDict[ticker][date]) + '\n'
+        for yearIdx in sorted(outDict[ticker].keys()):
+            line = outDict[ticker][yearIdx]
+
+            integer = line[-1]
+            filename = line[-3]
+            perChange = line[2]
+
+            integerToFilenamePerChange[integer] = [filename, perChange]
+            filenameToInteger[filename] = integer
+
+            outString = '\t'.join(outDict[ticker][yearIdx]) + '\n'
             outFile.write(outString)
     outFile.close()
+    pickle.dump(integerToFilename, open('integerToFilenamePerChange.pkl', "w+" ))
+    pickle.dump(filenameToInteger, open('filenameToInteger.pkl', "w+" ))
+
 
 if __name__ == '__main__':
     # parser = argparse.ArgumentParser(description='Scrapes Market Cap from SEC db.')
