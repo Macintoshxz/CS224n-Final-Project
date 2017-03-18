@@ -362,7 +362,7 @@ class SecCrawler():
             link = hrefs[i].string
             curType = types[i].string
 
-            if curType != '10-K405' and curType != '10-K':
+            if curType != '10-K405' and curType != '10-K', and curType != '10-KT':
                 continue
         # for link in soup.find_all('filinghref')
             URL = link.string

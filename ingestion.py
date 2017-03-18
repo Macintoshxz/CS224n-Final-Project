@@ -38,8 +38,6 @@ def Doc2VecMapping(filename):
 
     return orderedd2v, sequenceDict.values()
 
-
-
 def getMarketCap(path, inflationDict):
     '''
     args: path is the path to the SEC filings
@@ -77,10 +75,77 @@ def createInflationDict(path):
         inflationDict[int(year)] = float(rate)
     return inflationDict
 
+def get_glove_for_data():
+    '''
+    Create "document vectors" by averaging glove vectors
+    for words inside 10ks
+    '''
+
+def construct_single_feedforward_data(filename, embeddingDim):
+    '''
+    For constructing data for feedforward nerual net for classificiation
+    on five classes based on quintiles of percentage change. 
+
+    Filename refers to the check file. Third column is the percentage change. 
+    First column is the ticker. Second column is the year.
+
+    outDict is now [ticker, year, perChange, mc, date, filename, link, integerMapping]
+
+    '''
+    #dict of change : (ticker, year) mapping
+    embeddingBase = 'embeddingDicts/embeddingDict_'
+    embeddingFile = embeddingBase + str(embeddingDim) + '.pkl'
+
+    dict = {}
+    integerToFilename = {}
+    with open(filename) as check:
+        lines = check.readlines()
+        for line in lines:
+            data = line.split("\t")
+            ticker = data[0].strip()
+            year = data[1].strip()
+            integer = int(data[-1].strip())
+            data_filename = data[-3].strip()
+            change = data[2].strip()
+            if change == 'None':
+                continue
+            change = float(change)
+            dict[change] = integer
+            integerToFilename[integer] = data_filename
+
+    #sort by change
+    orderedList = dict.items()
+    orderedList = sorted(orderedList, key = lambda t: t[0])
+
+    #dict of (ticker, year) : label where label is from 0 to 4 with 0 being lowest
+    #quintile and 4 being the highest quintile
+    #will backload up to 4 labels of 4 (consider example if len = 24)
+    listlen = len(orderedList)
+    fifth = int(listlen/5)
+    labelsDict = {}
+    for i in range(listlen):
+        labelsDict[orderedList[i][1]] = i/fifth if i/fifth <= 4 else 4 #backloading
+        if i % fifth == 0:
+            print(orderedList[i][0])
+
+    embeddingDict = pickle.load(open(embeddingFile, "r"))
+
+    embeddings = []
+    labels = []
+    for curInteger in sorted(labelsDict.keys()):
+        curFilename = integerToFilename[curInteger]
+        embeddings.append(embeddingDict[curFilename])
+        labels.append(labelsDict[curInteger])
+
+    indices = range(len(embeddings))
+    # print X[:5]
+    # print Y[:5]
+    return indices, labels, embeddings
+
+
 def construct_data(filename, path):
     '''
-    Constructs data in the format requried by TFLearn
-    TODO Check for correctness
+    Old: for RNN. But not enough data. 
     '''
     inflationDict = createInflationDict()
     orderedd2v, X = Doc2VecMapping(filename)
@@ -143,14 +208,53 @@ def test_contiguous_data():
     if not test:
         print "CONTIGUOUS DATA CHECK FAILED!"
 
+def test_check(filename):
+    '''
+    Fix Contiguous check
+    '''
+    length = 0
+    with open("Data_Test.txt", "w") as output:
+        with open(filename) as check:
+            lines = check.readlines()
+            length = len(lines)
+            for line in lines:
+                data = line.split("\t")
+                year = data[4].split("-")[0]
+                if data[1]!= year:
+                    # output.write("Year Mismatch" + " " + data[0] + " " + data[1] + "\n")
+                    output.write(data[5] + "\n")
+
+                if data[2] != "None" and (float(data[2]) > 5 or float(data[2]) < -2):
+                    # output.write("Suspicious Percentage Change" + " " + data[0]  + " " + data[1] + "\n")
+                     output.write(data[5] + "\n")
+
+                if data[3] != "None" and float(data[3]) < 100000000.0:
+                    # output.write("Suspicious Market Cap" + " " + data[0]  + " " + data[1] + "\n")
+                    output.write(data[5] + "\n")
+
+        with open(filename) as check:
+            lines = check.readlines()
+            curr = []
+            company = ""
+            for line in lines:
+                data = line.split("\t")
+                if  data[0] == company:
+                    curr.append(int(data[1]))
+                else:
+                    curr = [int(data[1])]
+                if curr[-1] == 2016 and curr[-1] - curr[0] + 1 != len(curr):
+                    output.write("Contiguous Data Fail" " " + data[0] + "\n")
+                company = data[0]
+                    
+                
+        output.write("File contains" + " " + str(length) + " 10ks" + "\n")
 
 def createCheckFile(path, inflationDict, outPath):
     '''
     args: path is the path to the SEC filings
     Output: returns a dictionary mapping (ticker, year) : market capitalization
     '''
-    outFile = open(outPath, 'w+')
-    outDict = {}
+    filingDict = {}
     fileCounter = 0
     for subdir, dirs, files in os.walk(path):
         for f in files:
@@ -158,22 +262,26 @@ def createCheckFile(path, inflationDict, outPath):
                 print fileCounter, 'files processed.'
             docPath = os.path.join(subdir, f)
             filename, file_extension = os.path.splitext(f)
-            if file_extension == ".txt":     
+            if file_extension == ".txt" and 'embedding' not in filename:     
                 infile = open(docPath, 'r')
                 #Reading individual lines (so as to not open the entire thing), so ordering matters
                 file_html = infile.readline().strip()
                 index_html = infile.readline().strip()
-                mc = float(infile.readline().strip())
+                try:
+                    mc = float(infile.readline().strip())
+                except:
+                    print filename
+                    return
                 ticker = infile.readline().strip()
                 filingDate = infile.readline().strip()
                 infile.close()
                 filingYear = int(filingDate.split("-")[0])
                 mc = mc*inflationDict[filingYear]
 
-                if ticker not in outDict:
-                    outDict[ticker] = {}
-                if filingYear in outDict[ticker]:
-                    prevFiling = outDict[ticker][filingYear]
+                if ticker not in filingDict:
+                    filingDict[ticker] = {}
+                if filingYear in filingDict[ticker]:
+                    prevFiling = filingDict[ticker][filingYear]
                     curFiling = [ticker, str(filingYear), str(mc), filingDate, f, file_html]
                     prevDate = prevFiling[3]
                     if filingDate < prevDate:
@@ -183,50 +291,67 @@ def createCheckFile(path, inflationDict, outPath):
                         firstData = prevFiling
                         secondData = curFiling
                         
-                    if (filingYear - 1) not in outDict[ticker]:
+                    if (filingYear - 1) not in filingDict[ticker]:
                         firstData[1] = str(filingYear - 1)
-                        outDict[ticker][filingYear - 1] = firstData
-                        outDict[ticker][filingYear] = secondData
+                        filingDict[ticker][filingYear - 1] = firstData
+                        filingDict[ticker][filingYear] = secondData
                     else:
                         secondData[1] = str(filingYear + 1)
-                        outDict[ticker][filingYear] = firstData
-                        outDict[ticker][filingYear + 1] = secondData
+                        filingDict[ticker][filingYear] = firstData
+                        filingDict[ticker][filingYear + 1] = secondData
                 else:
-                    outDict[ticker][filingYear] = [ticker, str(filingYear), str(mc), filingDate, f, file_html]
+                    filingDict[ticker][filingYear] = [ticker, str(filingYear), str(mc), filingDate, f, file_html]
             fileCounter += 1
 
     #Reformat every line
     fileCounter = 0
-    for ticker in sorted(outDict.keys()):
+    outDict = {}
+    for ticker in sorted(filingDict.keys()):
+        outDict[ticker] = {}
         print ticker
-        tickerCounter = 0
-        years = sorted(outDict[ticker].keys())
+        years = sorted(filingDict[ticker].keys())
         
-        for yearIdx in range(len(outDict[ticker].keys())):
+        for yearIdx in range(len(years)):
             year = years[yearIdx]
-            filing = outDict[ticker][year]
+            filing = filingDict[ticker][year]
             curMC = float(filing[2])
 
             #Not the last entry
             if curMC != 0:
-                if yearIdx != len(outDict[ticker].keys()) - 1:
+                if yearIdx != len(filingDict[ticker].keys()) - 1:
                     nextYear = years[yearIdx + 1]
-                    nextMC = float(outDict[ticker][nextYear][2])
+                    nextMC = float(filingDict[ticker][nextYear][2])
                     perChange = (nextMC - curMC) / curMC
                 else:
                     perChange = None
             else:
                 perChange = None
-            outDict[ticker][year] = filing[:1] + [str(years[0]+tickerCounter)] + [str(perChange)] + filing[2:] + [str(tickerCounter)]
+            outDict[ticker][yearIdx] = filing[:1] + [str(years[0]+yearIdx)] + [str(perChange)] + filing[2:] + [str(fileCounter)]
+            fileCounter += 1
 
-            tickerCounter += 1
-        fileCounter += 1
-    
+    # outDict is now [company, year, perChange, mc, date, filename, link, integerMapping]
+
+    integerToFilenamePerChange = {}
+    filenameToInteger = {}
+    outFile = open(outPath, 'w+')
+
     for ticker in sorted(outDict.keys()):
-        for date in sorted(outDict[ticker].keys()):
-            outString = '\t'.join(outDict[ticker][date]) + '\n'
+        for yearIdx in sorted(outDict[ticker].keys()):
+            line = outDict[ticker][yearIdx]
+
+            integer = line[-1]
+            filename = line[-3]
+            perChange = line[2]
+
+            integerToFilenamePerChange[integer] = [filename, perChange]
+            filenameToInteger[filename] = integer
+
+            outString = '\t'.join(outDict[ticker][yearIdx]) + '\n'
             outFile.write(outString)
     outFile.close()
+    pickle.dump(integerToFilename, open('integerToFilenamePerChange.pkl', "w+" ))
+    pickle.dump(filenameToInteger, open('filenameToInteger.pkl', "w+" ))
+
 
 if __name__ == '__main__':
     # parser = argparse.ArgumentParser(description='Scrapes Market Cap from SEC db.')
@@ -236,11 +361,16 @@ if __name__ == '__main__':
     # print mc
     # pickle.dump(mc, open("market_labels", "w"))
     # X, Y = construct_data("fleet_model.d2v", "data_scraping/SEC-Edgar-data")
-    DATA_PATH = "data_scraping/SEC-Edgar-data"
-    INFLATION_TABLE_PATH = "data_scraping/inflation_table.txt"
-    inflationDict = createInflationDict(INFLATION_TABLE_PATH)
-    createCheckFile(DATA_PATH, inflationDict, 'check.txt')
-    import pdb; pdb.set_trace()
+
+    construct_single_feedforward_data("check.txt", 100)
+    # test_check("check.txt")
+
+# =======
+#     DATA_PATH = "data_scraping/SEC-Edgar-data"
+#     INFLATION_TABLE_PATH = "data_scraping/inflation_table.txt"
+#     inflationDict = createInflationDict(INFLATION_TABLE_PATH)
+#     createCheckFile(DATA_PATH, inflationDict, 'check.txt')
+#     import pdb; pdb.set_trace()
 
 
 

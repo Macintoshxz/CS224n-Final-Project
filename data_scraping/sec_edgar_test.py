@@ -63,34 +63,18 @@ def nonthreaded_get_filings():
 	sp_500.close()
 	companies = [line.split('\t')[1:3] for line in lines]
 
+	# OVERRIDES FOR TESTING
 	# companies = [line.split('\t')[1:3] for line in lines[2:4]]
-	companies = [['AAPL', 'AAPL']]
-
-	companiesToDownload = 10
-	curDownloaded = 0
-	blocking = True
-	scrapeCount = 0
+	companies = [['AMZN', 'AMZN']]
 	
 	start = time.time()
 	for companyCode, cik in companies:
-		# if companyCode != 'A' and blocking:
-		# 	scrapeCount += 1
-		# 	continue
-		# print 'madeit'
-		# blocking = False
-		# if scrapeCount < curDownloaded:
-			# scrapeCount += 1
-			# continue
-
 		t1 = time.time() 
 		seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "10-K")
 		# seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "10-Q")
 		# seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "8-K") 
 		t2 = time.time() 
 		print "Total Time taken for ", companyCode, ": ", str(t2-t1)
-		# scrapeCount += 1
-		# if scrapeCount >= companiesToDownload:
-			# break
 	end = time.time()
 	print '\n\n\n FINAL TIME:'
 	print end - start
