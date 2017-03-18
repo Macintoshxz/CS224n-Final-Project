@@ -6,7 +6,7 @@ import re
 import requests
 import os
 import time
-
+import string
 
 class SecCrawler():
 
@@ -98,12 +98,13 @@ class SecCrawler():
             if isinstance(textElem, tuple):
                 textElem = textElem[0]
             # print 'TEXTELEM: ', textElems
-            amount = re.findall(r'(\d{1,3}(,\d{3})*(\.\d+)?)', textElem)
+            amount = re.findall(r'(\d{1,3}(\s*,\s*\d{3})*(\s*\.\s*\d+)?)', textElem)
             if len(amount) == 0:
                 continue
             amount = amount[0]
-            amount = amount[0].strip().replace(',','')
-            amount = amount.strip('.')
+            replace_punctuation = string.maketrans(string.punctuation, ' '*len(string.punctuation))
+            amount = amount[0].translate(replace_punctuation)
+            amount = re.sub(r'\s*', '', amount)
             # print 'Amount: ', amount
             multiplier = 1
             if 'billion' in textElem:
@@ -131,15 +132,15 @@ class SecCrawler():
         # potentialMarketCaps.append(re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
 
         #New spacing between dots
-        potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence)
-        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence))
-        potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
-        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
-        potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
-        potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        potentialMarketCaps.append(re.findall(r'\$? *((\d{1,3}(\s*,\d{3})*(\.\d+)?))', sentence))
-
+        potentialMarketCaps = re.findall(r'was\s*\$\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence)
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r':\s*\$\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r'was\s*\$\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r':\s*\$\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r'approximately\s*\$ \s*((\d{1,3}(\s*,\s*\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
+        potentialMarketCaps.append(re.findall(r'\$?\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
+        potentialMarketCaps.append(re.findall(r'\$?\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence))
         #If we still have nothing, check more unlikely cases
         # if len(potentialMarketCaps) is 0:
         #     potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
@@ -151,14 +152,14 @@ class SecCrawler():
         #     potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
 
         #New spacing between dots
+        # if len(potentialMarketCaps) is 0:
+        #     potentialMarketCaps = re.findall(r'\$?\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence)
         if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence)
+            potentialMarketCaps = re.findall(r'approximately\s*\$?\s*((\d{1,3}(\s*,\s*\d{3})*(\s*\.\s*\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence)
+            potentialMarketCaps = re.findall(r'was\s*\$?\s*((\d{1,3}(\s*,\s*\d{3})*(\s*\.\s*\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence)
-        if len(potentialMarketCaps) is 0:
-            potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence)
+            potentialMarketCaps = re.findall(r'\$\s*((\d{1,3}(\s*,\s*\d{3})*(\s*\.\s*\d+)?))', sentence)
 
         potentialMarketCaps = [item for sublist in potentialMarketCaps for item in sublist]
         return potentialMarketCaps
@@ -202,14 +203,14 @@ class SecCrawler():
             # Don't overwrite existing, non-text root files
             # if os.path.isfile(path):
             # #     #Fixing weird .txt downloads
-            #     # f = open(path, 'r')
+            #     # f = open(path, 'r') 
             #     # original_filetype = f.readline().split('.')[-1]
             #     # f.close()
             # #     ##TODO: Remove the following after we actually fix things
             # #     print 'Original filetype:', original_filetype
             #     # if 'txt' not in original_filetype:
-            #     print "ALREADY EXISTS: ", path, ', moving on...'
-            #     continue
+                # print "ALREADY EXISTS: ", path, ', moving on...'
+                # continue
 
             t1 = time.time()
             target_url = filingURLList[i]
@@ -361,8 +362,7 @@ class SecCrawler():
             link = hrefs[i].string
             curType = types[i].string
 
-            #TOOD: REMOVE THIS WHEN DONE DOWNLOADING 405s
-            if curType != '10-K405':
+            if curType != '10-K405' and curType != '10-K':
                 continue
         # for link in soup.find_all('filinghref')
             URL = link.string
@@ -447,7 +447,7 @@ class SecCrawler():
                                     if '.htm' in URL.lower() or '.txt' in URL.lower():
                                         filingURLList.append(base_url + URL)
                                         foundFiling = True
-                                        print 'FOUND ROW FILING!!!!: ', base_url + URL
+                                        print 'FOUND ROW FILING!!!!: ', filingDate, base_url + URL
                                 break
             
             #If we can't identify, use naive link checking method
@@ -457,7 +457,7 @@ class SecCrawler():
                     # print URL
                     if isFiling(filingType, URL):
                         filingURLList.append(base_url + URL)
-                        print 'FOUND NAIVE FILING: ', URL
+                        print 'FOUND NAIVE FILING: ', filingDate, base_url + URL
                         foundFiling = True
                         break
 
@@ -469,7 +469,7 @@ class SecCrawler():
                     if linkID in URL.lower() and '.txt' in URL.lower():
                         filingURLList.append(base_url + URL)
                         foundFiling = True
-                        print 'FOUND COMPLETE FILING: ', URL
+                        print 'FOUND COMPLETE FILING: ', filingDate, base_url + URL
                         break
             
 
