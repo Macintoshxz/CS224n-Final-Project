@@ -8,58 +8,68 @@ from tflearn.datasets import imdb
 from ingestion import construct_data
 import random
 
-def one_layer_LSTM():
-    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
-    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
-    net = tflearn.lstm(net, 300, dropout=0.8, weights_init = "xavier") #300 refers to size of h_t = Embedding length
-    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
-                             loss='mean_square', metric = 'R2')
-    return net
 
-def two_layer_LSTM():
-    '''
-    WARNING: CANNOT HAVE MORE THAN ONE DYNAMIC LAYER AT THE LAYER CLOSEST TO THE INPUT
-    '''
-    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+def feedforward():
+    net = tflearn.input_data([None, 1]) #[Batch Size, Sequence Length] Sequence is sliding window length
     net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
-    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier", dynamic = True, return_seq = True)
-    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier") #300 refers to size of h_t = Embedding length
-    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+     net = tflearn.fully_connected(net, 5, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
-                             loss='mean_square', metric = 'R2')
-    return net
+                             loss='', metric = 'R2')
 
-def three_layer_LSTM():
-    '''
-    WARNING: CANNOT HAVE MORE THAN ONE DYNAMIC LAYER AT THE LAYER CLOSEST TO THE INPUT
-    '''
-    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
-    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
-    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier", dynamic = True, return_seq = True)
-    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier", return_seq = True) #300 refers to size of h_t = Embedding length
-    net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier") #300 refers to size of h_t = Embedding length
-    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
-                             loss='mean_square', metric = 'R2')
-    return net
+# def one_layer_LSTM():
+    # net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+    # net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+    # net = tflearn.lstm(net, 300, dropout=0.8, weights_init = "xavier") #300 refers to size of h_t = Embedding length
+    # net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    # net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+    #                          loss='mean_square', metric = 'R2')
+#     return net
 
-def fat_one_layer_LSTM():
-    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
-    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
-    net = tflearn.lstm(net, 512, dropout=0.8, weights_init = "xavier") #512 refers to size of h_t
-    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
-                             loss='mean_square', metric = 'R2')
-    return net
+# def two_layer_LSTM():
+#     '''
+#     WARNING: CANNOT HAVE MORE THAN ONE DYNAMIC LAYER AT THE LAYER CLOSEST TO THE INPUT
+#     '''
+#     net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+#     net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+#     net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier", dynamic = True, return_seq = True)
+#     net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier") #300 refers to size of h_t = Embedding length
+#     net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+#     net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+#                              loss='mean_square', metric = 'R2')
+#     return net
 
-def one_layer_GRU():
-    net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
-    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
-    net = tflearn.gru(net, 300, dropout=0.8, weights_init = "xavier") #512 refers to size of h_t
-    net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
-                             loss='mean_square', metric = 'R2')
+# def three_layer_LSTM():
+#     '''
+#     WARNING: CANNOT HAVE MORE THAN ONE DYNAMIC LAYER AT THE LAYER CLOSEST TO THE INPUT
+#     '''
+#     net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+#     net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+#     net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier", dynamic = True, return_seq = True)
+#     net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier", return_seq = True) #300 refers to size of h_t = Embedding length
+#     net = tflearn.lstm(net, 300,  dropout = 0.8, weights_init = "xavier") #300 refers to size of h_t = Embedding length
+#     net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+#     net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+#                              loss='mean_square', metric = 'R2')
+#     return net
+
+# def fat_one_layer_LSTM():
+#     net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+#     net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+#     net = tflearn.lstm(net, 512, dropout=0.8, weights_init = "xavier") #512 refers to size of h_t
+#     net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+#     net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+#                              loss='mean_square', metric = 'R2')
+#     return net
+
+# def one_layer_GRU():
+#     net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
+#     net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+#     net = tflearn.gru(net, 300, dropout=0.8, weights_init = "xavier") #512 refers to size of h_t
+#     net = tflearn.fully_connected(net, 1, activation='linear', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+#     net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
+#                              loss='mean_square', metric = 'R2')
 
 #load data
 X, Y, embedding= construct_data("fleet_model.d2v", "/Users/hoyincheung/Desktop/CS224n-final-project/SEC-Edgar-data")
