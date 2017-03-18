@@ -364,13 +364,3 @@ if __name__ == '__main__':
 
     construct_single_feedforward_data("check.txt", 100)
     # test_check("check.txt")
-
-# =======
-#     DATA_PATH = "data_scraping/SEC-Edgar-data"
-#     INFLATION_TABLE_PATH = "data_scraping/inflation_table.txt"
-#     inflationDict = createInflationDict(INFLATION_TABLE_PATH)
-#     createCheckFile(DATA_PATH, inflationDict, 'check.txt')
-#     import pdb; pdb.set_trace()
-
-
-
