@@ -10,13 +10,13 @@ import random
 import numpy as np
 
 
-def feedforward(embedding):
+def feedforward(embedding, maxClasses):
     net = tflearn.input_data([None, 1]) #[Batch Size, Sequence Length] Sequence is sliding window length
     net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = True) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
     net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.fully_connected(net, 5, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.regression(net, optimizer='adam', learning_rate=1e-8,
+    net = tflearn.fully_connected(net, maxClasses, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.regression(net, optimizer='adam', learning_rate=1e-10,
                              loss='categorical_crossentropy', metric = 'Accuracy')
     return net
 
@@ -81,7 +81,8 @@ def splitData(arr, valPercentage, testPercentage):
 
 #load data
 # X, Y, embedding= construct_data("fleet_model.d2v", "/Users/hoyincheung/Desktop/CS224n-final-project/SEC-Edgar-data")
-X, Y, embedding = construct_single_feedforward_data("check.txt", 300)
+maxClasses = 2
+X, Y, embedding = construct_single_feedforward_data("check.txt", 100, maxClasses)
 Y = tflearn.data_utils.to_categorical (Y, max(Y) + 1)
 
 X = [[x] for x in X]
@@ -102,7 +103,7 @@ trainY, valY, testY = splitData(Y, 0.7, 0.1)
 
 # Training
 # net = fat_one_layer_LSTM()
-net = feedforward(embedding)
+net = feedforward(embedding, maxClasses)
 
 model = tflearn.DNN(net)#, tensorboard_verbose=3)
 

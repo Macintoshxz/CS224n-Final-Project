@@ -81,7 +81,7 @@ def get_glove_for_data():
     for words inside 10ks
     '''
 
-def construct_single_feedforward_data(filename, embeddingDim):
+def construct_single_feedforward_data(filename, embeddingDim, maxClasses):
     '''
     For constructing data for feedforward nerual net for classificiation
     on five classes based on quintiles of percentage change. 
@@ -121,24 +121,31 @@ def construct_single_feedforward_data(filename, embeddingDim):
     #quintile and 4 being the highest quintile
     #will backload up to 4 labels of 4 (consider example if len = 24)
     listlen = len(orderedList)
-    fifth = int(listlen/5)
+    maxLabel = maxClasses - 1
+    div = int(listlen/maxClasses)
     labelsDict = {}
     for i in range(listlen):
-        labelsDict[orderedList[i][1]] = i/fifth if i/fifth <= 4 else 4 #backloading
-        if i % fifth == 0:
+        labelsDict[orderedList[i][1]] = i/div if i/div <= maxLabel else maxLabel #backloading
+        if i % div == 0:
             print(orderedList[i][0])
 
     # print len(labelsDict.keys())
 
     embeddingDict = pickle.load(open(embeddingFile, "rb"))
+    print 'embeddingDict size:', len(embeddingDict)
+    # print embeddingDict.keys()
 
     embeddings = []
     labels = []
+    missCounter = 0
     for curInteger in sorted(labelsDict.keys()):
         curFilename = integerToFilename[curInteger]
-        embeddings.append(list(embeddingDict[curFilename]))
-        labels.append(labelsDict[curInteger])
-
+        if curFilename in embeddingDict:
+            embeddings.append(list(embeddingDict[curFilename]))
+            labels.append(labelsDict[curInteger])
+        else:
+            missCounter += 1
+    print 'Missed', missCounter, 'embeddings :(s'
     indices = range(len(embeddings))
     # print embeddings
     # print 'Ingested indices: ', indices

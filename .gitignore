@@ -1,4 +1,8 @@
-/data_scraping/SEC-Edgar-data/
-*
+data_scraping/SEC-Edgar-data/*
 *.ipynb
 *.zip
+*.pyc
+data_scraping/glove/*.txt
+data_scraping/logs/*
+*.npy
+*.d2v
