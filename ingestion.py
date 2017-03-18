@@ -63,12 +63,11 @@ def getMarketCap(path, inflationDict):
                 #print mc
     return marketCap
 
-def createInflationDict():
+def createInflationDict(path):
     '''
     Loads the manual-entry inflation_table.txt into a dict to convert
     the market caps to current day currency.
     '''
-    path = 'inflation_table.txt'
     f = open(path, 'r')
     lines = f.readlines()
     f.close()
@@ -83,8 +82,6 @@ def get_glove_for_data():
     Create "document vectors" by averaging glove vectors
     for words inside 10ks
     '''
-
-
 
 
 def construct_feedforward_data(filename):
@@ -236,6 +233,90 @@ def test_check(filename):
 
 
 
+def createCheckFile(path, inflationDict, outPath):
+    '''
+    args: path is the path to the SEC filings
+    Output: returns a dictionary mapping (ticker, year) : market capitalization
+    '''
+    outFile = open(outPath, 'w+')
+    outDict = {}
+    fileCounter = 0
+    for subdir, dirs, files in os.walk(path):
+        for f in files:
+            if fileCounter % 500 == 0:
+                print fileCounter, 'files processed.'
+            docPath = os.path.join(subdir, f)
+            filename, file_extension = os.path.splitext(f)
+            if file_extension == ".txt":     
+                infile = open(docPath, 'r')
+                #Reading individual lines (so as to not open the entire thing), so ordering matters
+                file_html = infile.readline().strip()
+                index_html = infile.readline().strip()
+                mc = float(infile.readline().strip())
+                ticker = infile.readline().strip()
+                filingDate = infile.readline().strip()
+                infile.close()
+                filingYear = int(filingDate.split("-")[0])
+                mc = mc*inflationDict[filingYear]
+
+                if ticker not in outDict:
+                    outDict[ticker] = {}
+                if filingYear in outDict[ticker]:
+                    prevFiling = outDict[ticker][filingYear]
+                    curFiling = [ticker, str(filingYear), str(mc), filingDate, f, file_html]
+                    prevDate = prevFiling[3]
+                    if filingDate < prevDate:
+                        firstData = curFiling
+                        secondData = prevFiling
+                    else:
+                        firstData = prevFiling
+                        secondData = curFiling
+                        
+                    if (filingYear - 1) not in outDict[ticker]:
+                        firstData[1] = str(filingYear - 1)
+                        outDict[ticker][filingYear - 1] = firstData
+                        outDict[ticker][filingYear] = secondData
+                    else:
+                        secondData[1] = str(filingYear + 1)
+                        outDict[ticker][filingYear] = firstData
+                        outDict[ticker][filingYear + 1] = secondData
+                else:
+                    outDict[ticker][filingYear] = [ticker, str(filingYear), str(mc), filingDate, f, file_html]
+            fileCounter += 1
+
+    #Reformat every line
+    fileCounter = 0
+    for ticker in sorted(outDict.keys()):
+        print ticker
+        tickerCounter = 0
+        years = sorted(outDict[ticker].keys())
+        
+        for yearIdx in range(len(outDict[ticker].keys())):
+            year = years[yearIdx]
+            filing = outDict[ticker][year]
+            curMC = float(filing[2])
+
+            #Not the last entry
+            if curMC != 0:
+                if yearIdx != len(outDict[ticker].keys()) - 1:
+                    nextYear = years[yearIdx + 1]
+                    nextMC = float(outDict[ticker][nextYear][2])
+                    perChange = (nextMC - curMC) / curMC
+                else:
+                    perChange = None
+            else:
+                perChange = None
+            outDict[ticker][year] = filing[:1] + [str(years[0]+tickerCounter)] + [str(perChange)] + filing[2:] + [str(tickerCounter)]
+
+            tickerCounter += 1
+        fileCounter += 1
+    
+    for ticker in sorted(outDict.keys()):
+        for date in sorted(outDict[ticker].keys()):
+            outString = '\t'.join(outDict[ticker][date]) + '\n'
+            outFile.write(outString)
+    outFile.close()
+
 if __name__ == '__main__':
     # parser = argparse.ArgumentParser(description='Scrapes Market Cap from SEC db.')
     # parser.add_argument('-d','--directory', help='Directory containing financial documents', required=True)
@@ -244,9 +325,16 @@ if __name__ == '__main__':
     # print mc
     # pickle.dump(mc, open("market_labels", "w"))
     # X, Y = construct_data("fleet_model.d2v", "data_scraping/SEC-Edgar-data")
+
     # construct_feedforward_data("check.txt")
     test_check("check.txt")
 
+# =======
+#     DATA_PATH = "data_scraping/SEC-Edgar-data"
+#     INFLATION_TABLE_PATH = "data_scraping/inflation_table.txt"
+#     inflationDict = createInflationDict(INFLATION_TABLE_PATH)
+#     createCheckFile(DATA_PATH, inflationDict, 'check.txt')
+#     import pdb; pdb.set_trace()
 
 
 
