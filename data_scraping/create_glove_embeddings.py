@@ -82,7 +82,7 @@ class EmbeddingCreator():
 		glovePath = "glove/glove.6B." + gloveDim + 'd.txt'
 
 		global gloveDict
-		if not os.path.isfile('gloveDict_' + gloveDim + '.pkl'):
+		if not os.path.isfile('/glovegloveDict_' + gloveDim + '.pkl'):
 			print 'Creating new gloveDict'
 			newGloveDict = {}
 			gloveFile = open(glovePath)
@@ -96,10 +96,10 @@ class EmbeddingCreator():
 			    newGloveDict[word] = embedding
 
 			gloveDict = newGloveDict
-			pickle.dump(gloveDict, open('gloveDict_' + gloveDim + '.pkl', "wb+" ) )
+			pickle.dump(gloveDict, open('glove/gloveDict_' + gloveDim + '.pkl', "wb+" ) )
 		else:
 			print 'Loading gloveDict'
-			gloveDict = pickle.load(open('gloveDict_' + gloveDim + '.pkl'))
+			gloveDict = pickle.load(open('glove/gloveDict_' + gloveDim + '.pkl'))
 
 		return gloveDict
 
