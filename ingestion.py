@@ -128,16 +128,21 @@ def construct_single_feedforward_data(filename, embeddingDim):
         if i % fifth == 0:
             print(orderedList[i][0])
 
+    # print len(labelsDict.keys())
+
     embeddingDict = pickle.load(open(embeddingFile, "rb"))
 
     embeddings = []
     labels = []
     for curInteger in sorted(labelsDict.keys()):
         curFilename = integerToFilename[curInteger]
-        embeddings.append(embeddingDict[curFilename])
+        embeddings.append(list(embeddingDict[curFilename]))
         labels.append(labelsDict[curInteger])
 
     indices = range(len(embeddings))
+    # print embeddings
+    # print 'Ingested indices: ', indices
+    # print indices
     # print X[:5]
     # print Y[:5]
     return indices, labels, embeddings
@@ -362,5 +367,5 @@ if __name__ == '__main__':
     # pickle.dump(mc, open("market_labels", "w"))
     # X, Y = construct_data("fleet_model.d2v", "data_scraping/SEC-Edgar-data")
 
-    construct_single_feedforward_data("check.txt", 100)
+    construct_single_feedforward_data("check.txt", 50)
     # test_check("check.txt")

@@ -7,16 +7,18 @@ from tflearn.data_utils import to_categorical, pad_sequences
 from tflearn.datasets import imdb
 from ingestion import construct_single_feedforward_data
 import random
+import numpy as np
 
 
-def feedforward():
+def feedforward(embedding):
     net = tflearn.input_data([None, 1]) #[Batch Size, Sequence Length] Sequence is sliding window length
-    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = True) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
     net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.fully_connected(net, 5, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
-                             loss='', metric = 'R2')
+    net = tflearn.regression(net, optimizer='adam', learning_rate=0.000001,
+                             loss='categorical_crossentropy', metric = 'Accuracy')
+    return net
 
 # def one_layer_LSTM():
     # net = tflearn.input_data([None, 5]) #[Batch Size, Sequence Length] Sequence is sliding window length
@@ -71,36 +73,46 @@ def feedforward():
 #     net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
 #                              loss='mean_square', metric = 'R2')
 
+def splitData(arr, valPercentage, testPercentage):
+    n = len(arr)
+    valIdx = int(n*valPercentage)
+    testIdx = int(n*(1-testPercentage))
+    return arr[:valIdx], arr[valIdx:testIdx], arr[testIdx:]
+
 #load data
 # X, Y, embedding= construct_data("fleet_model.d2v", "/Users/hoyincheung/Desktop/CS224n-final-project/SEC-Edgar-data")
-X, Y, embeddings = construct_single_feedforward_data("check.txt", 50)
+X, Y, embedding = construct_single_feedforward_data("check.txt", 50)
+Y = tflearn.data_utils.to_categorical (Y, max(Y) + 1)
 
+X = [[x] for x in X]
+print X[0]
+print Y[0]
+print embedding[0]
 # Data preprocessing
 # Sequence padding
 # random.seed(1234)
 # trainX = pad_sequences(X, maxlen=5, value=0.)
 # trainY = [[random.uniform(-1, 1)] for i in range(len(X))] #PROOF OF CONCEPT
+# print X
+# print len(X)
 
 splitIdx = len(X)/5
-trainX = X[splitIdx:]
-trainY = Y[splitIdx:]
-
-testX = X[:splitIdx]
-testY = Y[:splitIdx]
+trainX, valX, testX = splitData(X, 0.7, 0.1)
+trainY, valY, testY = splitData(Y, 0.7, 0.1)
 
 # Training
 # net = fat_one_layer_LSTM()
-net = feedforward()
+net = feedforward(embedding)
 
-model = tflearn.DNN(net, tensorboard_verbose=3)
+model = tflearn.DNN(net)#, tensorboard_verbose=3)
 
 #insert our doc2vec embeddings here
 embeddingWeights = tflearn.get_layer_variables_by_name('Embedding')[0]
 model.set_weights(embeddingWeights, embedding)
 
-model.fit(trainX, trainY, validation_set= (testX, testY), show_metric=True,
+model.fit(trainX, trainY, validation_set= (valX, valY), show_metric=True,
           batch_size=32, n_epoch = 100)
 
 print(trainY)
-print(model.predict(trainX))
+print(model.predict(testX))
 # model.save("rnn")
