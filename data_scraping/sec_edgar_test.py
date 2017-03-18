@@ -49,23 +49,23 @@ def get_filings(num_threads, path='sp_500.txt'):
 
 def nonthreaded_get_filings():
 	# create object 
-	print 'getting filings using a single lonely execution thread :(s'
+	print 'getting filings using a single lonely execution thread :('
 	seccrawler = SecCrawler() 
 	date = '20170313' # date from which filings should be downloaded 
 	# date = '20160922' 
 
 	count = '100' # no of filings
 
-	sp_500 = open('missed_companies2.txt')
+	# sp_500 = open('missed_companies2.txt')
 
-	# sp_500 = open('sp_500.txt')
+	sp_500 = open('sp_500.txt')
 	lines = sp_500.readlines()
 	sp_500.close()
 	companies = [line.split('\t')[1:3] for line in lines]
 
 	# OVERRIDES FOR TESTING
 	# companies = [line.split('\t')[1:3] for line in lines[2:4]]
-	companies = [['AMZN', 'AMZN']]
+	# companies = [['AMZN', 'AMZN']]
 	
 	start = time.time()
 	for companyCode, cik in companies:

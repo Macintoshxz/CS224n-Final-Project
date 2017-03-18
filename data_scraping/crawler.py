@@ -19,14 +19,19 @@ class SecCrawler():
 
     def repeatRequest(self, target_url):
         r = requests.get(target_url)
-        acceptable_errors = [404]
+        acceptable_errors = [404, 503]
+        REQUEST_THRESHOLD = 5
+        requestCounter = 0
         while r.status_code != self.HTTP_OKAY:
-            if r.status_code in acceptable_errors:
-                print r.status_code, ": ", target_url, ""
-                return None
-            print r.status_code, ": ", target_url, ".  Sleeping for ", self.REQUEST_SLEEP_TIME, "..."
-            time.sleep(self.REQUEST_SLEEP_TIME)
+            if requestCounter >= REQUEST_THRESHOLD:
+                if r.status_code in acceptable_errors:
+                    print r.status_code, ": ", target_url, ""
+                    return None
+                print r.status_code, ": ", target_url, ".  Sleeping for ", self.REQUEST_SLEEP_TIME, "..."
+                time.sleep(self.REQUEST_SLEEP_TIME)
+                requestCounter =0
             r = requests.get(target_url)
+            requestCounter += 1
         print r.status_code, ": ", target_url
         return r
 
@@ -43,7 +48,6 @@ class SecCrawler():
         decomposeList = ["table", "a"]
         for toDecompose in soup.findAll(decomposeList):
             toDecompose.decompose()
-            toDecompose.extract()
         return soup
 
     #Takes in an array of strings from BS4 and identifies the sentence with the market cap
@@ -93,11 +97,9 @@ class SecCrawler():
         for textElem in text:
             if not textElem:
                 continue
-            if isinstance(textElem, list):
+            if isinstance(textElem, list) or isinstance(textElem, tuple):
                 textElem = textElem[0]
-            if isinstance(textElem, tuple):
-                textElem = textElem[0]
-            # print 'TEXTELEM: ', textElems
+
             amount = re.findall(r'(\d{1,3}(\s*,\s*\d{3})*(\s*\.\s*\d+)?)', textElem)
             if len(amount) == 0:
                 continue
@@ -122,14 +124,6 @@ class SecCrawler():
         #Consolidate all the likely cases for finding the market cap.
         #If you're wondering why 'illion' is split up - some fuckers put newlines in the middle of
         #the motherfucking goddamn word.
-        # potentialMarketCaps = re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
-        # potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        # potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        # potentialMarketCaps.append(re.findall(r'was\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-        # potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-        # potentialMarketCaps.append(re.findall(r':\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
-        # potentialMarketCaps.append(re.findall(r'approximately\s*\$ *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
-        # potentialMarketCaps.append(re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence))
 
         #New spacing between dots
         potentialMarketCaps = re.findall(r'was\s*\$\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence)
@@ -141,19 +135,8 @@ class SecCrawler():
         potentialMarketCaps.append(re.findall(r'approximately\s*\$ \s*((\d{1,3}(\s*,\s*\d{3})*(\s*\.\s*\d+)?) *[mb]ill?i?o?n?(?i))', sentence))
         potentialMarketCaps.append(re.findall(r'\$?\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?))', sentence))
         potentialMarketCaps.append(re.findall(r'\$?\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence))
-        #If we still have nothing, check more unlikely cases
-        # if len(potentialMarketCaps) is 0:
-        #     potentialMarketCaps = re.findall(r'\$? *((\d{1,3}(,\d{3})*(\.\d+)?) *[mb]ill?i?o?n?(?i))', sentence)
-        # if len(potentialMarketCaps) is 0:
-        #     potentialMarketCaps = re.findall(r'approximately\s*\$? ((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        # if len(potentialMarketCaps) is 0:
-        #     potentialMarketCaps = re.findall(r'was\s*\$? *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
-        # if len(potentialMarketCaps) is 0:
-        #     potentialMarketCaps = re.findall(r'\$ *((\d{1,3}(,\d{3})*(\.\d+)?))', sentence)
 
-        #New spacing between dots
-        # if len(potentialMarketCaps) is 0:
-        #     potentialMarketCaps = re.findall(r'\$?\s*((\d{1,3}(\s*,\d{3})*(\s*\.\s*\d+)?)\s*[mb]ill?i?o?n?(?i))', sentence)
+        #If we still have nothing, check more unlikely cases
         if len(potentialMarketCaps) is 0:
             potentialMarketCaps = re.findall(r'approximately\s*\$?\s*((\d{1,3}(\s*,\s*\d{3})*(\s*\.\s*\d+)?))', sentence)
         if len(potentialMarketCaps) is 0:
@@ -169,7 +152,7 @@ class SecCrawler():
         outArray= []
         lineCounter = 0
         for line in lines:
-            found = re.findall('\.\s*$', line)
+            found = re.findall(r'\.\s*$', line)
             curLine += line.strip() + " "
             if len(found) != 0:                
                 curLine = curLine.replace("?", " ")
@@ -195,20 +178,83 @@ class SecCrawler():
 
         return newData
 
+    ITEM_STRINGS = [r'item\s*1', r'item\s*1a', r'item\s*1b',r'item\s*2', r'item\s*3', r'item\s*5', \
+                    r'item\s*6', r'item\s*7', r'item\s*7a', r'item\s*8', r'item\s*9', r'item\s*9a', \
+                    r'item\s*9B', r'item\s*10', r'item\s*11', r'item\s*12', r'item\s*13', r'item\s*14', r'item\s*15']
+    ITEM_THRESHOLD = 10
+
+    def getTableSoup(soup, ITEM_STRINGS, ITEM_THRESHOLD):
+        tableList = soup.findAll('table')
+        for t in tableList:
+            tsoup = BeautifulSoup(str(t), 'lxml')
+            sstrings = tsoup.stripped_strings
+            joined_sstrings = ' '.join(sstrings).lower().encode('ascii', 'replace').replace('?', ' ')
+            truthArray = [1*bool(re.search(item, joined_sstrings)) for item in ITEM_STRINGS]
+            if sum(truthArray) >= ITEM_THRESHOLD:
+                toc = t
+                return tsoup
+        return None
+
+    def getLinkMapping(tsoup, ITEM_STRINGS):
+        def findStart(link, text):
+            regexString = r'[^\#]' + link + r'\W'
+            return re.search(regexString, data).start()
+        
+        trs = tsoup.findAll('tr')
+        linkMapping = OrderedDict()
+        for tr in trs:
+            tds = tr.findAll('td')
+            tdsString = ''.join([(td.string) if td.string != None else '' for td in tds])
+            tdsString = tdsString.lower().encode('ascii', 'replace').replace('?', ' ')
+            thisItem = -1
+            for item in reversed(ITEM_STRINGS):
+                if re.search(item, tdsString):
+                    thisItem = item.split('*')[-1]
+                    break
+            if thisItem != -1:
+                for td in tds:
+                    found = td.find('a')
+                    if found:
+                        linkMapping[thisItem] = found['href']
+                        break
+        return linkMapping
+
+    def getLinkRawIndices(linkMapping, data):
+        sectionList = []
+        sectionIdxList = []
+        for _ in range(len(linkMapping.keys())):
+            key, val = linkMapping.popitem(last=False)
+            idx = findStart(val.strip('#'), data)
+            idx += data[idx:].find('</A>') + 4 #4 is the length of the closing tag
+            sectionList.append(key)
+            sectionIdxList.append(idx)
+        return sectionList, sectionIdxList
+
+    def writeFile(parsedStrings, docName, target_url, index_url, marketCap, path):
+        outArray = self.getCombinedLineArray(parsedStrings, -1)
+        outString = '\n'.join(outArray)
+        outString = re.sub(r'(?<!\n)\n', '\n', outString)
+
+        filename = open(path,"w+")
+        filename.write(target_url + '\n')
+        filename.write(index_url + '\n')
+        filename.write(str(float(marketCap)) + '\n')
+        infoArray = docName.strip(".txt").split('_')
+        for info in infoArray:
+            print info
+            filename.write(info + '\n')
+        filename.write(str(docNameList[i]) + '\n\n')
+        filename.write(outString)
+        filename.close()
+
     def save_in_directory(self, companyCode, cik, priorto, filingURLList, docNameList, indexURLList, filingType):
         # Save every text document into its respective folder
         for i in range(len(filingURLList)):
-            path = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"+str(docNameList[i])
+            basePath = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"
+            path = basePath + str(docNameList[i])
 
             # Don't overwrite existing, non-text root files
             # if os.path.isfile(path):
-            # #     #Fixing weird .txt downloads
-            #     # f = open(path, 'r') 
-            #     # original_filetype = f.readline().split('.')[-1]
-            #     # f.close()
-            # #     ##TODO: Remove the following after we actually fix things
-            # #     print 'Original filetype:', original_filetype
-            #     # if 'txt' not in original_filetype:
                 # print "ALREADY EXISTS: ", path, ', moving on...'
                 # continue
 
@@ -243,11 +289,11 @@ class SecCrawler():
                     else:
                         rawStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
 
-                    soup = self.parseData(soup)
+                    parsedSoup = self.parseData(soup)
                     if '.txt' in target_url:
-                        parsedStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                        parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.get_text().split('\n') if s.strip() != '']
                     else:
-                        parsedStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+                        parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.strings if s.strip() != '']
 
                 except:
                     # print 'Initial soup load failed'
@@ -263,22 +309,22 @@ class SecCrawler():
                         else:
                             rawStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
 
-                        soup = self.parseData(soup)
+                        parsedSoup = self.parseData(soup)
                         if '.txt' in target_url:
-                            parsedStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                            parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.get_text().split('\n') if s.strip() != '']
                         else:
-                            parsedStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+                            parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.strings if s.strip() != '']
                     except:
                         # print 'Soup conversion failed.  Running as text.'
                         errorFile = open(self.ERROR_FILENAME, 'a+')
                         errorFile.write('SOUP CONVERSION FAILED: ' + target_url + ' ' + companyCode +  '\n')
                         errorFile.close()
                         return None, None, None
-                return soup, rawStrings, parsedStrings
+                return parsedSoup, rawStrings, parsedStrings, soup
 
             #Use raw (with tables) strings to find the market cap text
-            soup, rawStrings, parsedStrings = ingestSoup(data)
-            if soup is None or rawStrings is None or parsedStrings is None:
+            soup, rawStrings, parsedStrings, rawSoup = ingestSoup(data)
+            if soup is None or rawStrings is None or parsedStrings is None or rawSoup is None:
                 errorFile = open(self.ERROR_FILENAME, 'a+')
                 errorFile.write('SOMETHING PARSE FUCKED: ' + target_url + ' ' + companyCode +  '\n')
                 errorFile.close()
@@ -296,24 +342,35 @@ class SecCrawler():
                 errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n')# + 'Market cap text was: ' + str(marketCapText))
                 errorFile.close()
 
-            #Use parsed strings (no tables) to create actual output
-            outArray = self.getCombinedLineArray(parsedStrings, -1)
-            outString = '\n'.join(outArray)
-            outString = re.sub(r'(?<!\n)\n', '\n', outString)
-
-            filename = open(path,"w+")
-            filename.write(target_url + '\n')
-            filename.write(index_url + '\n')
-            filename.write(str(float(marketCap)) + '\n')
-            infoArray = docNameList[i].strip(".txt").split('_')
-            for info in infoArray:
-                print info
-                filename.write(info + '\n')
-            filename.write(str(docNameList[i]) + '\n\n')
-            filename.write(outString)
-            filename.close()
+            #Use parsed strings (no tables) to create actual output           
+            self.writeFile(parsedStrings, docName[i], target_url, index_url, marketCap, path)
             t2 = time.time()
             print "Downloaded " + companyCode + "'s " + filingType + "s: " + str(i) + "/" + str(len(filingURLList)) + ". Time: " + str(t2-t1) + "\n"
+            
+            ##Now we write the sections.
+            print "Now writing sections for ", companyCode
+            sectionStart = time.time()
+            sectionSoup = rawSoup
+            tsoup = self.getTableSoup(sectionSoup, self.ITEM_STRINGS, self.ITEM_THRESHOLD)
+            if tsoup == None:
+                continue
+            linkMapping = self.getLinkMapping(tsoup, self.ITEM_STRINGS)
+            sectionList, sectionIdxList = self.getLinkRawIndices(linkMapping, data)
+
+            n = len(sectionList)
+            for i in range(n):
+                curSectionName = sectionList[i]
+                curIdx = sectionIdxList[i]
+                if i < n - 1:
+                    nextIdx = sectionIdxList[i + 1]
+                    sectionData = data[curIdx:nextIdx]
+                else:
+                    sectionData = data[curIdx:]
+                sectionPath = basePath.split('.')[0] + '_section_' + str(curSectionName) + '.txt'
+
+                sectionParsedSoup, sectionRawStrings, sectionParsedStrings, sectionRawSoup = ingestSoup(sectionData)
+                self.writeFile(sectionParsedStrings, docName[i], target_url, index_url, marketCap, sectionPath)
+            print "Done writing sections for ", companyCode, "Time: ", time.time() - sectionStart
 
 
     #filingType must be "10-K", "10-Q", "8-K", "13F"
@@ -333,28 +390,13 @@ class SecCrawler():
         target_url = base_url + "/cgi-bin/browse-edgar?action=getcompany&CIK="+str(companyCode)+"&type="+filingType+"&dateb="+str(priorto)+"&owner=exclude&output=xml&count="+str(count)    
         print "Now trying to download "+ filingType + " forms for " + str(companyCode) + ' from target url:\n' + target_url
         r = self.repeatRequest(target_url)
+        if r == None:
+            print 'Did not download forms for ', str(companyCode), "Bad request of some kind :("
+            return
         data = r.text
         soup = BeautifulSoup(data, "lxml") # Initializing to crawl again
         linkList=[] # List of all links from the CIK page
 
-        # print soup
-
-        # trs = soup.findAll('type')
-        # print trs
-        # for tr in trs:
-        #     tds = tr.findAll('td')
-        #     for td in tds:
-        #         s = str(td.string).lower().strip()
-        #         if '10-k' in s and '10-k/a' not in s and '10-k405' not in s:
-        #             URL = str(tr.find('a').string)
-        #             extension = URL.split(".")[len(URL.split("."))-1]
-        #             if extension == "htm":
-        #                 URL+="l"
-        #             linkList.append(URL)
-        #             break
-        # print 'final linklist'
-        # print linkList
-        # If the link is .htm convert it to .html
         # print "Printing all seen URLs\n\n"
         hrefs = soup.findAll('filinghref')
         types = soup.findAll('type')
@@ -362,7 +404,7 @@ class SecCrawler():
             link = hrefs[i].string
             curType = types[i].string
 
-            if curType != '10-K405' and curType != '10-K', and curType != '10-KT':
+            if curType != '10-K405' and curType != '10-K' and curType != '10-KT':
                 continue
         # for link in soup.find_all('filinghref')
             URL = link.string
@@ -387,6 +429,9 @@ class SecCrawler():
 
         for link in linkListFinal:
             r = self.repeatRequest(link)
+            if r == None:
+                print 'Did not download forms for ', str(companyCode), "Bad request of some kind :("
+                return
             data = r.text
             newSoup = BeautifulSoup(data, "lxml") # Initializing to crawl again
             linkList=[] # List of all links from the CIK page
@@ -415,18 +460,6 @@ class SecCrawler():
                     if re.search(filingTypeNoHyphenRegex + '\.txt', URL) != None:
                         return True
                 return False
-
-                # if '/archives/' in URL:
-                #     if re.search(filingTypeFillerRegex + '\.htm', URL) != None
-                #         return True
-                #     if (filingType.replace('-', '') + '.htm') in URL:
-                #         return True
-                #     results = re.search(r'\.', URL)
-                #     if (filingType + '.txt') in URL:
-                #         return True
-                #     if (filingType.replace('-', '') + '.txt') in URL:
-                #         return True
-                # return False
 
             foundFiling = False
             #Use the table search method to locate table rows with '10k'
