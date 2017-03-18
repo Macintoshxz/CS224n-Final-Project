@@ -128,7 +128,7 @@ def construct_single_feedforward_data(filename, embeddingDim):
         if i % fifth == 0:
             print(orderedList[i][0])
 
-    embeddingDict = pickle.load(open(embeddingFile, "r"))
+    embeddingDict = pickle.load(open(embeddingFile, "rb"))
 
     embeddings = []
     labels = []
@@ -349,8 +349,8 @@ def createCheckFile(path, inflationDict, outPath):
             outString = '\t'.join(outDict[ticker][yearIdx]) + '\n'
             outFile.write(outString)
     outFile.close()
-    pickle.dump(integerToFilename, open('integerToFilenamePerChange.pkl', "w+" ))
-    pickle.dump(filenameToInteger, open('filenameToInteger.pkl', "w+" ))
+    pickle.dump(integerToFilename, open('integerToFilenamePerChange.pkl', "wb+" ))
+    pickle.dump(filenameToInteger, open('filenameToInteger.pkl', "wb+" ))
 
 
 if __name__ == '__main__':
