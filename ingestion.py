@@ -3,6 +3,8 @@ import pickle
 import argparse
 from gensim.models import Doc2Vec
 from collections import OrderedDict
+import numpy as np
+import math
 
 def Doc2VecMapping(filename):
     '''
@@ -80,8 +82,104 @@ def get_glove_for_data():
     Create "document vectors" by averaging glove vectors
     for words inside 10ks
     '''
+def getLabel(change, bins):
 
-def construct_single_feedforward_data(filename, embeddingDim, maxClasses):
+    if change >= bins[0] and change < bins[1]:
+        return 0
+    elif change >= bins[1] and change < bins[2]:
+        return 1
+    elif change >= bins[2] and change < bins[3]:
+        return 2
+    elif change >= bins[3] and change < bins[4]:
+        return 3
+    else:
+        return 4
+
+def construct_differential_feedforward_data(filename, embeddingDim, maxClasses):
+    ''' For constructing data for FF NN for classificiation into five classes
+        based on quitiles of percentage change based on differential input of 
+        two consecutive documents from a particular company.
+
+        AAPL 2008 -> (emb_08, emb_09) (MC_change from 09-10) (UUID ordered chronologically)
+
+        Filename refers to the check file. Third column is the percentage change. 
+        First column is the ticker. Second column is the year.
+    '''
+
+    #dict of change : (ticker, year) mapping
+    embeddingBase = 'embeddingDicts/embeddingDict_'
+    embeddingFile = embeddingBase + str(embeddingDim) + '.pkl'
+    embeddingDict = pickle.load(open(embeddingFile, "rb"))
+
+    '''Track two indices for two input embeddings'''
+
+    company_histories = {}
+    changes = []
+
+    with open(filename) as check:
+        lines = check.readlines()
+        tickers = []
+        #get stock tickers in check file
+        for line in lines:
+            data = line.split("\t")
+            if data[0].strip() not in tickers:
+                tickers.append(data[0].strip())
+            if data[2] != "None":
+                changes.append(float(data[2]))
+            else:
+                changes.append(float(0))
+
+        for ticker in tickers:
+            history = []
+            for line in lines:
+                data = line.split("\t")
+                if ticker == data[0].strip():
+                    history.append(data)
+            company_histories[ticker] = history
+
+    changes.sort()
+    listlen = len(changes)
+    maxLabel = maxClasses - 1
+    div = int(listlen/maxClasses)
+    labelsDict = {}
+    bins = []
+    for i in range(listlen):
+        labelsDict[changes[i]] = i/div if i/div <= maxLabel else maxLabel #backloading
+
+    indices = []
+    labels = []
+    embeddings = []
+
+    index = 0
+    for history in company_histories.values():
+        if len(history) > 1:
+            for year in range(len(history)-1):
+
+                filename_A = history[year][5]
+                embeddings.append(list(embeddingDict[filename_A]))
+
+                indices.append([index, index+1])
+
+                key = history[year+1][2]
+                if key == "None":
+                    key = 0
+                key = float(key)
+                labels.append(labelsDict[key])
+
+                index += 1
+
+                if year == len(history)-2:
+                    embeddings.append(list(embeddingDict[history[year+1][5]]))
+                    #indices.append([-1, -1])
+                    #labels.append(-1)
+                    index += 1
+
+                #diff_ff_data.append([indices, label, embedding, history[year][0], [filename_A, filename_B]])
+
+    return indices, labels, embeddings
+
+
+def construct_single_feedforward_data(filename, embeddingDim):
     '''
     For constructing data for feedforward nerual net for classificiation
     on five classes based on quintiles of percentage change. 
@@ -95,6 +193,8 @@ def construct_single_feedforward_data(filename, embeddingDim, maxClasses):
     #dict of change : (ticker, year) mapping
     embeddingBase = 'embeddingDicts/embeddingDict_'
     embeddingFile = embeddingBase + str(embeddingDim) + '.pkl'
+
+
 
     dict = {}
     integerToFilename = {}
@@ -121,31 +221,24 @@ def construct_single_feedforward_data(filename, embeddingDim, maxClasses):
     #quintile and 4 being the highest quintile
     #will backload up to 4 labels of 4 (consider example if len = 24)
     listlen = len(orderedList)
-    maxLabel = maxClasses - 1
-    div = int(listlen/maxClasses)
+    fifth = int(listlen/5)
     labelsDict = {}
     for i in range(listlen):
-        labelsDict[orderedList[i][1]] = i/div if i/div <= maxLabel else maxLabel #backloading
-        if i % div == 0:
+        labelsDict[orderedList[i][1]] = i/fifth if i/fifth <= 4 else 4 #backloading
+        if i % fifth == 0:
             print(orderedList[i][0])
 
     # print len(labelsDict.keys())
 
     embeddingDict = pickle.load(open(embeddingFile, "rb"))
-    print 'embeddingDict size:', len(embeddingDict)
-    # print embeddingDict.keys()
 
     embeddings = []
     labels = []
-    missCounter = 0
     for curInteger in sorted(labelsDict.keys()):
         curFilename = integerToFilename[curInteger]
-        if curFilename in embeddingDict:
-            embeddings.append(list(embeddingDict[curFilename]))
-            labels.append(labelsDict[curInteger])
-        else:
-            missCounter += 1
-    print 'Missed', missCounter, 'embeddings :(s'
+        embeddings.append(list(embeddingDict[curFilename]))
+        labels.append(labelsDict[curInteger])
+
     indices = range(len(embeddings))
     # print embeddings
     # print 'Ingested indices: ', indices
@@ -374,5 +467,10 @@ if __name__ == '__main__':
     # pickle.dump(mc, open("market_labels", "w"))
     # X, Y = construct_data("fleet_model.d2v", "data_scraping/SEC-Edgar-data")
 
-    construct_single_feedforward_data("check.txt", 50)
+    #construct_single_feedforward_data("check.txt", 50)
+    X, Y, embed = construct_differential_feedforward_data("check.txt", 50, 5)
+    for i in range(20):
+        print X[i]
+        print Y[i]
+        print embed[i]
     # test_check("check.txt")
