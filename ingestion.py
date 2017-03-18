@@ -38,8 +38,6 @@ def Doc2VecMapping(filename):
 
     return orderedd2v, sequenceDict.values()
 
-
-
 def getMarketCap(path, inflationDict):
     '''
     args: path is the path to the SEC filings
@@ -82,7 +80,6 @@ def get_glove_for_data():
     Create "document vectors" by averaging glove vectors
     for words inside 10ks
     '''
-
 
 def construct_single_feedforward_data(filename, embeddingDim):
     '''
@@ -133,16 +130,17 @@ def construct_single_feedforward_data(filename, embeddingDim):
 
     embeddingDict = pickle.load(open(embeddingFile, "r"))
 
-    X = []
-    Y = []
+    embeddings = []
+    labels = []
     for curInteger in sorted(labelsDict.keys()):
         curFilename = integerToFilename[curInteger]
-        X.append(embeddingDict[curFilename])
-        Y.append(labelsDict[curInteger])
+        embeddings.append(embeddingDict[curFilename])
+        labels.append(labelsDict[curInteger])
 
+    indices = range(len(embeddings))
     # print X[:5]
     # print Y[:5]
-    return X, Y
+    return indices, labels, embeddings
 
 
 def construct_data(filename, path):
@@ -250,11 +248,6 @@ def test_check(filename):
                     
                 
         output.write("File contains" + " " + str(length) + " 10ks" + "\n")
-
-
-
-
-
 
 def createCheckFile(path, inflationDict, outPath):
     '''

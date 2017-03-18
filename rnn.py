@@ -5,7 +5,7 @@ LSTM Recurrent Neural Network
 import tflearn
 from tflearn.data_utils import to_categorical, pad_sequences
 from tflearn.datasets import imdb
-from ingestion import construct_data
+from ingestion import construct_single_feedforward_data
 import random
 
 
@@ -14,7 +14,7 @@ def feedforward():
     net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
     net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-     net = tflearn.fully_connected(net, 5, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.fully_connected(net, 5, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
                              loss='', metric = 'R2')
 
@@ -72,24 +72,33 @@ def feedforward():
 #                              loss='mean_square', metric = 'R2')
 
 #load data
-X, Y, embedding= construct_data("fleet_model.d2v", "/Users/hoyincheung/Desktop/CS224n-final-project/SEC-Edgar-data")
+# X, Y, embedding= construct_data("fleet_model.d2v", "/Users/hoyincheung/Desktop/CS224n-final-project/SEC-Edgar-data")
+X, Y, embeddings = construct_single_feedforward_data("check.txt", 50)
 
 # Data preprocessing
 # Sequence padding
-random.seed(1234)
-trainX = pad_sequences(X, maxlen=5, value=0.)
-trainY = [[random.uniform(-1, 1)] for i in range(len(X))] #PROOF OF CONCEPT
+# random.seed(1234)
+# trainX = pad_sequences(X, maxlen=5, value=0.)
+# trainY = [[random.uniform(-1, 1)] for i in range(len(X))] #PROOF OF CONCEPT
+
+splitIdx = len(X)/5
+trainX = X[splitIdx:]
+trainY = Y[splitIdx:]
+
+testX = X[:splitIdx]
+testY = Y[:splitIdx]
 
 # Training
-net = fat_one_layer_LSTM()
+# net = fat_one_layer_LSTM()
+net = feedforward()
+
 model = tflearn.DNN(net, tensorboard_verbose=3)
 
 #insert our doc2vec embeddings here
 embeddingWeights = tflearn.get_layer_variables_by_name('Embedding')[0]
 model.set_weights(embeddingWeights, embedding)
 
-
-model.fit(trainX, trainY, validation_set= (trainX, trainY), show_metric=True,
+model.fit(trainX, trainY, validation_set= (testX, testY), show_metric=True,
           batch_size=32, n_epoch = 100)
 
 print(trainY)
