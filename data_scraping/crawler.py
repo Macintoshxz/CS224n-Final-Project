@@ -535,6 +535,7 @@ class SecCrawler():
                     # If already written, skip
                     sectionPath = basePath + curDocName.split('.')[0] + '_html_section_' + str(curSectionName) + '.txt'
                     if os.path.isfile(sectionPath):
+                        print 'Section already extracted!  Moving on.'
                         continue
 
                     if curIdx == None:
@@ -547,15 +548,13 @@ class SecCrawler():
                     else:
                         sectionData = '<html><body>' + data[curIdx:] + '</body></html/>'
                     # print sectionData
-                    print 'Writing section ', curSectionName, 'for ', companyCode, target_url
                     sectionParsedSoup, sectionRawStrings, sectionParsedStrings, sectionRawSoup = ingestSoup(sectionData)
                     status = self.writeFile(sectionParsedStrings, curDocName, target_url, index_url, marketCap, sectionPath)
                     if not status:
                         print 'Error with section ', curSectionName, 'for ', companyCode, target_url
-                        # if curSectionName == '7a':
-                        #     print curIdx, nextIdx
-                        #     # print sectionData
-                        #     print sectionParsedSoup
+                    else:
+                        print 'Writing section ', curSectionName, 'for ', companyCode, target_url
+
                 print "Done writing sections for ", companyCode, "Time: ", time.time() - sectionStart
             else:
                 print 'Target was a .txt, so no sections could be extracted'
