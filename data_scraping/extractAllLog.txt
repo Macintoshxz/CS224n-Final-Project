@@ -1,0 +1,478 @@
+[4043, 146248, 148168, None, 152906, 153599, 252254, 254332, None, None, 255260, None, None, None]	SEC-Edgar-data\A\10-K\A_1999-10-31_10-K.txt
+[3300, 94117, 96750, None, 98708, 100398, 172463, 173612, None, None, 174666, None, None, None]	SEC-Edgar-data\A\10-K\A_2000-10-31_10-K.txt
+[2902, 72897, 75068, None, 78451, 78515, 142128, 143279, None, None, 144307, None, None, None]	SEC-Edgar-data\A\10-K\A_2001-10-31_10-K.txt
+[3640, 88106, 90173, None, 94182, None, 204808, None, None, None, 207424, None, None, 209352]	SEC-Edgar-data\A\10-K\A_2002-10-31_10-K.txt
+[3641, 88100, 90213, None, 94000, 94076, 233923, 235719, None, 235940, None, 241362, None, None, 242591, 243029]	SEC-Edgar-data\A\10-K\A_2003-10-31_10-K.txt
+[3797, 90639, 92572, None, 95876, 95949, 217119, 218915, None, 219133, 224695, None, 226317, None, None, 227578, None]	SEC-Edgar-data\A\10-K\A_2004-10-31_10-K.txt
+[6192, 67214, 96954, 96999, 99064, None, 105205, 108917, 184364, 186168, None, 284427, 291642, None, 295075, None, None, 296346, None]	SEC-Edgar-data\A\10-K\A_2005-10-31_10-K.txt
+[4139, 57255, 86918, 86963, 88480, None, 95265, 96791, 170548, 172355, None, 282449, 284934, 284987, 286606, None, 287582, 288061, None]	SEC-Edgar-data\A\10-K\A_2006-10-31_10-K.txt
+[3916, 64073, 101569, 101617, 103134, None, 111929, 112142, 183431, 185247, None, 301048, 303502, 303555, 305174, None, 306150, 306629, None]	SEC-Edgar-data\A\10-K\A_2007-10-31_10-K.txt
+[3981, 68123, 105528, 105576, 107100, None, 112064, 112277, 185998, 187814, None, 303780, 306234, 306287, 307944, None, 311039, 311520, None]	SEC-Edgar-data\A\10-K\A_2008-10-31_10-K.txt
+[4256, 72366, 114031, 114079, 115804, None, 124472, 124676, 208941, 210757, None, 332111, 334565, 334618, 336274, None, 339497, 339978, 340441]	SEC-Edgar-data\A\10-K\A_2009-10-31_10-K.txt
+[4432, 74667, 117604, 117652, 119775, None, 128371, 128575, 209718, 212992, None, 344300, 346754, 346804, 348460, None, 351585, 352066, None]	SEC-Edgar-data\A\10-K\A_2010-10-31_10-K.txt
+[4342, 73867, 116419, 116464, 117883, None, 123074, 123147, 208019, 211433, None, 341535, 343985, 344035, 345688, None, 348804, 349285, None]	SEC-Edgar-data\A\10-K\A_2011-10-31_10-K.txt
+[4718, 87018, 128240, 128285, 129550, None, 131942, 132251, 229312, 232072, None, 370927, 374147, 374197, 375840, None, 377605, 378086, None]	SEC-Edgar-data\A\10-K\A_2012-10-31_10-K.txt
+[4851, 81702, 128462, 128507, 129638, None, 135595, 135668, 229467, 232227, None, 371278, 373737, 373787, 375430, None, 376961, 377442, None]	SEC-Edgar-data\A\10-K\A_2013-10-31_10-K.txt
+[5091, 85096, 132834, 132879, 134291, None, 139993, 140066, 243788, 246583, None, 395594, 398053, 398099, 399746, None, 400804, 401285, None]	SEC-Edgar-data\A\10-K\A_2014-10-31_10-K.txt
+[5191, 68014, 117180, 117225, 118325, None, 121064, 121137, 214399, 217192, None, 360027, 365062, 365108, 366751, None, 367809, 368290, None]	SEC-Edgar-data\A\10-K\A_2015-10-31_10-K.txt
+[5119, 63702, 114818, 114863, 116008, None, 119575, 119648, 210563, 213966, None, 355137, 358552, 358598, 360246, None, 361586, 362067, None]	SEC-Edgar-data\A\10-K\A_2016-10-31_10-K.txt
+[5668, 73668, 152518, 152564, 154035, None, None, 5702, 5990, None, 575926, 577129, 577180, 578976, None, 580466, 608276]	SEC-Edgar-data\AA\10-K\AA_2016-12-31_10-K.txt
+[3828, 27913, 30610, None, 39779, 40373, 74547, None, None, 117419, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_1994-09-30_10-K.txt
+[3823, 27967, 29964, None, 37463, 38686, 81571, None, None, 136697, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_1995-09-29_10-K.txt
+[3795, 27411, 30408, None, 40863, 41397, 94342, None, None, 153288, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_1996-09-27_10-K.txt
+[4708, 26554, 29214, None, 30425, 30903, 107535, None, None, 183231, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_1997-09-26_10-K.txt
+[3851, 25047, 26851, None, 28380, 29318, 105723, None, None, 185927, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_1998-09-25_10-K.txt
+[3668, 27466, 29339, None, 30580, 31683, 110451, None, None, 194362, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_1999-09-25_10-K.txt
+[2830, 29157, 31044, None, 36690, 38302, 106262, None, None, 180748, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2000-09-30_10-K.txt
+[2745, 34691, 36530, None, 47130, 47410, 132598, None, None, 215745, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2001-09-29_10-K.txt
+[2638, 56373, 58242, None, 70939, 71219, 188545, None, None, 291417, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2002-09-28_10-K.txt
+[3174, 59371, 61092, None, 76356, 76636, 205638, 215981, None, 332099, None, 345093, None, None, 359323, 361223]	SEC-Edgar-data\AAPL\10-K\AAPL_2003-09-27_10-K.txt
+[3174, 69871, 71613, None, 89524, 89804, 225845, 234195, None, 342910, None, 355077, None, None, 368804, 370756]	SEC-Edgar-data\AAPL\10-K\AAPL_2004-09-25_10-K.txt
+[3446, 65483, 67216, None, 103141, 103421, 225119, 232781, None, 325717, 330180, None, 342476, None, None, 355277, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2005-09-24_10-K.txt
+[20422, 74728, 129812, 129855, 131797, None, 188080, 188840, 258300, 265199, None, 375788, 385620, None, 398470, None, None, 414061, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2006-09-30_10-K.txt
+[3684, 53692, 97883, 97926, 99916, None, 143074, 143240, 204621, 211469, None, 296382, 300923, 301433, 315170, None, 364331, 370592, 373154]	SEC-Edgar-data\AAPL\10-K\AAPL_2007-09-29_10-K.txt
+[3876, 58744, 108573, 108616, 110661, None, 154939, 155157, 211632, 218397, None, 304612, 308439, 310024, 310631, None, 311278, 311601, 311852]	SEC-Edgar-data\AAPL\10-K\AAPL_2008-09-27_10-K.txt
+[4478, 4478, None, 102075, None, None, 68601, None, None, None, None, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2009-09-26_10-K.txt
+[4480, 4480, None, 89924, None, None, 56882, None, None, None, None, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2010-09-25_10-K.txt
+[4502, 4502, None, 118233, None, None, 71855, None, None, None, None, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2011-09-24_10-K.txt
+[4554, 4554, None, 114369, None, None, 93555, None, None, None, None, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2012-09-29_10-K.txt
+[4551, 4551, None, 152695, None, None, 9259, 33260, None, None, None, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2013-09-28_10-K.txt
+[4539, 4539, None, 159953, None, None, 3750, 34955, None, None, None, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2014-09-27_10-K.txt
+[4724, 4724, None, 151519, None, None, 3935, 33562, None, None, None, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2015-09-26_10-K.txt
+[4733, 4733, None, 147973, None, None, 3924, 32911, None, None, None, None, None, None]	SEC-Edgar-data\AAPL\10-K\AAPL_2016-09-24_10-K.txt
+[2367, 51221, 125497, 125543, 126597, None, 144050, 145377, 204229, 209417, None, 283352, 286882, 286929, 288788, None, 289647, 290503]	SEC-Edgar-data\ABBV\10-K\ABBV_2012-12-31_10-K.txt
+[2604, 49086, 107463, 107506, 108562, None, 116680, 121045, 181466, 187007, None, 287192, 290710, 296194, 298193, None, 299438, 300293]	SEC-Edgar-data\ABBV\10-K\ABBV_2013-12-31_10-K.txt
+[2605, 49280, 101972, 102015, 103071, None, 112010, 117096, 183162, 191122, None, 297494, 301627, 307077, 309076, None, 310349, 311168]	SEC-Edgar-data\ABBV\10-K\ABBV_2014-12-31_10-K.txt
+[53836, 97589, None, 54093, None, None, 4748, 158103, 4635, None, None, None, None, None, None]	SEC-Edgar-data\ABBV\10-K\ABBV_2015-12-31_10-K.txt
+[2774, 51967, 96273, 96316, 97447, None, 106446, 107897, 158583, 164839, None, 279323, 288217, 288261, 290273, None, 290905, 291744]	SEC-Edgar-data\ABBV\10-K\ABBV_2016-12-31_10-K.txt
+[76985, None, None, None, None, 76490, None, None, None, None, None, None, None]	SEC-Edgar-data\ABC\10-K\ABC_2001-09-30_10-K.txt
+[2058, 30427, 32667, None, 40057, 110937, 110937, 111132, None, None, 190025, None, None, 192233]	SEC-Edgar-data\ABC\10-K\ABC_2002-09-30_10-K.txt
+[129704, None, None, None, None, 129929, None, None, None, None, None, None, None]	SEC-Edgar-data\ABC\10-K\ABC_2003-09-30_10-K.txt
+[38173, None, None, None, None, 160760, None, None, None, None, None, None, None]	SEC-Edgar-data\ABC\10-K\ABC_2004-09-30_10-K.txt
+[182763, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ABC\10-K\ABC_2005-09-30_10-K.txt
+[201047, 201047, None, None, None, None, None, None, None, 307448, 315676, None, 316858, None, None, 317596, None]	SEC-Edgar-data\ABC\10-K\ABC_2006-09-30_10-K.txt
+[2469, 40292, 69029, 69072, 72150, None, 90251, 90526, 194937, 195224, None, 306599, 314494, 316056, None, 316722, 317344]	SEC-Edgar-data\ABC\10-K\ABC_2007-09-30_10-K.txt
+[2534, 39776, 70726, 70769, 73292, None, None, 91592, None, None, None, None, None, None, None]	SEC-Edgar-data\ABC\10-K\ABC_2008-09-30_10-K.txt
+[169026, 169026, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ABC\10-K\ABC_2009-09-30_10-K.txt
+[2973, 44783, 88460, 88505, 90922, None, 98062, 98604, 165828, 166117, None, 257037, 264889, 264935, 266095, None, 266675, 267071, None]	SEC-Edgar-data\ABC\10-K\ABC_2010-09-30_10-K.txt
+[149482, 149482, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ABC\10-K\ABC_2011-09-30_10-K.txt
+[2855, 39870, 80249, 80294, 82788, None, 90294, 92883, 160172, 160463, None, 248605, 257876, 257922, 259085, None, 259673, 260077, None]	SEC-Edgar-data\ABC\10-K\ABC_2012-09-30_10-K.txt
+[2800, 36838, 84085, 84130, 86255, None, 94166, 95997, 172520, 172811, None, 266566, 274473, 274519, 275682, None, 276270, 276674, None]	SEC-Edgar-data\ABC\10-K\ABC_2013-09-30_10-K.txt
+[2847, 37347, 82023, 82068, 84193, None, 94163, 96150, 170411, 170759, None, 265801, 273708, 273754, 274917, None, 275505, 275909, None]	SEC-Edgar-data\ABC\10-K\ABC_2014-09-30_10-K.txt
+[2847, 39753, 89912, 89957, 92709, None, 103874, 106192, 185220, 185568, None, 288625, 297804, 297850, 299013, None, 299611, 300011, None]	SEC-Edgar-data\ABC\10-K\ABC_2015-09-30_10-K.txt
+[2905, 38519, 86923, 86968, 89905, None, 98989, 99494, 174877, 175225, None, 285585, 294861, 294907, 296001, None, 296682, 297082, None]	SEC-Edgar-data\ABC\10-K\ABC_2016-09-30_10-K.txt
+[3151, 24324, 25625, None, 38505, 38721, 39054, None, None, 40034, None, None, None]	SEC-Edgar-data\ABT\10-K\ABT_1993-12-31_10-K.txt
+[3221, 26035, 27310, None, 44509, 44725, 45058, None, None, 46001, None, None, None]	SEC-Edgar-data\ABT\10-K\ABT_1994-12-31_10-K.txt
+[3209, 27079, 28487, None, 45436, 45652, 45985, None, None, 46928, None, None, None]	SEC-Edgar-data\ABT\10-K\ABT_1995-12-31_10-K.txt
+[3309, 28143, 29496, None, 47608, 47824, 48157, None, None, 49027, None, None, None]	SEC-Edgar-data\ABT\10-K\ABT_1996-12-31_10-K.txt
+[3346, 29022, 30463, None, 53120, 53336, 53669, 53868, None, None, 54838, None, None, None]	SEC-Edgar-data\ABT\10-K\ABT_1997-12-31_10-K.txt
+[3336, 38194, 39695, None, 61439, 61655, 61988, 62190, None, None, 63197, None, None, None]	SEC-Edgar-data\ABT\10-K\ABT_1998-12-31_10-K.txt
+[3342, 39113, 40623, None, 71162, 71378, 71711, 71913, None, None, 73056, None, None, None]	SEC-Edgar-data\ABT\10-K\ABT_1999-12-31_10-K.txt
+[1626, 34539, 36027, None, 62243, 62278, 76337, 79411, None, None, 110367, None, None, None]	SEC-Edgar-data\ABT\10-K\ABT_2000-12-31_10-K.txt
+[1583, 34233, 35799, None, 64213, 64248, 80302, 84459, None, None, 118106, None, None, None]	SEC-Edgar-data\ABT\10-K\ABT_2001-12-31_10-K.txt
+[1719, 35222, 36777, None, 68212, 68436, 96814, 101002, None, None, 175816, None, None, 183000]	SEC-Edgar-data\ABT\10-K\ABT_2002-12-31_10-K.txt
+[1719, 39422, 41069, None, 76217, 76899, 117376, 121567, None, 198007, None, 200370, None, None, 203766]	SEC-Edgar-data\ABT\10-K\ABT_2003-12-31_10-K.txt
+[1718, 34803, 36459, None, 70626, 70984, 122093, 126334, None, 205446, 206788, None, 208230, None, None, 211655]	SEC-Edgar-data\ABT\10-K\ABT_2004-12-31_10-K.txt
+[2277, 34572, 52126, 52182, 53833, None, 80891, 81249, 131612, 135790, None, 213846, 215713, None, 217155, None, None, 218559]	SEC-Edgar-data\ABT\10-K\ABT_2005-12-31_10-K.txt
+[2431, 32141, 49591, 49646, 51415, None, 76848, 77277, 128948, 134128, None, 225888, 227831, 227880, 229394, None, 236217, 237001]	SEC-Edgar-data\ABT\10-K\ABT_2006-12-31_10-K.txt
+[2305, 29247, 48006, 48049, 49753, None, 72840, 73257, 122482, 127316, None, 218721, 220585, 220632, 222161, None, 222612, 223404]	SEC-Edgar-data\ABT\10-K\ABT_2007-12-31_10-K.txt
+[2289, 27345, 46673, 46719, 48416, None, 74044, 74344, 125824, 130757, None, 230810, 232674, 232721, 234250, None, 235186, 235993]	SEC-Edgar-data\ABT\10-K\ABT_2008-12-31_10-K.txt
+[2648, 28478, 48003, 48049, 49770, None, 74384, 74684, 124333, 129190, None, 201296, 203160, 203207, 204530, None, 210544, 211351]	SEC-Edgar-data\ABT\10-K\ABT_2009-12-31_10-K.txt
+[2592, 28289, 48331, 48377, 50159, None, 81543, 81843, 148192, 152757, None, 229508, 231372, 231419, 232742, None, 238756, 239563]	SEC-Edgar-data\ABT\10-K\ABT_2010-12-31_10-K.txt
+[2591, 34276, 55873, 55919, 57681, None, 85173, 85208, 170813, 175374, None, 252389, 254253, 254300, 255623, None, 261638, 262445]	SEC-Edgar-data\ABT\10-K\ABT_2011-12-31_10-K.txt
+[2565, 33354, 58221, 58267, 59871, None, 78742, 79090, 156748, 161239, None, 238888, 240771, 240818, 242145, None, 248447, 249254]	SEC-Edgar-data\ABT\10-K\ABT_2012-12-31_10-K.txt
+[2564, 27861, 52250, 52296, 53379, None, 70384, 70907, 136606, 141687, None, 216666, 218549, 218596, 219893, None, 225866, 226737]	SEC-Edgar-data\ABT\10-K\ABT_2013-12-31_10-K.txt
+[2565, 28216, 53631, 53677, 54881, None, 67095, 67660, 144477, 149202, None, 234521, 236404, 236451, 237748, None, 243582, 244454]	SEC-Edgar-data\ABT\10-K\ABT_2014-12-31_10-K.txt
+[2564, 29100, 55554, 55600, 56679, None, 66388, 67228, 145452, 150376, None, 238586, 240465, 240512, 241809, None, 247640, 248512]	SEC-Edgar-data\ABT\10-K\ABT_2015-12-31_10-K.txt
+[2562, 32399, 60922, 60968, 62678, None, 75095, 75620, 162257, 167527, None, 256102, 257981, 258028, 259325, None, 260255, 261143]	SEC-Edgar-data\ABT\10-K\ABT_2016-12-31_10-K.txt
+[6574, 40129, 87869, 87912, 88482, None, 106320, None, 168439, 171957, None, 172192, 175842, 175889, 177453, None, 178523, 179487]	SEC-Edgar-data\ACN\10-K\ACN_2009-08-31_10-K.txt
+[6956, 93000, None, None, None, None, None, 11279, None, None, None, None, None, None]	SEC-Edgar-data\ACN\10-K\ACN_2010-08-31_10-K.txt
+[6938, 34527, 94946, 94989, 95559, None, 110965, None, 165971, 11304, None, 172614, None, None, None, 175294, 176543]	SEC-Edgar-data\ACN\10-K\ACN_2011-08-31_10-K.txt
+[6996, 34396, 100012, 100055, 100644, None, 114218, 114942, 171301, 174881, None, 175043, 178025, None, None, None, 180722, 181972]	SEC-Edgar-data\ACN\10-K\ACN_2012-08-31_10-K.txt
+[7021, 34976, 106296, 106339, 106947, None, 119986, 120713, 181578, 185331, None, 185493, 188416, None, None, None, 191137, 192404]	SEC-Edgar-data\ACN\10-K\ACN_2013-08-31_10-K.txt
+[7019, 31501, 102574, 102617, 103225, None, 115475, 116183, 174770, 178516, None, 178678, 181608, None, 184595, None, 185847, 186954]	SEC-Edgar-data\ACN\10-K\ACN_2014-08-31_10-K.txt
+[7006, 33809, 105567, 105610, 106218, None, 117488, 118180, 173325, 177104, None, 177313, 180240, None, 181282, None, 182534, 183641]	SEC-Edgar-data\ACN\10-K\ACN_2015-08-31_10-K.txt
+[6942, 33240, 103148, 103191, 103807, None, 115185, 115877, 176330, 180935, None, 181144, 184071, None, 185232, None, 186486, 187595]	SEC-Edgar-data\ACN\10-K\ACN_2016-08-31_10-K.txt
+[3548, 48326, 50146, None, 56693, 58646, 76681, None, None, 77712, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_1995-12-31_10-K.txt
+[3370, 62932, 65653, None, 71524, 73612, 100892, None, None, 101935, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_1996-12-31_10-K.txt
+[3493, 38813, 40806, None, 45338, 46975, 70111, 74263, None, None, 75309, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_1997-12-31_10-K.txt
+[3524, 59180, 60681, None, 68225, 69699, 95614, 96508, None, None, 97553, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_1998-12-31_10-K.txt
+[3618, 65019, 66542, None, 81401, 82898, 94353, 112566, None, None, 113559, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_1999-12-31_10-K.txt
+[2455, 101988, 103919, None, 118584, 120949, 149043, 150404, None, None, 151380, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_2000-12-31_10-K.txt
+[1942, 86387, 88499, None, 107952, None, 144628, 151751, None, None, 151144, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_2001-12-31_10-K.txt
+[1822, 89875, 91971, None, 110347, 111297, 139203, 144210, None, None, 145197, None, None, 147788]	SEC-Edgar-data\ACT\10-K\ACT_2002-12-31_10-K.txt
+[None, None, 29384, None, 78644, None, 165066, None, None, None, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_2003-12-31_10-K.txt
+[1802, 90351, 91435, None, 120228, 121712, 173418, 177312, None, 177782, 182394, None, 184556, None, None, 185223, 185442]	SEC-Edgar-data\ACT\10-K\ACT_2004-12-31_10-K.txt
+[2917, 48009, 89062, 89118, 90143, None, 119081, 120386, 172491, 176436, None, 176908, 181522, None, 183486, None, None, 184159, 184380]	SEC-Edgar-data\ACT\10-K\ACT_2005-12-31_10-K.txt
+[2810, 63864, 121008, 121061, 122060, None, 131964, 133845, 204790, 207883, None, 208355, 213542, 213588, 215520, None, None, 216256, 216474]	SEC-Edgar-data\ACT\10-K\ACT_2006-12-31_10-K.txt
+[9700, 9700, None, None, None, None, None, None, None, 218317, None, None, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_2007-12-31_10-K.txt
+[11549, 11549, None, None, None, None, None, None, None, 213882, None, None, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_2008-12-31_10-K.txt
+[18813, 18813, None, None, None, None, None, None, None, 234109, None, None, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_2009-12-31_10-K.txt
+[19064, 19064, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_2010-12-31_10-K.txt
+[22002, 22002, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_2011-12-31_10-K.txt
+[25797, 25797, 45850, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ACT\10-K\ACT_2012-12-31_10-K.txt
+[4279, 39486, 40620, None, 43696, 44025, 73149, None, None, 78611, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_1994-11-25_10-K.txt
+[3650, 36335, 36943, None, 39448, 39777, 81129, None, None, 86277, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_1995-12-01_10-K.txt
+[4342, 24342, 24950, None, 27655, 27984, 74776, None, None, 70602, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_1996-11-29_10-K.txt
+[4480, 31984, 32728, None, 37088, 37417, 73457, 82700, None, None, 83965, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_1997-11-28_10-K.txt
+[4480, 30650, 32008, None, 36749, 37078, 94906, 101006, None, None, 102265, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_1998-11-27_10-K.txt
+[2855, 41331, 42254, None, 45785, 46114, 110719, 116412, None, None, 117869, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_1999-12-03_10-K.txt
+[2952, 44694, 45617, None, 49864, 50187, 112218, 120936, None, None, 122467, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_2000-12-01_10-K.txt
+[2980, 56923, 57854, None, 61722, 62045, 148277, 160406, None, None, 163392, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_2001-11-30_10-K.txt
+[4333, 82807, 83818, None, 92030, 91883, 207919, 219666, None, None, 222537, None, None, 224900]	SEC-Edgar-data\ADBE\10-K\ADBE_2002-11-29_10-K.txt
+[3886, 88631, 89695, None, 97723, 99679, 177858, 191744, None, 193702, None, 195986, None, None, 197638]	SEC-Edgar-data\ADBE\10-K\ADBE_2003-11-28_10-K.txt
+[3780, 94273, 95407, None, 103343, 105025, 180274, 191961, None, 193352, 195829, None, 196597, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_2004-12-03_10-K.txt
+[4187, 111232, 137555, 137598, 139289, None, 147079, 148332, 195461, 206831, None, 208184, 215013, None, 217220, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_2005-12-02_10-K.txt
+[4465, 120406, 148441, 148486, 149883, None, 155462, 156351, 208579, 220086, None, 221102, 227926, 229910, 230720, None, 231823, 232683]	SEC-Edgar-data\ADBE\10-K\ADBE_2006-12-01_10-K.txt
+[4251, 129737, 161048, 161094, 162305, None, 168656, 169670, 223959, 234623, None, 336521, 343259, 343307, 345123, None, 346115, 347085]	SEC-Edgar-data\ADBE\10-K\ADBE_2007-11-30_10-K.txt
+[3852, 3852, None, None, None, None, 173147, 200464, None, None, None, None, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_2008-11-28_10-K.txt
+[4255, 4255, None, None, None, None, 209766, 238497, None, None, None, None, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_2009-11-27_10-K.txt
+[4296, 4296, None, None, None, None, 229661, 270296, None, None, None, None, None, None, None]	SEC-Edgar-data\ADBE\10-K\ADBE_2010-12-03_10-K.txt
+[5145, 159168, 211744, 211790, 212825, None, 217087, 217632, 297116, 306622, None, 423315, 426373, 426417, 427043, None, 427411, 427777]	SEC-Edgar-data\ADBE\10-K\ADBE_2011-12-02_10-K.txt
+[5164, 174856, 227741, 227787, 228907, None, 234257, 234802, 312614, 321742, None, 424818, 427881, 427925, 428551, None, 428919, 429285]	SEC-Edgar-data\ADBE\10-K\ADBE_2012-11-30_10-K.txt
+[5198, 64697, 120709, 120752, 121863, None, 129056, 129601, 207903, 215715, None, 323262, 326325, 326369, 326995, None, 327363, 327729]	SEC-Edgar-data\ADBE\10-K\ADBE_2013-11-29_10-K.txt
+[5339, 67328, 123392, 123438, 124723, None, 132273, 132818, 213830, 222630, None, 333199, 336269, 337044, 337681, None, 338059, 338439]	SEC-Edgar-data\ADBE\10-K\ADBE_2014-11-28_10-K.txt
+[5376, 68571, 128011, 128054, 129270, None, 136358, 136903, 211864, 220299, None, 326527, 329597, 329641, 330222, None, 330604, 330984]	SEC-Edgar-data\ADBE\10-K\ADBE_2015-11-27_10-K.txt
+[5377, 70991, 129044, 129090, 130430, None, 135606, 136162, 207013, 215479, None, 317859, 320866, 322554, 323135, None, 323513, 323893]	SEC-Edgar-data\ADBE\10-K\ADBE_2016-12-02_10-K.txt
+[3436, 39634, 40889, None, 48262, 48300, None, None, None, 108735, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_1994-10-29_10-K.txt
+[3287, 35175, 36560, None, 43051, 43312, None, None, None, 131071, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_1995-10-28_10-K.txt
+[3438, 31303, 32360, None, 37866, 38132, None, None, None, 121885, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_1996-11-02_10-K.txt
+[3634, 28359, 29525, None, 31392, 31424, 32042, None, None, 33353, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_1997-11-01_10-K.txt
+[3625, 30256, 32430, None, 34593, 34726, 35344, None, None, 36654, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_1998-10-31_10-K.txt
+[3628, 32446, 33615, None, 35776, 35910, 36522, None, None, 37627, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_1999-10-30_10-K.txt
+[2120, 30848, 31923, None, 33862, 33900, 34516, None, None, 35612, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2000-10-28_10-K.txt
+[1650, 29484, 30488, None, 32165, None, 64551, None, None, 121905, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2001-11-03_10-K.txt
+[1766, 37292, 38314, None, 45167, None, 109568, None, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2002-11-02_10-K.txt
+[1960, 35932, 36954, None, 44630, None, 110974, None, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2003-11-01_10-K.txt
+[176706, 35567, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2004-10-30_10-K.txt
+[184631, None, None, None, None, None, None, None, 194763, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2005-10-29_10-K.txt
+[78790, 80347, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2006-10-28_10-K.txt
+[75299, 77805, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2007-11-03_10-K.txt
+[74020, 77207, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2008-11-01_10-K.txt
+[70673, 74022, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2009-10-31_10-K.txt
+[73745, 77456, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2010-10-30_10-K.txt
+[5407, 5407, None, None, None, None, 3152, None, None, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2011-10-29_10-K.txt
+[4689, 4689, 75040, None, 76087, None, 79062, 3224, 137000, None, None, 239404, 247280, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2012-11-03_10-K.txt
+[4906, 40718, 76491, None, 77538, None, 80734, 3230, 137605, None, None, 244183, 252098, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2013-11-02_10-K.txt
+[4933, 42586, 80978, None, 82025, None, 85242, None, 147517, None, None, 276147, 285750, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2014-11-01_10-K.txt
+[4930, 41838, 80618, None, 81666, None, 84685, None, 138921, None, None, 258109, 266035, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2015-10-31_10-K.txt
+[5036, 43267, 93206, None, 94274, None, 97633, None, 158381, None, None, 294283, 302204, None, None, None, None, None]	SEC-Edgar-data\ADI\10-K\ADI_2016-10-29_10-K.txt
+[7889, 21653, 25833, None, 27883, 28137, 28418, None, None, 29375, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_1994-06-30_10-K.txt
+[3273, 22066, 26592, None, 34469, 34726, 35046, None, None, 36230, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_1995-06-30_10-K.txt
+[3601, 24634, 29458, None, 57509, 57777, 58097, None, None, 59615, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_1996-06-30_10-K.txt
+[3591, 26255, 31417, None, 64863, 65120, 65441, 65746, None, None, 66955, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_1997-06-30_10-K.txt
+[3540, 27052, 33361, None, 64115, 64372, 64985, None, None, 66205, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_1998-06-30_10-K.txt
+[3522, 27446, 33639, None, 60150, 60407, 61020, None, None, 62310, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_1999-06-30_10-K.txt
+[2502, 27307, 33827, None, 67102, 67359, 67972, None, None, 69263, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2000-06-30_10-K.txt
+[2568, 21138, 27377, None, 63658, 63915, 64529, None, None, 65809, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2001-06-30_10-K.txt
+[3721, 22562, 29670, None, 65248, 65505, 66119, None, None, 67399, None, None, 68496]	SEC-Edgar-data\ADM\10-K\ADM_2002-06-30_10-K.txt
+[3478, 23595, 30579, None, 59717, 59974, 60588, None, 61383, None, 62989, None, None, 63991, 65719]	SEC-Edgar-data\ADM\10-K\ADM_2003-06-30_10-K.txt
+[3211, 3559, 3642, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2004-06-30_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2005-06-30_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2006-06-30_10-K.txt
+[23268, 23268, 23295, None, None, None, None, 79412, 5823, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2007-06-30_10-K.txt
+[23076, 23076, 23103, None, None, None, None, 77437, 5997, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2008-06-30_10-K.txt
+[24954, 24954, 24981, None, None, None, None, 73190, 6367, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2009-06-30_10-K.txt
+[28972, 28972, 28999, None, None, None, 62531, 83422, 6565, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2010-06-30_10-K.txt
+[28645, 28645, 28672, None, None, None, None, 92595, 7440, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2011-06-30_10-K.txt
+[28487, 28487, 28514, None, None, None, None, 95295, 7274, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2012-06-30_10-K.txt
+[25056, 25056, 25083, None, None, None, None, 112671, 6960, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2013-12-31_10-K.txt
+[27612, 27612, 27639, None, None, None, None, 113869, 7106, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2014-12-31_10-K.txt
+[26118, 26118, 26145, None, None, None, None, 108984, 6406, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2015-12-31_10-K.txt
+[26219, 26219, 26246, None, None, None, None, 111233, 6932, None, None, None, None, None, None]	SEC-Edgar-data\ADM\10-K\ADM_2016-12-31_10-K.txt
+[3575, 20004, 20480, None, 21040, 21226, 21606, None, None, 24733, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_1994-06-30_10-K.txt
+[3257, 22513, 22987, None, 23547, 23733, 24113, None, None, 27773, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_1995-06-30_10-K.txt
+[3566, 25072, 25548, None, 26108, 26294, 26678, None, None, 29430, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_1996-06-30_10-K.txt
+[3604, 23794, 24291, None, 25836, 26022, 26403, 26589, None, None, 29429, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_1997-06-30_10-K.txt
+[3611, 24486, 25008, None, 26604, 26790, 27171, 27518, None, None, 30001, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_1998-06-30_10-K.txt
+[3579, 26064, 26586, None, 28727, 28913, 29293, 29640, None, None, 31483, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_1999-06-30_10-K.txt
+[2148, 21417, 21939, None, 23694, 23879, 24139, 24785, None, None, 27971, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_2000-06-30_10-K.txt
+[2435, 21055, 21609, None, 22173, 22358, 22618, 23776, None, None, 27057, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_2001-06-30_10-K.txt
+[2430, 23865, 24588, None, 30218, 30403, 30663, 31850, None, None, 35160, None, None, 36425]	SEC-Edgar-data\ADP\10-K\ADP_2002-09-16_10-K.txt
+[2687, 22580, 23321, None, 25944, 26129, 26389, 26657, None, 27164, None, 31091, None, None, 31989, 32217]	SEC-Edgar-data\ADP\10-K\ADP_2003-09-12_10-K.txt
+[2686, 24537, 25278, None, 29420, 29605, 29865, 30154, None, 30656, None, 34435, None, None, 35553]	SEC-Edgar-data\ADP\10-K\ADP_2004-08-30_10-K.txt
+[2806, 25801, 26540, None, 30751, 30936, 31245, 31528, None, 32037, 36612, None, 39714, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_2005-08-31_10-K.txt
+[1966, 24562, 31139, 31179, 31918, None, 36223, 37072, 119368, 119670, None, 181241, 190293, None, 193693, None, None, None]	SEC-Edgar-data\ADP\10-K\ADP_2006-06-30_10-K.txt
+[1950, 22358, 27940, 27980, 28692, None, 32410, 33682, 113149, 113449, None, 187361, 196656, 196703, 201205, None, 201857, 202118, 202364]	SEC-Edgar-data\ADP\10-K\ADP_2007-06-30_10-K.txt
+[2034, 20917, 26626, 26666, 27376, None, 30676, 32373, 105942, 106242, None, 184591, 194134, 194181, 198830, None, 199490, 199755, 200006]	SEC-Edgar-data\ADP\10-K\ADP_2008-06-30_10-K.txt
+[2401, 21962, 28727, 28767, 29477, None, 31261, 31844, 116353, 116653, None, 204365, 214003, 214047, 218923, None, 219583, 219848, 220099]	SEC-Edgar-data\ADP\10-K\ADP_2009-06-30_10-K.txt
+[2476, 22588, 29626, 29669, 30385, None, 32033, 32616, 110137, 110434, None, 190549, 199596, 199643, 204365, None, 205025, 205541]	SEC-Edgar-data\ADP\10-K\ADP_2010-06-30_10-K.txt
+[2459, 23791, 31156, 31199, 31916, None, 33470, 34053, 201435, 201732, None, 204559, 214624, 214668, 219438, None, 220098, 220611]	SEC-Edgar-data\ADP\10-K\ADP_2011-06-30_10-K.txt
+[2535, 24869, 32580, 32623, 33334, None, 34915, 37125, 113100, 113397, None, 193519, 202603, 202650, 207253, None, 207913, 208429]	SEC-Edgar-data\ADP\10-K\ADP_2012-06-30_10-K.txt
+[2430, 31944, 40561, 40604, 41296, None, 42874, 45350, 119310, 119609, None, 197242, 206366, 206410, 211891, None, 212557, 213072]	SEC-Edgar-data\ADP\10-K\ADP_2013-06-30_10-K.txt
+[2427, 33958, 44960, 45006, 45698, None, 47299, 50293, 127491, 127793, None, 208920, 218048, 218095, 224570, None, 225239, 225754]	SEC-Edgar-data\ADP\10-K\ADP_2014-06-30_10-K.txt
+[2428, 29954, 50645, 50688, 51381, None, 53865, 56384, 121764, 122065, None, 198959, 208053, 208100, 214225, None, 214938, 215453]	SEC-Edgar-data\ADP\10-K\ADP_2015-06-30_10-K.txt
+[2436, 30289, 54146, 54189, 54824, None, 56993, 62551, 125575, 125876, None, 211460, 220547, 224458, 230745, None, 231430, 231947]	SEC-Edgar-data\ADP\10-K\ADP_2016-06-30_10-K.txt
+[2834, 72197, 72719, None, 79042, 81629, 124244, 129294, None, None, 141005, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2001-12-31_10-K.txt
+[3162, 73546, 74066, None, 76801, 79337, 126284, 131597, None, None, 132109, None, None, 134377]	SEC-Edgar-data\ADS\10-K\ADS_2002-12-31_10-K.txt
+[3076, 77806, 78285, None, 80229, 81089, 143313, 148359, None, 148589, None, 150330, None, None, 151161, 151433]	SEC-Edgar-data\ADS\10-K\ADS_2003-12-31_10-K.txt
+[3103, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2004-12-31_10-K.txt
+[3664, 3664, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2005-12-31_10-K.txt
+[3621, 3621, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2006-12-31_10-K.txt
+[3824, 3824, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2007-12-31_10-K.txt
+[3835, 3835, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2008-12-31_10-K.txt
+[4218, 56790, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2009-12-31_10-K.txt
+[4211, 4211, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2010-12-31_10-K.txt
+[4183, 4183, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2011-12-31_10-K.txt
+[4025, 4025, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2012-12-31_10-K.txt
+[3951, 3951, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2013-12-31_10-K.txt
+[3990, 3990, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2014-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ADS\10-K\ADS_2015-12-31_10-K.txt
+[5075, 40849, 95573, 95622, 96133, None, 100960, 101548, 157040, 160534, None, 160775, 164184, None, 164490, None, None, 165521]	SEC-Edgar-data\ADS\10-K\ADS_2016-12-31_10-K.txt
+[3930, 34224, 34802, None, 39879, None, 40393, None, None, 42085, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_1995-01-31_10-K.txt
+[4135, 43534, 44002, None, 50636, 50801, 51043, None, None, 52552, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_1996-01-31_10-K.txt
+[4555, 46350, 46818, None, 54611, 54776, 55015, None, None, 56529, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_1997-01-31_10-K.txt
+[4536, 42635, 43126, None, 49427, 49592, 49831, None, None, 51345, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_1998-01-31_10-K.txt
+[4546, 50741, 51287, None, 56128, 56292, 56730, None, None, 58244, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_1999-01-31_10-K.txt
+[4312, 32532, 33074, None, 38052, 38214, 96904, None, None, 146459, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2000-01-31_10-K.txt
+[3413, 22116, 22629, None, 27242, 28709, 76330, None, None, 122104, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2001-01-31_10-K.txt
+[3144, 23042, 23689, None, 28499, 28534, 86536, None, None, 141810, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2002-01-31_10-K.txt
+[3758, 31482, 32163, None, 41496, 7954, 110571, None, None, 175919, None, None, 179238]	SEC-Edgar-data\ADSK\10-K\ADSK_2003-01-31_10-K.txt
+[42479, None, 64699, None, 42497, 8127, 42534, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2004-01-31_10-K.txt
+[4293, 36339, 37344, None, 47242, 47954, 151027, 155088, None, 232019, 235739, None, 238960, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2005-01-31_10-K.txt
+[4764, 40657, 67873, 68117, 69123, None, 80759, 81471, 158724, 161565, None, 247910, 252190, None, 253618, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2006-01-31_10-K.txt
+[3025, 3025, None, 145588, None, 98048, 5013, 204537, 207534, None, 364600, 336903, 336947, 345305, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2007-01-31_10-K.txt
+[4685, 4685, None, 111518, None, None, 90211, 267673, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2008-01-31_10-K.txt
+[5028, 5028, None, 112820, None, None, 56406, 295796, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2009-01-31_10-K.txt
+[5560, 5560, None, 115406, None, None, 89662, 289141, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2010-01-31_10-K.txt
+[5447, 5447, None, 115878, None, None, 92334, 278393, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2011-01-31_10-K.txt
+[6207, 5940, None, 120605, None, None, 38388, 275719, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2012-01-31_10-K.txt
+[6240, 5965, None, 137454, None, None, 109876, 295090, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2013-01-31_10-K.txt
+[6388, 6086, None, 140155, None, None, 109953, 195041, 302706, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2014-01-31_10-K.txt
+[6275, 47937, None, 143980, None, None, 111146, 198663, None, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2015-01-31_10-K.txt
+[6640, 6640, None, 161905, None, None, 126523, 222991, None, None, None, None, None, None, None]	SEC-Edgar-data\ADSK\10-K\ADSK_2016-01-31_10-K.txt
+[145080, 145080, None, None, None, None, 144610, None, None, None, None, None, None, None]	SEC-Edgar-data\ADT\10-K\ADT_2012-09-28_10-K.txt
+[3177, 52030, 141206, 141252, 142578, None, 147785, 149199, 205897, 207906, None, 208742, 213177, 213227, 215367, None, 216323, 216741, None]	SEC-Edgar-data\ADT\10-K\ADT_2013-09-27_10-K.txt
+[3103, 53301, 142522, 142568, 143180, None, 150601, 151628, 213983, 217420, None, 218253, 223328, 223378, 225011, None, 226060, 226576, None]	SEC-Edgar-data\ADT\10-K\ADT_2014-09-26_10-K.txt
+[3129, 56252, 148073, 148119, 149095, None, 153733, 154874, 219656, 223364, None, 224161, 228157, 228207, 229841, None, 230890, 231346, None]	SEC-Edgar-data\ADT\10-K\ADT_2015-09-25_10-K.txt
+[3456, 18927, 19886, None, 22349, 22550, 22800, None, None, 23538, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_1997-12-31_10-K.txt
+[3247, 22160, 23938, None, 29328, 29529, 29779, 30112, None, None, 30843, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_1998-12-31_10-K.txt
+[3649, 26282, 29555, None, 35414, 35615, 35865, 36247, None, None, 36984, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_1999-12-31_10-K.txt
+[4527, 33653, 38705, None, 45335, 45536, 45786, 46273, None, None, 47010, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2000-12-31_10-K.txt
+[2923, 37344, 44813, None, 53270, 53471, 53721, 54140, None, None, 54871, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2001-12-31_10-K.txt
+[5935, 35786, 43462, None, 63308, 63509, 63759, 64186, None, None, 65888, None, None, 5039]	SEC-Edgar-data\AEE\10-K\AEE_2002-12-31_10-K.txt
+[16686, 72018, 79996, None, 83302, 83340, 188335, 204405, None, 423748, None, 426760, None, None, 428779, 429130]	SEC-Edgar-data\AEE\10-K\AEE_2003-12-31_10-K.txt
+[17690, 69281, 75679, None, 80463, 80504, 185828, 202391, None, 413494, 417345, None, 423819, None, None, 446051, None]	SEC-Edgar-data\AEE\10-K\AEE_2004-12-31_10-K.txt
+[17944, 43049, 79730, 79839, 86074, None, 90842, 90883, 207294, 224965, None, 432773, 436381, None, 442645, None, None, 458662, None]	SEC-Edgar-data\AEE\10-K\AEE_2005-12-31_10-K.txt
+[47331, 43926, None, None, None, None, 20579, 25109, None, None, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2006-12-31_10-K.txt
+[47492, 47492, None, None, None, None, 21837, 42060, None, None, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2007-12-31_10-K.txt
+[51901, 51901, None, None, None, None, 22089, 141476, None, None, 493377, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2008-12-31_10-K.txt
+[55513, 55513, None, None, None, None, 23053, 45557, None, None, 524964, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2009-12-31_10-K.txt
+[64881, 64881, None, None, None, None, 24978, 54643, None, None, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2010-12-31_10-K.txt
+[68922, 68922, None, None, None, None, 24295, 57012, None, None, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2011-11-23_10-K.txt
+[74837, 74837, 122953, None, None, None, 25323, 62182, None, None, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2012-12-31_10-K.txt
+[23937, 67306, 110467, None, None, None, 24840, 54235, None, None, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2013-12-31_10-K.txt
+[23245, 67227, 111437, None, None, None, 24134, 41038, None, None, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2014-12-31_10-K.txt
+[24648, 64498, None, None, None, None, 25552, 40441, None, None, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2015-12-31_10-K.txt
+[20731, 20731, None, None, None, None, 23462, 40350, None, None, None, None, None, None, None]	SEC-Edgar-data\AEE\10-K\AEE_2016-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AEP\10-K\AEP_1994-12-31_10-K.txt
+[8773, 8792, 8814, None, 9036, None, 9168, None, None, 9392, None, None, None]	SEC-Edgar-data\AEP\10-K\AEP_1995-12-31_10-K.txt
+[9490, 9558, 9627, None, 9959, None, 10142, None, None, 181432, None, None, None]	SEC-Edgar-data\AEP\10-K\AEP_1996-12-31_10-K.txt
+[8405, 8472, 8540, None, 8906, None, 9088, 9159, None, None, 9417, None, None, None]	SEC-Edgar-data\AEP\10-K\AEP_1997-12-31_10-K.txt
+[6295, 152431, 168895, None, 175688, None, 179153, 181095, None, None, 184178, None, None, None]	SEC-Edgar-data\AEP\10-K\AEP_1998-12-31_10-K.txt
+[5362, 5426, 5491, None, 5811, None, 5988, 6104, None, None, 6351, None, None, None]	SEC-Edgar-data\AEP\10-K\AEP_1999-12-31_10-K.txt
+[5357, 136170, 144398, None, 150776, None, 151840, 152196, None, None, 154538, None, None, None]	SEC-Edgar-data\AEP\10-K\AEP_2000-12-31_10-K.txt
+[5647, 56755, 146868, None, 153044, None, 154273, 154710, None, None, 157418, None, None, None]	SEC-Edgar-data\AEP\10-K\AEP_2001-12-31_10-K.txt
+[7088, 103578, 113199, None, 117085, None, 118312, 118748, None, None, 121327, None, None, 128650]	SEC-Edgar-data\AEP\10-K\AEP_2002-12-31_10-K.txt
+[9610, 113013, 126326, None, 130159, None, 131084, 131393, None, 131852, None, 135238, None, None, 143735]	SEC-Edgar-data\AEP\10-K\AEP_2003-12-31_10-K.txt
+[3978, None, 148508, None, None, None, None, None, 151556, None, 157763, None, None, None]	SEC-Edgar-data\AEP\10-K\AEP_2004-12-31_10-K.txt
+[3336, 75024, 124028, 124073, 136350, None, 138347, 138662, 139345, 139682, None, 140149, 142634, None, 144212, None, None, 153730]	SEC-Edgar-data\AEP\10-K\AEP_2005-12-31_10-K.txt
+[3397, 78132, 128747, 128792, 145687, None, 147658, 147973, 148656, 148993, None, 149460, 151945, 151991, 156452, None, 160153, 162351]	SEC-Edgar-data\AEP\10-K\AEP_2006-12-31_10-K.txt
+[2908, 72626, 112385, 112428, 127018, None, 128935, 129225, 129903, 130215, None, 130632, 133331, 133375, 137724, None, 141113, 143259]	SEC-Edgar-data\AEP\10-K\AEP_2007-12-31_10-K.txt
+[2858, 73313, 116389, 116432, 130605, None, 132544, 132835, 133494, 133806, None, 134223, 136922, 136966, 140154, None, 141656, 143808]	SEC-Edgar-data\AEP\10-K\AEP_2008-12-31_10-K.txt
+[2960, 84498, 133537, 133580, 140797, None, 143021, 143310, 143968, 144280, None, 144697, 147396, 147440, 150627, None, 151952, 154091]	SEC-Edgar-data\AEP\10-K\AEP_2009-12-31_10-K.txt
+[3438, 84522, 131057, 131100, 137588, None, 139773, 140064, 140673, 141030, None, 141450, 144148, 144195, 147611, None, 150313, 152973]	SEC-Edgar-data\AEP\10-K\AEP_2010-12-31_10-K.txt
+[3416, 85418, 134270, 134313, 140118, None, 142648, 143172, 143769, 144120, None, 144521, 147187, 147234, 149308, None, 150879, None]	SEC-Edgar-data\AEP\10-K\AEP_2011-12-31_10-K.txt
+[3453, 94569, 145614, 145657, 150974, None, 153550, 154113, 154788, 155178, None, 155579, 158245, 158292, 160376, None, 161991, None]	SEC-Edgar-data\AEP\10-K\AEP_2012-12-31_10-K.txt
+[3428, 103522, 159946, 159989, 165013, None, 167477, 168040, 168715, 169105, None, 169506, 173051, 173098, 175182, None, 176797, None]	SEC-Edgar-data\AEP\10-K\AEP_2013-12-31_10-K.txt
+[3444, 96226, 140909, 140952, 145844, None, 148310, 148871, 149546, 149922, None, 150319, 152976, 153023, 155105, None, 156734, None]	SEC-Edgar-data\AEP\10-K\AEP_2014-12-31_10-K.txt
+[4219, 100506, 142052, 142095, 146879, None, 149276, 149837, 150512, 150888, None, 151285, 153945, 153992, 156005, None, 157636, None]	SEC-Edgar-data\AEP\10-K\AEP_2015-12-31_10-K.txt
+[4230, 101489, 147554, 147597, 152609, None, 154932, 155493, 156168, 156544, None, 157168, 159831, 159878, 161891, None, 163523, None]	SEC-Edgar-data\AEP\10-K\AEP_2016-12-31_10-K.txt
+[3033, 65154, 66379, None, 71642, 71674, 72017, None, None, 72995, None, None, None]	SEC-Edgar-data\AES\10-K\AES_1996-12-31_10-K.txt
+[3051, 90218, 91134, None, 93831, None, 132549, 140728, None, None, 196477, None, None, None]	SEC-Edgar-data\AES\10-K\AES_1997-12-31_10-K.txt
+[3663, 99489, 100397, None, 102445, None, 103515, 103756, None, None, 104791, None, None, None]	SEC-Edgar-data\AES\10-K\AES_1998-12-31_10-K.txt
+[3647, 53759, 54678, None, 60020, None, 111830, 121436, None, None, 195607, None, None, None]	SEC-Edgar-data\AES\10-K\AES_1999-12-31_10-K.txt
+[1862, 62371, 63289, None, 73601, None, 138703, 145082, None, None, 246645, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2000-12-31_10-K.txt
+[1800, 108847, 109769, None, 121386, None, 207457, 214861, None, None, 345530, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2001-12-31_10-K.txt
+[2132, 101650, 102575, None, 125922, None, 284388, 528074, None, None, 525214, None, None, 527883]	SEC-Edgar-data\AES\10-K\AES_2002-12-31_10-K.txt
+[2103, 80488, 81347, None, 115381, None, 227242, 234369, None, 449301, None, 453758, None, None, 456854]	SEC-Edgar-data\AES\10-K\AES_2003-12-31_10-K.txt
+[102615, None, None, None, None, None, 430716, None, None, None, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2004-12-31_10-K.txt
+[7125, 142716, 193296, 193341, 194016, None, 235930, 237519, 354208, 362455, None, 527660, 558702, None, 560439, None, None, 563278]	SEC-Edgar-data\AES\10-K\AES_2005-12-31_10-K.txt
+[39962, 165258, 223306, 223351, 224026, None, 265573, 267919, 404478, 413235, None, 603663, 653224, 653273, 675636, None, None, 791296, None]	SEC-Edgar-data\AES\10-K\AES_2006-12-31_10-K.txt
+[10401, 163165, 238318, 238364, 239037, None, 282781, 284674, 403129, 412185, None, 626389, 662500, 662547, 663766, None, 665240, 665597, None]	SEC-Edgar-data\AES\10-K\AES_2007-12-31_10-K.txt
+[9239, 11306, 279383, 279426, 280099, None, 325478, 326817, 474865, 484145, None, 733582, 748739, 748786, 750005, None, 755895, 756252, None]	SEC-Edgar-data\AES\10-K\AES_2008-12-31_10-K.txt
+[271879, 6408, None, 386352, None, None, 16287, 376531, 343713, None, 777373, None, None, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2009-12-31_10-K.txt
+[348083, 4166, None, 319641, None, None, 16121, 454362, 423484, None, None, None, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2010-12-31_10-K.txt
+[333028, 4173, None, None, None, None, 15499, 458888, 435308, None, None, None, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2011-12-31_10-K.txt
+[4171, 4172, None, 5251, None, None, 26507, 371968, 27598, None, None, None, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2012-12-31_10-K.txt
+[4091, 4092, 267700, 268386, None, 303221, 304752, 394618, 27607, None, 589947, 597075, None, None, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2013-12-31_10-K.txt
+[4780, 4245, 272396, 273083, None, 304113, 305865, 418151, 25831, None, 622491, 629593, None, None, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2014-12-31_10-K.txt
+[4770, 4235, 294333, 295026, None, 328873, 330619, 387444, 26667, None, 661874, 668974, None, None, None, None, None]	SEC-Edgar-data\AES\10-K\AES_2015-12-31_10-K.txt
+[4776, 4239, 277139, 277182, 277875, None, 302140, 303916, 353527, 418418, None, 602632, 609733, 609781, 610451, None, None, 612299, None]	SEC-Edgar-data\AES\10-K\AES_2016-12-31_10-K.txt
+[1755, 46664, 47305, None, 67951, 68099, 68294, 68477, None, None, 69213, None, None, None]	SEC-Edgar-data\AET\10-K\AET_2000-12-31_10-K.txt
+[1676, 40613, 41252, None, 59020, 59168, 59371, 59554, None, None, 60279, None, None, None]	SEC-Edgar-data\AET\10-K\AET_2001-12-31_10-K.txt
+[1809, 41045, 41662, None, 54409, 54557, 54748, 54931, None, None, 55755, None, None, 60013]	SEC-Edgar-data\AET\10-K\AET_2002-12-31_10-K.txt
+[2264, 39297, 40005, None, 52042, 52190, 52381, 52627, None, 52987, None, 55641, None, None, 58050, 58371]	SEC-Edgar-data\AET\10-K\AET_2003-12-31_10-K.txt
+[2080, 38136, 38834, None, 53344, 53489, 53681, 53861, None, 54270, 56512, None, 58671, None, None, None]	SEC-Edgar-data\AET\10-K\AET_2004-12-31_10-K.txt
+[2531, 39623, 39784, 39827, 40535, None, 53698, 53843, 54035, 54213, None, 54630, 56863, None, 58642, None, None, None]	SEC-Edgar-data\AET\10-K\AET_2005-12-31_10-K.txt
+[2923, 38654, 38856, 38899, 39547, None, 46563, 46719, 46933, 47176, None, 47615, 49821, 50594, 51361, None, 53651, None]	SEC-Edgar-data\AET\10-K\AET_2006-12-31_10-K.txt
+[2998, 40710, 40912, 40963, 41639, None, 47692, 47848, 48062, 48305, None, 48736, 50901, 50945, 51653, None, 54057, None]	SEC-Edgar-data\AET\10-K\AET_2007-12-31_10-K.txt
+[1930, 38808, 39010, 39061, 39737, None, 45209, 45365, 45579, 45822, None, 46253, 48533, 48577, 49285, None, 51568, None]	SEC-Edgar-data\AET\10-K\AET_2008-12-31_10-K.txt
+[1638, 43226, 43428, 43471, 44147, None, 49697, 49853, 50067, 50310, None, 50749, 52993, 53037, 53793, None, 54474, 55090]	SEC-Edgar-data\AET\10-K\AET_2009-12-31_10-K.txt
+[1682, 44692, 44894, 44945, 45503, None, 51494, 51650, 51864, 52107, None, 52539, 54798, 54842, 55590, None, 56271, 56895]	SEC-Edgar-data\AET\10-K\AET_2010-12-31_10-K.txt
+[1636, 49492, 49694, 49745, 50304, None, 55501, 55665, 55879, 56122, None, 56553, 58813, 58857, 59607, None, 60261, 60877]	SEC-Edgar-data\AET\10-K\AET_2011-12-31_10-K.txt
+[1642, 53256, 53458, 53501, 54060, None, 60293, 60449, 60663, 60916, None, 61347, 63607, 63651, 64361, None, 65015, 65631]	SEC-Edgar-data\AET\10-K\AET_2012-12-31_10-K.txt
+[1643, 56615, 56817, 56860, 57439, None, 64340, 64496, 64710, 64963, None, 65394, 67654, 67698, 68408, None, 69150, 69774]	SEC-Edgar-data\AET\10-K\AET_2013-12-31_10-K.txt
+[1642, 53995, 54197, 54240, 54819, None, 60481, 60645, 60859, 61112, None, 61543, 63803, 63847, 64557, None, 65299, 65915]	SEC-Edgar-data\AET\10-K\AET_2014-12-31_10-K.txt
+[1634, 56257, 56459, 56502, 57081, None, 63541, 63697, 63919, 64172, None, 64603, 66855, 66907, 67617, None, 68359, 68975]	SEC-Edgar-data\AET\10-K\AET_2015-12-31_10-K.txt
+[2197, 39688, 186050, 186093, 186672, None, 190253, 190608, 324317, 333466, None, 506986, 513082, 513126, 518203, None, 518945, 519570]	SEC-Edgar-data\AET\10-K\AET_2016-12-31_10-K.txt
+[5563, 39705, 41041, None, 50396, 220066, 260380, None, None, 51465, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_1993-12-31_10-K.txt
+[5683, 45109, 46477, None, 52738, 177217, 217360, None, None, 53805, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_1994-12-31_10-K.txt
+[5818, 46413, 47702, None, 54012, 87668, 130179, None, None, 55076, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_1995-12-31_10-K.txt
+[5816, 49667, 50660, None, 56157, 89859, 141207, None, None, 57224, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_1996-12-31_10-K.txt
+[6054, 58615, 59770, None, 64552, 133014, 4042, 196151, None, None, 65726, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_1997-12-31_10-K.txt
+[6033, 62072, 63047, None, 67645, 153154, 4021, 4081, None, None, 68835, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_1998-12-31_10-K.txt
+[5978, 54401, 55097, None, 59564, 91581, 3967, 4026, None, None, 60745, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_1999-12-31_10-K.txt
+[4866, 53164, 53997, None, 58734, 2820, 2860, 2919, None, None, 59910, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2000-12-31_10-K.txt
+[520, 45448, 46263, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2001-12-31_10-K.txt
+[550, 41147, 42067, None, 43275, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2002-12-31_10-K.txt
+[460, 39764, 40684, None, 41884, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2003-12-31_10-K.txt
+[370, 33893, 34824, None, None, 827, None, None, None, None, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2004-12-31_10-K.txt
+[370, 33465, 50197, 50253, 50832, None, None, 800, None, None, None, None, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2005-12-31_10-K.txt
+[2313, 55575, 55633, 56676, None, 58948, 59601, 138563, 138809, None, 218545, 225545, None, None, None, None, 226299]	SEC-Edgar-data\AFL\10-K\AFL_2006-12-31_10-K.txt
+[None, None, None, None, None, 2845, None, None, None, None, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2007-12-31_10-K.txt
+[2506, 48566, 103517, 103573, 104797, None, 109012, 2936, 213378, 213618, None, 375681, 377304, None, None, None, None, 378048]	SEC-Edgar-data\AFL\10-K\AFL_2008-12-31_10-K.txt
+[100230, 100230, None, None, None, None, 3293, None, None, None, None, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2009-12-31_10-K.txt
+[None, None, None, None, None, 3300, None, None, None, None, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2010-12-31_10-K.txt
+[None, None, None, None, None, 3305, None, None, None, None, None, None, None]	SEC-Edgar-data\AFL\10-K\AFL_2011-12-31_10-K.txt
+[2830, 40477, 107739, 107792, 108958, None, 112387, 113035, 260383, 260617, None, 415908, 417533, None, None, None, None, 418270]	SEC-Edgar-data\AFL\10-K\AFL_2012-12-31_10-K.txt
+[2830, 47969, 121207, 121260, 122441, None, 125949, 126573, 266289, 266523, None, 431278, 432903, None, None, None, None, 433640]	SEC-Edgar-data\AFL\10-K\AFL_2013-12-31_10-K.txt
+[2830, 50867, 131900, 131953, 133225, None, 136631, 137075, 274794, 275031, None, 443374, 444999, None, None, None, None, 445736]	SEC-Edgar-data\AFL\10-K\AFL_2014-12-31_10-K.txt
+[2806, 51176, 137335, 137388, 138752, None, 142282, 142726, 288331, 288565, None, 469913, 471538, None, None, None, None, 472275]	SEC-Edgar-data\AFL\10-K\AFL_2015-12-31_10-K.txt
+[2903, 49208, 125194, 125247, 126610, None, 130015, 130294, 248383, 266186, None, 456511, 458085, None, None, None, None, 458822]	SEC-Edgar-data\AFL\10-K\AFL_2016-12-31_10-K.txt
+[10038, 10038, 54699, None, None, None, None, None, None, 171542, None, None, None, None, None]	SEC-Edgar-data\AGN\10-K\AGN_2013-12-31_10-K.txt
+[12744, 12744, 57411, None, None, None, 381726, None, None, None, None, None, None, None]	SEC-Edgar-data\AGN\10-K\AGN_2014-12-31_10-K.txt
+[15710, 15710, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AGN\10-K\AGN_2015-12-31_10-K.txt
+[15290, 15290, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AGN\10-K\AGN_2016-12-31_10-K.txt
+[3808, 35519, 36306, None, 40461, 41281, 98264, None, None, 186432, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_1993-12-31_10-K.txt
+[2701, 35740, 36491, None, 40560, 41667, 127902, None, None, 225673, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_1994-12-31_10-K.txt
+[3993, 37106, 37855, None, 41802, 42990, 125717, None, None, 227729, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_1995-12-31_10-K.txt
+[4174, 37482, 38221, None, 42247, 43294, 123878, None, None, 224862, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_1996-12-31_10-K.txt
+[4153, 36213, 36973, None, 40937, 42211, 130944, None, None, 231185, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_1997-12-31_10-K.txt
+[4138, 37290, 38049, None, 42405, 43732, 144718, None, None, 251831, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_1998-12-31_10-K.txt
+[4175, 39340, 40112, None, 44154, 45839, 154323, None, None, 285692, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_1999-12-31_10-K.txt
+[2910, 39067, 39845, None, 43531, 45195, 152640, 152817, None, None, 283040, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_2000-12-31_10-K.txt
+[2910, 40328, 41157, None, 44842, 46474, 171760, 171937, None, None, 319640, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_2001-12-31_10-K.txt
+[2397, 43046, 43848, None, 48136, 52285, 211608, 211785, None, None, 375748, None, None, 377970]	SEC-Edgar-data\AIG\10-K\AIG_2002-12-31_10-K.txt
+[None, None, None, None, None, 192350, None, None, None, None, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_2003-12-31_10-K.txt
+[96342, None, 47131, None, None, 269275, None, None, None, 48458, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_2004-12-31_10-K.txt
+[2797, 36356, 61093, 61377, 62213, None, 80412, 80948, 297693, 297872, None, 507423, 527702, None, 528772, None, None, 529615, None]	SEC-Edgar-data\AIG\10-K\AIG_2005-12-31_10-K.txt
+[2820, 30824, 64288, 64538, 29078, None, 90687, 91226, 422380, 422559, None, 48510, 655443, 655564, 656299, None, 656869, 657169, None]	SEC-Edgar-data\AIG\10-K\AIG_2006-12-31_10-K.txt
+[2813, 33347, 66336, 66660, 31556, None, 107909, 108448, 537803, 537982, None, 64808, 792794, 792915, 793650, None, 794220, 794520, None]	SEC-Edgar-data\AIG\10-K\AIG_2007-12-31_10-K.txt
+[46018, 46018, None, 456036, None, None, 553148, None, None, None, None, None, None, None]	SEC-Edgar-data\AIG\10-K\AIG_2008-12-31_10-K.txt
+[2851, 34045, 111920, 112168, 113008, None, 116325, 119738, 630778, 631031, None, 1092925, 1097437, 1097725, 1098180, None, 1098884, 1099667]	SEC-Edgar-data\AIG\10-K\AIG_2009-12-31_10-K.txt
+[2882, 41358, 131589, 131837, 132488, None, 134945, 30060, 613383, 613749, None, 1107561, 1111775, 1112251, None, 1112431, 1112690]	SEC-Edgar-data\AIG\10-K\AIG_2010-12-31_10-K.txt
+[2917, 46749, 145892, 146140, 146781, None, 151838, 154712, 569942, 570266, None, 1049190, 1053131, 1053607, None, 1053787, 1054030]	SEC-Edgar-data\AIG\10-K\AIG_2011-12-31_10-K.txt
+[109611, 127207, 125081, 122912, 127283, None, 140677, 496018, 496018, 496343, None, 860733, 864628, 865126, None, 865308, 865516]	SEC-Edgar-data\AIG\10-K\AIG_2012-12-31_10-K.txt
+[134955, 161709, 159555, 159840, 161785, None, 174470, 585864, 585864, 586258, None, 930577, 934491, 934989, None, 935171, 935356]	SEC-Edgar-data\AIG\10-K\AIG_2013-12-31_10-K.txt
+[98409, 121242, 119199, 119440, 121318, None, 134560, 521333, 521333, 521704, None, 838584, 841728, 841996, 842369, None, 842551, 842736]	SEC-Edgar-data\AIG\10-K\AIG_2014-12-31_10-K.txt
+[102767, 125923, 123861, 124121, 125999, None, 137245, 537837, 537837, 538208, None, 840241, 843394, 843767, None, 843949, 844134]	SEC-Edgar-data\AIG\10-K\AIG_2015-12-31_10-K.txt
+[92740, 21763, 115126, 115386, 117256, None, 127775, 445418, 445418, None, None, 813683, 816862, 817129, None, 817312, 817497]	SEC-Edgar-data\AIG\10-K\AIG_2016-12-31_10-K.txt
+[7703, 43449, 46861, None, 50261, 51055, 79638, None, None, 89979, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_1996-12-31_10-K.txt
+[5706, 54062, 56220, None, 65019, 65969, 98683, 98772, None, None, 119749, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_1997-12-31_10-K.txt
+[5692, 41298, 43261, None, 48518, 49218, 79938, 82051, None, None, 95999, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_1998-12-31_10-K.txt
+[3645, 30018, 31895, None, 37194, 37552, 65230, 67069, None, None, 79345, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_1999-12-31_10-K.txt
+[2099, 26064, 27935, None, 32807, 33162, 68970, 70786, None, None, 71489, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2000-12-31_10-K.txt
+[2053, 29572, 31503, None, 37348, 37701, 98249, 100829, None, None, 101514, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2001-12-31_10-K.txt
+[4250, 71690, 74305, None, 77740, 78971, 154783, 158057, None, None, 158742, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2002-12-31_10-K.txt
+[4532, 57160, 59748, None, 63890, 65397, 125838, 128478, None, 128898, None, 130079, None, None, 131196, 131477]	SEC-Edgar-data\AIV\10-K\AIV_2003-12-31_10-K.txt
+[4317, None, 54899, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2004-12-31_10-K.txt
+[4716, 31317, None, 50713, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2005-12-31_10-K.txt
+[4771, 4771, None, 56702, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2006-12-31_10-K.txt
+[4795, 4795, None, 56583, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2007-12-31_10-K.txt
+[4933, 4933, None, 65424, None, None, None, 119593, None, None, None, None, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2008-12-31_10-K.txt
+[5260, 5260, None, None, None, None, None, 121073, None, None, None, None, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2009-12-31_10-K.txt
+[5294, 5294, None, None, None, None, None, 125807, None, None, None, None, None, None, None]	SEC-Edgar-data\AIV\10-K\AIV_2010-12-31_10-K.txt
+[5354, 26103, 57300, 57345, 59338, None, 64780, 65196, 143923, 147178, None, 148233, 154610, 154656, 155248, None, 156256, 156626, None]	SEC-Edgar-data\AIV\10-K\AIV_2011-12-31_10-K.txt
+[7498, 27254, 59811, 59859, 61806, None, 69177, 69675, 131432, 149379, None, 4398, 163913, 163959, 164877, None, 166123, 166499, None]	SEC-Edgar-data\AIV\10-K\AIV_2012-12-31_10-K.txt
+[7635, 28182, 60236, 60284, 62462, None, 70399, 70897, 148394, 150395, None, 4335, 165172, 165218, 166136, None, 167381, 167757, None]	SEC-Edgar-data\AIV\10-K\AIV_2013-12-31_10-K.txt
+[7781, 26523, 58341, 58389, 60907, None, 69576, 70074, 154227, 156225, None, 4328, 170702, 170748, 171666, None, 172911, 173287, None]	SEC-Edgar-data\AIV\10-K\AIV_2014-12-31_10-K.txt
+[7769, 26177, 61111, 61156, 63706, None, 72390, 72847, 153372, 155251, None, 4303, 169676, 169722, 170640, None, 171885, 172261, None]	SEC-Edgar-data\AIV\10-K\AIV_2015-12-31_10-K.txt
+[6479, 21658, 57090, 57135, 59896, None, 67989, 68443, 144303, 146135, None, 4299, 160692, 160738, 161731, None, 162976, 163352, None]	SEC-Edgar-data\AIV\10-K\AIV_2016-12-31_10-K.txt
+[432719, None, None, None, None, 79235, 346732, None, None, None, None, None, None, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2003-12-31_10-K.txt
+[None, None, None, None, None, 99379, None, None, None, None, None, None, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2004-12-31_10-K.txt
+[5066, 68321, 154489, 154534, 155562, None, 164590, 164687, 245826, 257970, None, 258385, 261089, None, 262164, None, None, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2005-12-31_10-K.txt
+[4978, 44495, 128474, 128519, 129634, None, 136664, 136763, 227176, 239290, None, 239705, 243374, 243426, 244922, None, 245828, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2006-12-31_10-K.txt
+[5005, 46643, 133936, 133981, 135077, None, 145648, 145747, 248160, 260601, None, 261016, 264677, 264729, 266224, None, 267203, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2007-12-31_10-K.txt
+[7458, 54360, 154705, 154750, 155973, None, 165817, 165916, 293756, 306528, None, 306943, 311006, 311058, 312496, None, 313321, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2008-12-31_10-K.txt
+[7765, 42552, 135545, 135590, 136784, None, 142935, 143034, 288843, 301338, None, 301753, 305800, 305852, 307322, None, 308209, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2009-12-31_10-K.txt
+[7918, 121355, 114487, 114532, None, None, 120628, 120727, 250066, 262417, None, 266882, None, None, None, None, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2010-12-31_10-K.txt
+[5163, 126733, 119815, 119860, 121028, None, 126006, 126105, 260446, 273013, None, 273428, 277477, 277529, 279028, None, 279915, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2011-12-31_10-K.txt
+[5164, 53407, 131255, 131300, 132471, None, 137712, 137811, 263163, 275662, None, 276077, 279655, 279707, 281182, None, 282074, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2012-12-31_10-K.txt
+[5161, 137745, 130433, 130478, None, None, 137017, 265496, 258818, None, None, 271712, None, 277025, None, None, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2013-12-31_10-K.txt
+[5082, 54845, 128655, 128700, 129864, None, 135232, 135331, 260586, 273004, None, 273413, 277209, 277258, 278729, None, 279606, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2014-12-31_10-K.txt
+[5068, 54860, 129731, 129776, 130940, None, 136386, 136485, 250514, 263015, None, 263424, 267262, 267311, 268782, None, 269659, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2015-12-31_10-K.txt
+[4901, 59891, 136908, 136953, 138034, None, 143587, 143686, 246699, 259379, None, 259788, 263626, 263675, 265148, None, 266025, None]	SEC-Edgar-data\AIZ\10-K\AIZ_2016-12-31_10-K.txt
+[3511, 75710, 76235, None, 85633, 86246, 101797, 102303, None, None, 148939, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_1999-12-31_10-K.txt
+[2000, 56659, 57498, None, 59145, 60886, 87220, 89075, None, None, 150992, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2000-12-31_10-K.txt
+[1918, 48331, 49676, None, 55992, 57495, 91939, 93746, None, None, 164212, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2001-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2002-12-31_10-K.txt
+[215926, None, None, None, None, 58348, None, None, 213352, None, 215926, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2003-12-31_10-K.txt
+[225123, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2004-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2005-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2006-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2007-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2008-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2009-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2010-12-31_10-K.txt
+[253318, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2011-12-31_10-K.txt
+[257696, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\AKAM\10-K\AKAM_2012-12-31_10-K.txt
+[3028, 27737, 77079, 77122, 78528, None, 80786, 81881, 135104, 138471, None, 223026, 227491, 227535, 228804, None, 229621, 230320]	SEC-Edgar-data\AKAM\10-K\AKAM_2013-12-31_10-K.txt
+[3023, 24216, 74442, 74485, 75934, None, 77349, 78203, 134569, 138038, None, 223753, 228217, 228261, 229530, None, 230347, 231046]	SEC-Edgar-data\AKAM\10-K\AKAM_2014-12-31_10-K.txt
+[3010, 22378, 70959, 71005, 72632, None, 74052, 74905, 135854, 139344, None, 224474, 228879, 228923, 230196, None, 231013, 231712]	SEC-Edgar-data\AKAM\10-K\AKAM_2015-12-31_10-K.txt
+[3014, 22171, 74153, 74196, 76294, None, 78647, 79492, 135576, 139060, None, 227577, 231983, 232027, 233300, None, 234117, 234816]	SEC-Edgar-data\AKAM\10-K\AKAM_2016-12-31_10-K.txt
+[4058, 91072, 92051, None, 93173, 9201, 102481, None, None, 103477, None, None, None]	SEC-Edgar-data\ALL\10-K\ALL_1996-12-31_10-K.txt
+[3978, 94230, 95201, None, 96464, 11602, 97024, 95776, None, None, 98365, None, None, None]	SEC-Edgar-data\ALL\10-K\ALL_1997-12-31_10-K.txt
+[6495, 100439, 101405, None, 102612, 102768, 5540, 103204, None, None, 104106, None, None, None]	SEC-Edgar-data\ALL\10-K\ALL_1998-12-31_10-K.txt
+[3878, 78085, 78986, None, 79942, 80103, 80376, 80558, None, None, 81444, None, None, None]	SEC-Edgar-data\ALL\10-K\ALL_1999-12-31_10-K.txt
+[2266, 81724, 82697, None, 84012, 84198, 84490, 84695, None, None, 85752, None, None, None]	SEC-Edgar-data\ALL\10-K\ALL_2000-12-31_10-K.txt
+[2030, 99188, 99922, None, 101247, 101430, 101722, 101927, None, None, 104203, None, None, None]	SEC-Edgar-data\ALL\10-K\ALL_2001-12-31_10-K.txt
+[2559, 94983, 95837, None, 98982, 99165, 99457, 99748, None, None, 100837, None, None, 107440]	SEC-Edgar-data\ALL\10-K\ALL_2002-12-31_10-K.txt
+[1983, 55543, 56376, None, 58364, 59134, 270018, 270236, None, 429835, None, 432555, None, None, 433524, 433794]	SEC-Edgar-data\ALL\10-K\ALL_2003-12-31_10-K.txt
+[1959, 47748, 48586, None, 51719, 53337, 293206, 293421, None, 473487, 476043, None, 482299, None, None, 484209, None]	SEC-Edgar-data\ALL\10-K\ALL_2004-12-31_10-K.txt
+[2599, 49834, 50092, 50135, 50973, None, 53514, 55140, 329512, 329727, None, 530492, 533048, None, 543211, None, None, 544974, None]	SEC-Edgar-data\ALL\10-K\ALL_2005-12-31_10-K.txt
+[2543, 48497, 85683, 85726, 86507, None, 89189, 90782, 352446, 352661, None, 562298, 564968, 571962, 573381, None, 575078, 575689]	SEC-Edgar-data\ALL\10-K\ALL_2006-12-31_10-K.txt
+[2620, 46287, 86739, 86782, 87694, None, 90570, 91467, 381080, 381295, None, 605797, 612882, 618808, 620911, None, 622855, None]	SEC-Edgar-data\ALL\10-K\ALL_2007-12-31_10-K.txt
+[2577, 46107, 94054, 94097, 95092, None, 97666, 98605, 460319, 460534, None, 706473, 713541, 713589, 715155, None, 715971, None]	SEC-Edgar-data\ALL\10-K\ALL_2008-12-31_10-K.txt
+[3055, 49116, 101376, 101419, 102319, None, 104841, 106028, 440632, 440847, None, 674956, 681913, 681961, 683255, None, 685247, None]	SEC-Edgar-data\ALL\10-K\ALL_2009-12-31_10-K.txt
+[3055, 50607, 99903, 99946, 100851, None, 103390, 104406, 444457, 444672, None, 674124, 681017, 681772, 683085, None, 685027, None]	SEC-Edgar-data\ALL\10-K\ALL_2010-12-31_10-K.txt
+[3102, 51279, 102471, 102514, 103419, None, 105926, 106949, 410029, 410244, None, 643537, 650430, 650478, 651745, None, 653660, None]	SEC-Edgar-data\ALL\10-K\ALL_2011-12-31_10-K.txt
+[3102, 55411, 109724, 109767, 110718, None, 113652, 114675, 389702, 389917, None, 626737, 633509, 633557, 634784, None, 635554, None]	SEC-Edgar-data\ALL\10-K\ALL_2012-12-31_10-K.txt
+[3100, 55384, 110682, 110725, 111630, None, 114165, 115491, 402896, 403111, None, 652889, 659675, 660871, 662147, None, 663816, None]	SEC-Edgar-data\ALL\10-K\ALL_2013-12-31_10-K.txt
+[3100, 58758, 114842, 114885, 115846, None, 119314, 120636, 414099, 414314, None, 663588, 670374, 670422, 671698, None, 674851, None]	SEC-Edgar-data\ALL\10-K\ALL_2014-12-31_10-K.txt
+[3205, 63941, 121884, 121930, 122905, None, 124812, 124920, 394069, 394286, None, 633489, 640275, 640323, 641814, None, 643222, None]	SEC-Edgar-data\ALL\10-K\ALL_2015-12-31_10-K.txt
+[3208, 62918, 133672, 133715, 134690, None, 136596, 136704, 436078, 436295, None, 691028, 697817, 698281, 699795, None, 701199, None]	SEC-Edgar-data\ALL\10-K\ALL_2016-12-31_10-K.txt
+[5546, 40617, 102628, 102673, 103176, None, 109572, 109648, 172704, None, 173543, 176408, 176457, 176909, None, 177557, 177875, None]	SEC-Edgar-data\ALLE\10-K\ALLE_2013-12-31_10-K.txt
+[5704, 26917, 80612, 80657, 81160, None, 88892, 88968, 155936, None, 157144, 160041, 160090, 160542, None, 161190, 161508, None]	SEC-Edgar-data\ALLE\10-K\ALLE_2014-12-31_10-K.txt
+[5671, 25788, 68942, 68987, 69490, None, 77379, 77455, 133493, None, 134205, 137860, 137909, 138361, None, 139009, 139327, None]	SEC-Edgar-data\ALLE\10-K\ALLE_2015-12-31_10-K.txt
+[5715, 26018, 76486, 76531, 77034, None, 84594, 85144, 139326, None, 140038, 142940, 142989, 143448, None, 144105, 144427, None]	SEC-Edgar-data\ALLE\10-K\ALLE_2016-12-31_10-K.txt
+[2352, 53228, 53944, None, 59198, 59386, 59691, None, None, 65252, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_1994-12-31_10-K.txt
+[3685, 54744, 55734, None, 60033, 60221, 60526, None, None, 66741, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_1995-12-31_10-K.txt
+[3657, 51372, 52208, None, 56705, 56893, 57198, None, None, 64153, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_1996-12-31_10-K.txt
+[3486, 32103, 32864, None, 37217, 37405, 37709, 37992, None, None, 44618, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_1997-12-31_10-K.txt
+[4205, 33194, 34003, None, 38826, 38996, 61854, 63209, None, None, 102523, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_1998-12-31_10-K.txt
+[4072, 34027, 34929, None, 43273, 43443, 75352, 76627, None, None, 119522, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_1999-12-31_10-K.txt
+[2699, 41157, 42529, None, 53909, 54069, 95284, 96505, None, None, 138579, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_2000-12-31_10-K.txt
+[2305, 41086, 42197, None, 46598, 46756, 103412, 104628, None, None, 144989, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_2001-12-31_10-K.txt
+[2153, 44318, 45361, None, 49174, 49332, 109736, None, None, 151457, None, None, 152934]	SEC-Edgar-data\ALTR\10-K\ALTR_2002-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_2003-12-31_10-K.txt
+[None, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_2004-12-31_10-K.txt
+[None, 4458, None, None, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_2005-12-30_10-K.txt
+[None, 4376, None, 77616, None, None, None, None, None, 198269, None, None, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_2006-12-29_10-K.txt
+[None, 4379, None, 77187, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_2007-12-28_10-K.txt
+[75933, 4506, None, 67061, None, None, None, None, None, None, None, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_2008-12-31_10-K.txt
+[3151, 39362, 64116, 64162, 64876, None, None, 71045, 131444, 134819, None, 210838, None, None, None, None]	SEC-Edgar-data\ALTR\10-K\ALTR_2009-12-31_10-K.txt
+[8365, 45031, 72074, 72120, 72848, None, 79726, 80006, 131379, 134753, None, 204289, 208252, 208302, 210625, None, None, 211550]	SEC-Edgar-data\ALTR\10-K\ALTR_2010-12-31_10-K.txt
+[8923, 46471, 74471, 74517, 75249, None, 84286, 84567, 130798, 134169, None, 204658, 211722, 211772, 213916, None, None, 214828]	SEC-Edgar-data\ALTR\10-K\ALTR_2011-12-31_10-K.txt
+[8923, 48202, 77396, 77442, 78174, None, 86395, 86679, 132010, 134045, None, 197953, 205017, 205067, 207218, None, None, 208146]	SEC-Edgar-data\ALTR\10-K\ALTR_2012-12-31_10-K.txt
+[8235, 51556, 84366, 84412, 85153, None, 93599, 93883, 138042, 140108, None, 219767, 226839, 226889, 229040, None, None, 229967]	SEC-Edgar-data\ALTR\10-K\ALTR_2013-12-30_

@@ -7,6 +7,7 @@ import requests
 import os
 import time
 import string
+from collections import OrderedDict
 
 class SecCrawler():
 
@@ -35,7 +36,7 @@ class SecCrawler():
         print r.status_code, ": ", target_url
         return r
 
-    def make_directory(self, companyCode, cik, priorto, filingType):
+    def make_directory(self, companyCode, filingType):
         # Making the directory to save comapny filings
         if not os.path.exists("SEC-Edgar-data/"):
             os.makedirs("SEC-Edgar-data/")
@@ -178,12 +179,41 @@ class SecCrawler():
 
         return newData
 
-    ITEM_STRINGS = [r'item\s*1', r'item\s*1a', r'item\s*1b',r'item\s*2', r'item\s*3', r'item\s*5', \
-                    r'item\s*6', r'item\s*7', r'item\s*7a', r'item\s*8', r'item\s*9', r'item\s*9a', \
-                    r'item\s*9B', r'item\s*10', r'item\s*11', r'item\s*12', r'item\s*13', r'item\s*14', r'item\s*15']
-    ITEM_THRESHOLD = 10
+    ITEM_STRINGS = [r'item.?\s*1', r'item.?\s*1a', r'item.?\s*1b',r'item.?\s*2', r'item.?\s*3', r'item.?\s*5', \
+                    r'item.?\s*6', r'item.?\s*7', r'item.?\s*7a', r'item.?\s*8', r'item.?\s*9', r'item.?\s*9a', \
+                    r'item.?\s*9B', r'item.?\s*10', r'item.?\s*11', r'item.?\s*12', r'item.?\s*13', r'item.?\s*14', r'item\s*15']
+    SECTION_NAMES = ['1', '1a', '1b', '2', '3', '5', '6', '7', '7a', '8', '9', '9a', '9b', '10', \
+        '11', '12', '13', '14', '15']
+    descDict = {
+        '1': r'business',
+        '1a': r'risk\s*factors',
+        '1b': r'unresolved\s*staff\s*comments',
+        '2': r'properties',
+        '3': r'legal\s*proceedings',
+        '5': r'market\s*for\s*registrant.?\s*s\s*common\s*equity.?\s*related\s*stockholder' + \
+            r'matters\s*and\s*issuer\s*purchases\s*of\s*equity\s*securities',
+        '6': r'selected\s*financial\s*data',
+        '7': r'management.?\s*s\s*discussion\s*and\s*analysis\s*of\s*' + \
+            r'financial\s*condition\s*and\s*results\s*of\s*operation',
+        '7a': r'quantitative\s*and\s*qualitative\s*disclosures\s*about\s*market\s*risk',
+        '8': r'financial\s*statements\s*and\s*supplementary\s*data',
+        '9': r'changes\s*in\s*and\s*disageements\s*with\s*accountants\s*on\s*accounting\s*and' + \
+            r'financial\s*disclosure',
+        '9a': r'controls\s*and\s*procedures',
+        '9b': r'other\s*information',
+        '10': r'directors.?\s*executive\s*officers\s*and\s*corporate\s*governance',
+        '11': r'executive\s*compensation',
+        '12': r'security\s*ownership\s*of\s*certain\s*beneficial\s*owners\s*and\s*management' + \
+            r'and\s*related\s*stockholder\s*matters',
+        '13': r'certain\s*relationships\s*and\s*related\s*transactions.?\s*and\s*director\s*independence',
+        '14': r'principal\s*accountant\s*fees\s*and\s*services',
+        '15': r'exhibits.?\s*financial\s*statement\s*schedules'
+    }
 
-    def getTableSoup(soup, ITEM_STRINGS, ITEM_THRESHOLD):
+    ITEM_THRESHOLD = 10
+    SECTION_DESCS = [descDict[name] for name in SECTION_NAMES]
+
+    def getTableSoup(self, soup, ITEM_STRINGS, ITEM_THRESHOLD):
         tableList = soup.findAll('table')
         for t in tableList:
             tsoup = BeautifulSoup(str(t), 'lxml')
@@ -192,48 +222,109 @@ class SecCrawler():
             truthArray = [1*bool(re.search(item, joined_sstrings)) for item in ITEM_STRINGS]
             if sum(truthArray) >= ITEM_THRESHOLD:
                 toc = t
+                print truthArray
                 return tsoup
         return None
 
-    def getLinkMapping(tsoup, ITEM_STRINGS):
-        def findStart(link, text):
-            regexString = r'[^\#]' + link + r'\W'
-            return re.search(regexString, data).start()
-        
+    def getLinkMapping(self, tsoup, ITEM_STRINGS, ITEM_NAMES):
         trs = tsoup.findAll('tr')
-        linkMapping = OrderedDict()
+        linkArray = [None]*len(ITEM_NAMES)
+        hasElem = False
         for tr in trs:
             tds = tr.findAll('td')
-            tdsString = ''.join([(td.string) if td.string != None else '' for td in tds])
-            tdsString = tdsString.lower().encode('ascii', 'replace').replace('?', ' ')
+            tdsString = ''.join([unicode(td) for td in tds])
+            # tdsString = ''.join([unicode(td) if td.string != None else '' for td in tds])
+
+            tdsString = tdsString.encode('ascii', 'replace').lower()
+            print tdsString
             thisItem = -1
-            for item in reversed(ITEM_STRINGS):
+            curI = -1
+            for i in reversed(range(len(ITEM_STRINGS))):
+                item = ITEM_STRINGS[i]
                 if re.search(item, tdsString):
-                    thisItem = item.split('*')[-1]
+                    thisItem = ITEM_NAMES[i]
+                    curI = i
                     break
             if thisItem != -1:
                 for td in tds:
                     found = td.find('a')
                     if found:
-                        linkMapping[thisItem] = found['href']
+                        # linkMapping[thisItem] = found['href']
+                        linkArray[curI] = found['href']
+                        hasElem = True
                         break
-        return linkMapping
+        print "linkarray:"
+        print linkArray
+        # print linkMapping
+        # return linkMapping
+        return linkArray if hasElem else None
 
-    def getLinkRawIndices(linkMapping, data):
-        sectionList = []
-        sectionIdxList = []
-        for _ in range(len(linkMapping.keys())):
-            key, val = linkMapping.popitem(last=False)
-            idx = findStart(val.strip('#'), data)
-            idx += data[idx:].find('</A>') + 4 #4 is the length of the closing tag
-            sectionList.append(key)
-            sectionIdxList.append(idx)
+    def getLinkMappingFromLinkTexts(self, soup, ITEM_STRINGS):
+        print 'Trying to get mapping from link texts'
+        links = soup.findAll('a', href=True)
+        linkArray = [None]*len(ITEM_STRINGS)
+
+        for link in links:
+            linkString = unicode(link).encode('ascii', 'replace').lower().replace('?', ' ')
+            for i in reversed(range(len(ITEM_STRINGS))):
+                item = ITEM_STRINGS[i]
+                if re.search(item, linkString):
+                    linkArray[i] = link['href']
+        return linkArray
+
+
+    def removeMissingLetteredSections(self, sectionList, sectionIdxList):
+        n = len(sectionList)
+        newSectionList = []
+        newSectionIdxList = []
+
+        letteredIndices = [1, 2, 8, 11, 12, 17]
+        for i in xrange(n):
+            if sectionList[i] == None and i in letteredIndices:
+                continue
+            newSectionList.append(sectionList[i])
+            newSectionIdxList.append(sectionIdxList[i])
+        return newSectionList, newSectionIdxList
+
+
+    def getLinkRawIndices(self, linkMapping, data):
+        def findStart(link, text):
+            # print link
+            regexString = r'name=.?' + str(link)
+            return re.search(regexString, data.encode('ascii', 'replace').lower()).start()
+        sectionList = [None]*len(linkMapping)
+        sectionIdxList = [None]*len(linkMapping)
+
+        for i in range(len(linkMapping)):
+            key = self.SECTION_NAMES[i]
+            val = linkMapping[i]
+            if val != None:
+                idx = findStart(val.strip('#'), data)
+                idx += data[idx:].find('</A>') + 4 #4 is the length of the closing tag
+                sectionIdxList[i] = idx
+                sectionList[i] = key
+        # for _ in range(len(linkMapping.keys())):
+        #     key, val = linkMapping.popitem(last=False)
+        #     idx = findStart(val.strip('#'), data)
+        #     idx += data[idx:].find('</A>') + 4 #4 is the length of the closing tag
+        #     sectionList.append(key)
+        #     sectionIdxList.append(idx)
         return sectionList, sectionIdxList
 
-    def writeFile(parsedStrings, docName, target_url, index_url, marketCap, path):
+    def writeFile(self, parsedStrings, docName, target_url, index_url, marketCap, path):
+        def isActualSection(text):
+            if text is None:
+                return False
+            MIN_CHARS = 1000
+            if len(text) < MIN_CHARS:
+                return False
+            return True
         outArray = self.getCombinedLineArray(parsedStrings, -1)
         outString = '\n'.join(outArray)
         outString = re.sub(r'(?<!\n)\n', '\n', outString)
+
+        if not isActualSection(outString):
+            return False
 
         filename = open(path,"w+")
         filename.write(target_url + '\n')
@@ -243,21 +334,76 @@ class SecCrawler():
         for info in infoArray:
             print info
             filename.write(info + '\n')
-        filename.write(str(docNameList[i]) + '\n\n')
+        filename.write(str(docName) + '\n\n')
         filename.write(outString)
         filename.close()
+        return True
 
-    def save_in_directory(self, companyCode, cik, priorto, filingURLList, docNameList, indexURLList, filingType):
+    def save_in_directory(self, companyCode, filingURLList, docNameList, indexURLList, filingType):
+        #Attempt normal parsing.  If this fails, try truncating and parsing again
+        #If this fails AGAIN, just ignore it completely.
+        def ingestSoup(data, shouldParse=False):
+            soup = None
+            rawSoup = None
+            rawStrings = None
+            parsedStrings = None
+
+            try:
+                soup = BeautifulSoup(data, "lxml")
+                rawSoup = soup
+                soup = BeautifulSoup(soup.prettify(), "lxml")
+                if '.txt' in target_url:
+                    rawStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                else:
+                    rawStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+
+                parsedSoup = self.parseData(soup)
+                if '.txt' in target_url:
+                    parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.get_text().split('\n') if s.strip() != '']
+                else:
+                    parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.strings if s.strip() != '']
+                    # print 'parsedHere'
+                    # print parsedSoup
+
+            except:
+                # print 'Initial soup load failed'
+                errorFile = open(self.ERROR_FILENAME, 'a+')
+                errorFile.write('INITIAL SOUPING FAILED: ' + target_url + ' ' + companyCode + '\n')
+                errorFile.close()
+                try:
+                    data = self.truncateDocumentData(data)
+                    soup = BeautifulSoup(data, "lxml")
+                    soup = BeautifulSoup(soup.prettify(), "lxml")
+                    if '.txt' in target_url:
+                        rawStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
+                    else:
+                        rawStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
+
+                    parsedSoup = self.parseData(soup)
+                    if '.txt' in target_url:
+                        parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.get_text().split('\n') if s.strip() != '']
+                    else:
+                        parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.strings if s.strip() != '']
+                except:
+                    # print 'Soup conversion failed.  Running as text.'
+                    errorFile = open(self.ERROR_FILENAME, 'a+')
+                    errorFile.write('SOUP CONVERSION FAILED: ' + target_url + ' ' + companyCode +  '\n')
+                    errorFile.close()
+                    return None, None, None
+            return parsedSoup, rawStrings, parsedStrings, rawSoup
         # Save every text document into its respective folder
         for i in range(len(filingURLList)):
+            curDocName = str(docNameList[i])
             basePath = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"
-            path = basePath + str(docNameList[i])
+            path = basePath + curDocName
 
+            fileExists = os.path.isfile(path)
             # Don't overwrite existing, non-text root files
             # if os.path.isfile(path):
-                # print "ALREADY EXISTS: ", path, ', moving on...'
-                # continue
+            #     print "ALREADY EXISTS: ", path, ', moving on...'
+            #     continue
 
+            #splits the section based on file existence
             t1 = time.time()
             target_url = filingURLList[i]
             #Removes interactive XBRL
@@ -273,54 +419,7 @@ class SecCrawler():
                 errorFile.close()
                 continue
             data = r.text
-
-            #Attempt normal parsing.  If this fails, try truncating and parsing again
-            #If this fails AGAIN, just ignore it completely.
-            def ingestSoup(data, shouldParse=False):
-                soup = None
-                rawStrings = None
-                parsedStrings = None
-
-                try:
-                    soup = BeautifulSoup(data, "lxml")
-                    soup = BeautifulSoup(soup.prettify(), "lxml")
-                    if '.txt' in target_url:
-                        rawStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
-                    else:
-                        rawStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
-
-                    parsedSoup = self.parseData(soup)
-                    if '.txt' in target_url:
-                        parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.get_text().split('\n') if s.strip() != '']
-                    else:
-                        parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.strings if s.strip() != '']
-
-                except:
-                    # print 'Initial soup load failed'
-                    errorFile = open(self.ERROR_FILENAME, 'a+')
-                    errorFile.write('INITIAL SOUPING FAILED: ' + target_url + ' ' + companyCode + '\n')
-                    errorFile.close()
-                    try:
-                        data = self.truncateDocumentData(data)
-                        soup = BeautifulSoup(data, "lxml")
-                        soup = BeautifulSoup(soup.prettify(), "lxml")
-                        if '.txt' in target_url:
-                            rawStrings = [s.encode('ascii', 'replace') for s in soup.get_text().split('\n') if s.strip() != '']
-                        else:
-                            rawStrings = [s.encode('ascii', 'replace') for s in soup.strings if s.strip() != '']
-
-                        parsedSoup = self.parseData(soup)
-                        if '.txt' in target_url:
-                            parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.get_text().split('\n') if s.strip() != '']
-                        else:
-                            parsedStrings = [s.encode('ascii', 'replace') for s in parsedSoup.strings if s.strip() != '']
-                    except:
-                        # print 'Soup conversion failed.  Running as text.'
-                        errorFile = open(self.ERROR_FILENAME, 'a+')
-                        errorFile.write('SOUP CONVERSION FAILED: ' + target_url + ' ' + companyCode +  '\n')
-                        errorFile.close()
-                        return None, None, None
-                return parsedSoup, rawStrings, parsedStrings, soup
+            data = data.encode('ascii', 'replace').replace('?', ' ')
 
             #Use raw (with tables) strings to find the market cap text
             soup, rawStrings, parsedStrings, rawSoup = ingestSoup(data)
@@ -329,6 +428,8 @@ class SecCrawler():
                 errorFile.write('SOMETHING PARSE FUCKED: ' + target_url + ' ' + companyCode +  '\n')
                 errorFile.close()
                 continue
+
+            # if not fileExists:
             header = self.getCombinedLineArray(rawStrings, -1)
             marketCapText = self.findMarketCapText(header)
 
@@ -342,42 +443,81 @@ class SecCrawler():
                 errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n')# + 'Market cap text was: ' + str(marketCapText))
                 errorFile.close()
 
-            #Use parsed strings (no tables) to create actual output           
-            self.writeFile(parsedStrings, docName[i], target_url, index_url, marketCap, path)
-            t2 = time.time()
-            print "Downloaded " + companyCode + "'s " + filingType + "s: " + str(i) + "/" + str(len(filingURLList)) + ". Time: " + str(t2-t1) + "\n"
+            if not fileExists:
+                #Use parsed strings (no tables) to create actual output
+                self.writeFile(parsedStrings, curDocName, target_url, index_url, marketCap, path)
+                t2 = time.time()
+                print "Downloaded " + companyCode + "'s " + filingType + "s: " + str(i) + "/" + str(len(filingURLList)) + ". Time: " + str(t2-t1) + "\n"
             
             ##Now we write the sections.
             print "Now writing sections for ", companyCode
-            sectionStart = time.time()
-            sectionSoup = rawSoup
-            tsoup = self.getTableSoup(sectionSoup, self.ITEM_STRINGS, self.ITEM_THRESHOLD)
-            if tsoup == None:
-                continue
-            linkMapping = self.getLinkMapping(tsoup, self.ITEM_STRINGS)
-            sectionList, sectionIdxList = self.getLinkRawIndices(linkMapping, data)
+            if '.txt' not in target_url:
+                sectionStart = time.time()
+                sectionSoup = rawSoup
+                # sectionSoup = BeautifulSoup(data, 'lxml')
+                tsoup = None
+                searchList = None
+                linkMapping = None
+                for possibleSearchList in [self.ITEM_STRINGS, self.SECTION_DESCS, self.SECTION_NAMES]:
+                    searchList = possibleSearchList
+                    tsoup = self.getTableSoup(sectionSoup, searchList, self.ITEM_THRESHOLD)
+                    if tsoup != None:
+                        print 'Used searchList:', possibleSearchList
+                        break
+                if tsoup != None:
+                    linkMapping = self.getLinkMapping(tsoup, searchList, self.SECTION_NAMES)
 
-            n = len(sectionList)
-            for i in range(n):
-                curSectionName = sectionList[i]
-                curIdx = sectionIdxList[i]
-                if i < n - 1:
-                    nextIdx = sectionIdxList[i + 1]
-                    sectionData = data[curIdx:nextIdx]
-                else:
-                    sectionData = data[curIdx:]
-                sectionPath = basePath.split('.')[0] + '_section_' + str(curSectionName) + '.txt'
+                #If we fucked up the table somehow, look through the links
+                if linkMapping == None:
+                    for possibleSearchList in [self.ITEM_STRINGS, self.SECTION_DESCS, self.SECTION_NAMES]:
+                        searchList = possibleSearchList
+                        linkMapping = self.getLinkMappingFromLinkTexts(sectionSoup, searchList)
+                        if linkMapping != None:
+                            break
 
-                sectionParsedSoup, sectionRawStrings, sectionParsedStrings, sectionRawSoup = ingestSoup(sectionData)
-                self.writeFile(sectionParsedStrings, docName[i], target_url, index_url, marketCap, sectionPath)
-            print "Done writing sections for ", companyCode, "Time: ", time.time() - sectionStart
+                #Still couldn't find anything
+                if linkMapping == None:
+                    continue
+
+                sectionList, sectionIdxList = self.getLinkRawIndices(linkMapping, data)
+                sectionList, sectionIdxList = self.removeMissingLetteredSections(sectionList, sectionIdxList)
+                print sectionList
+                print sectionIdxList
+                n = len(sectionList)
+
+                for i in range(n):
+                    curSectionName = sectionList[i]
+                    curIdx = sectionIdxList[i]
+                    if curIdx == None:
+                        continue
+                    if i < n - 1:
+                        nextIdx = sectionIdxList[i + 1]
+                        if nextIdx == None:
+                            continue
+                        sectionData = '<html><body>' + data[curIdx:nextIdx] + '</body></html/>'
+                    else:
+                        sectionData = '<html><body>' + data[curIdx:] + '</body></html/>'
+                    # print sectionData
+                    sectionPath = basePath + curDocName.split('.')[0] + '_html_section_' + str(curSectionName) + '.txt'
+                    print 'Writing section ', curSectionName, 'for ', companyCode, target_url
+                    sectionParsedSoup, sectionRawStrings, sectionParsedStrings, sectionRawSoup = ingestSoup(sectionData)
+                    status = self.writeFile(sectionParsedStrings, curDocName, target_url, index_url, marketCap, sectionPath)
+                    if not status:
+                        print 'Error with section ', curSectionName, 'for ', companyCode, target_url
+                        # if curSectionName == '7a':
+                        #     print curIdx, nextIdx
+                        #     # print sectionData
+                        #     print sectionParsedSoup
+                print "Done writing sections for ", companyCode, "Time: ", time.time() - sectionStart
+            else:
+                print 'Target was a .txt, so no sections could be extracted'
 
 
     #filingType must be "10-K", "10-Q", "8-K", "13F"
 
-    def getFiling(self, companyCode, cik, priorto, count, filingType):
+    def getFiling(self, companyCode, priorto, count, filingType):
         try:
-            self.make_directory(companyCode,cik, priorto, filingType)
+            self.make_directory(companyCode, filingType)
         except:
             errorFile = open(self.ERROR_FILENAME, 'a+')
             errorFile.write('DIRERROR: ' + companyCode + '\n' + str(sys.exc_info()[0]))
@@ -510,6 +650,6 @@ class SecCrawler():
                 indexURLList.append(link)
 
         # try:
-        self.save_in_directory(companyCode, cik, priorto, filingURLList, docNameList, indexURLList, filingType)
+        self.save_in_directory(companyCode, filingURLList, docNameList, indexURLList, filingType)
         # except:
             # print "Not able to save " + filingType + " files for " + companyCode
