@@ -291,7 +291,8 @@ class SecCrawler():
         def findStart(link, text):
             # print link
             regexString = r'name=.?' + str(link)
-            return re.search(regexString, data.encode('ascii', 'replace').lower()).start()
+            res = re.search(regexString, data.encode('ascii', 'replace').lower())
+            return res.start() if res else None
         sectionList = [None]*len(linkMapping)
         sectionIdxList = [None]*len(linkMapping)
 
@@ -300,6 +301,8 @@ class SecCrawler():
             val = linkMapping[i]
             if val != None:
                 idx = findStart(val.strip('#'), data)
+                if idx == None:
+                    continue
                 idx += data[idx:].find('</A>') + 4 #4 is the length of the closing tag
                 sectionIdxList[i] = idx
                 sectionList[i] = key
@@ -398,6 +401,7 @@ class SecCrawler():
             path = basePath + curDocName
 
             fileExists = os.path.isfile(path)
+            fileExists = False
             # Don't overwrite existing, non-text root files
             # if os.path.isfile(path):
             #     print "ALREADY EXISTS: ", path, ', moving on...'
@@ -419,7 +423,6 @@ class SecCrawler():
                 errorFile.close()
                 continue
             data = r.text
-            data = data.encode('ascii', 'replace').replace('?', ' ')
 
             #Use raw (with tables) strings to find the market cap text
             soup, rawStrings, parsedStrings, rawSoup = ingestSoup(data)
@@ -451,6 +454,7 @@ class SecCrawler():
             
             ##Now we write the sections.
             print "Now writing sections for ", companyCode
+            #Only writing sections 
             if '.txt' not in target_url:
                 sectionStart = time.time()
                 sectionSoup = rawSoup
