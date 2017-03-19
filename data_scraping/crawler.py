@@ -11,7 +11,7 @@ from collections import OrderedDict
 
 class SecCrawler():
 
-    REQUEST_SLEEP_TIME = 600
+    REQUEST_SLEEP_TIME = 300
     HTTP_OKAY = 200
     ERROR_FILENAME = 'error_log.txt'
 
@@ -61,7 +61,7 @@ class SecCrawler():
         def createSnippets(lineParts, strings, i):
             nextLines = ' '.join(strings[min(i + 1, len(strings) - 1): min(i + MAX_LINES_LOOKAHEAD, len(strings) - 1)]).split('.')
             nextLines = nextLines[:min(MAX_DOT_LOOKAHEAD, len(nextLines) - 1)]
-            prevLines = ' '.join(strings[max(0, i-MAX_LINES_LOOKBEHIND)]).split('.')
+            prevLines = ''.join(strings[max(0, i-MAX_LINES_LOOKBEHIND)]).split('.')
             prevLines = prevLines[min(-MAX_DOT_LOOKBEHIND, -(len(prevLines)-1)):]
             line = ' '.join(prevLines + lineParts + nextLines)
             snippets = self.findPotentialMarketCapSentences(line.lower())
@@ -247,7 +247,7 @@ class SecCrawler():
                     break
             if thisItem != -1:
                 for td in tds:
-                    found = td.find('a')
+                    found = td.find('a', href=True)
                     if found:
                         # linkMapping[thisItem] = found['href']
                         linkArray[curI] = found['href']
@@ -622,7 +622,11 @@ class SecCrawler():
                             #Ignore 10k-ish filingss
                             # print s
                             if '10-k' in s and '10-k/a' not in s and '10-k405/a' not in s:
-                                URL = str(tr.find('a')['href'])
+                                link = tr.find('a', href=True)
+                                if link:
+                                    URL = str(tr.find('a')['href'])
+                                else:
+                                    URL = None
                                 if URL is not None:
                                     if '.htm' in URL.lower() or '.txt' in URL.lower():
                                         filingURLList.append(base_url + URL)
@@ -632,7 +636,7 @@ class SecCrawler():
             
             #If we can't identify, use naive link checking method
             if not foundFiling:
-                for linkedDoc in newSoup.find_all('a'):
+                for linkedDoc in newSoup.find_all('a', href=True):
                     URL = linkedDoc['href']
                     # print URL
                     if isFiling(filingType, URL):
@@ -644,7 +648,7 @@ class SecCrawler():
             #If no filings found, THEN go look for complete submission .txt file
             if not foundFiling:
                 linkID = link.split('/')[-1].strip('-index.html')
-                for linkedDoc in newSoup.find_all('a'):
+                for linkedDoc in newSoup.find_all('a', href=True):
                     URL = linkedDoc['href']
                     if linkID in URL.lower() and '.txt' in URL.lower():
                         filingURLList.append(base_url + URL)
