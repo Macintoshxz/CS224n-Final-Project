@@ -269,7 +269,7 @@ class SecCrawler():
             for i in reversed(range(len(ITEM_STRINGS))):
                 item = ITEM_STRINGS[i]
                 if re.search(item, linkString):
-                    linkArray[i] = link['href']
+                    linkArray[i] = unicode(link['href']).encode('ascii', 'replace').replace('?', ' ')
         return linkArray
 
     def removeMissingLetteredSections(self, sectionList, sectionIdxList):
@@ -348,11 +348,25 @@ class SecCrawler():
 
         def getSource(target_url, savedTargetPath):
             data = None
+            oldSavedTargetPath = savedTargetPath.replace('_filing', '')
             # If its saved, load saved file instead of requesting
             if os.path.isfile(savedTargetPath):
                 f = open(savedTargetPath, 'r')
                 data = f.read()
                 f.close()
+                print 'READ FROM CACHED SOURCE FILE'
+            elif os.path.isfile(oldSavedTargetPath) and '.txt' not in oldSavedTargetPath:
+                f = open(oldSavedTargetPath, 'r')
+                data = f.read()
+                f.close()
+
+                os.remove(oldSavedTargetPath)
+
+                g = open(savedTargetPath, 'w+')
+                g.write(data)
+                g.close()
+                print 'REPLACED SOURCE FILE!'
+                print savedTargetPath
             else: # Make the request and say fuck the SEC.
                 r = self.repeatRequest(target_url)
                 if r is None:
@@ -361,6 +375,11 @@ class SecCrawler():
                     errorFile.close()
                     return None
                 data = r.text
+                g = open(savedTargetPath, 'w+')
+                g.write(data)
+                g.close()
+                print 'CACHED SOURCE FILE!'
+                print savedTargetPath
             return data
 
 
@@ -426,7 +445,7 @@ class SecCrawler():
             basePath = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"
             curDocBase = curDocName.split('.')[0]
             path = basePath + curDocName
-            savedTargetPath = basePath + curDocBase + '.' + target_extension
+            savedTargetPath = basePath + curDocBase + '_filing.' + target_extension
 
             # Don't overwrite existing, non-text root files - TEMPORARILY DEPRECATED - MAY USE LATER
             fileExists = os.path.isfile(path)
@@ -442,12 +461,6 @@ class SecCrawler():
             data = getSource(target_url, savedTargetPath)
             if data == None:
                 continue
-            else:
-                f = open(savedTargetPath, 'w+')
-                f.write(data)
-                f.close()
-                print 'CACHED SOURCE FILE!'
-                print savedTargetPath
 
             #Use raw (with tables) strings to find the market cap text
             soup, rawStrings, parsedStrings, rawSoup = ingestSoup(data)
@@ -646,7 +659,10 @@ class SecCrawler():
                     for td in tds:
                         # print td
                         if td.string:
-                            s = str((td.string).encode('ascii', 'replace')).lower().strip()
+                            try:
+                                s = str((td.string).encode('ascii', 'replace')).lower().strip()
+                            except UnicodeEncodeError:
+                                continue
                             #Ignore 10k-ish filingss
                             # print s
                             if '10-k' in s and '10-k/a' not in s and '10-k405/a' not in s:
