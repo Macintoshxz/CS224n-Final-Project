@@ -18,9 +18,9 @@ def getSingleCompanyFiling(inputData):
     print logString
     return logString
 
-def calculateParallel(inputs, threads=1):
+def calculateParallel(inputs, func, threads=1):
     pool = ThreadPool(threads)
-    results = pool.map(getSingleCompanyFiling, inputs)
+    results = pool.map(func, inputs)
     pool.close()
     pool.join()
     return results
@@ -42,7 +42,7 @@ def get_filings(num_threads, path='sp_500.txt'):
     scrapeCount = 0
     queries = [[companyCode, cik] for companyCode, cik in companies]
 
-    results = calculateParallel(queries, num_threads)
+    results = calculateParallel(queries, getSingleCompanyFiling, num_threads)
     end = time.time()
     print '\n\n\n FINAL TIME:'
     print end - start
@@ -79,24 +79,40 @@ def nonthreaded_get_filings():
     print '\n\n\n FINAL TIME:'
     print end - start
 
+def extractSingleSection(inputs):
+    companyCode, filingURLList, docNameList, indexURLList, filingType = inputs
+    logString = 'Skipping text file.'
+    if '.txt' not in filingURLList[0]:
+        t1 = time.time() 
+        seccrawler = SecCrawler() 
+        seccrawler.save_in_directory(companyCode, filingURLList, docNameList, indexURLList, filingType)
+        t2 = time.time()
+        logString = "Total Time taken for " + companyCode + "sections: " + str(t2-t1)
+    return logString
 
-def extractSectionFromExistingFilings():
+
+
+def extractSectionFromExistingFilings(numThreads):
     filename = '../check.txt'
-    seccrawler = SecCrawler() 
     with open(filename) as check:
         lines = check.readlines()
         lineElems = [[line.split('\t')[0].strip(), [line.split('\t')[6].strip()], \
             [line.split('\t')[5].strip()], [line.split('\t')[6].strip()], '10-K'] for line in lines]
 
-    count = 0
-    for lineElem in lineElems:
-        companyCode, filingURLList, docNameList, indexURLList, filingType = lineElem
-        if '.txt' not in filingURLList[0]:
-            seccrawler.save_in_directory(companyCode, filingURLList, docNameList, indexURLList, filingType)
-            
-            if count >= 10:
-                break
-            count += 1
+    if numThreads > 1:
+        print 'THREADED'
+        results = calculateParallel(lineElems, extractSingleSection, numThreads)
+    else:
+        print 'NONTHREADED'
+        seccrawler = SecCrawler() 
+        
+        for lineElem in lineElems:
+            companyCode, filingURLList, docNameList, indexURLList, filingType = lineElem
+            if '.txt' not in filingURLList[0]:
+                seccrawler.save_in_directory(companyCode, filingURLList, docNameList, indexURLList, filingType)            
+                # if count >= 10:
+                    # break
+                # count += 1
 
     
 if __name__ == '__main__':
@@ -106,7 +122,7 @@ if __name__ == '__main__':
     elif threading == '-nt':
         nonthreaded_get_filings()
     elif threading == '-es':
-        extractSectionFromExistingFilings()
+        extractSectionFromExistingFilings(int(sys.argv[2]))
     else:
         print 'Incorrect arguments.  Should have flag (-t, -nt) for threaded vs. nonthreaded, then numThreads\n' + \
             'Nonthreaded is test mode and may not pull everything'

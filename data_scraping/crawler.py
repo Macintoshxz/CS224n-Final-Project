@@ -236,7 +236,7 @@ class SecCrawler():
             # tdsString = ''.join([unicode(td) if td.string != None else '' for td in tds])
 
             tdsString = tdsString.encode('ascii', 'replace').lower()
-            print tdsString
+            # print tdsString
             thisItem = -1
             curI = -1
             for i in reversed(range(len(ITEM_STRINGS))):
@@ -462,7 +462,7 @@ class SecCrawler():
                     searchList = possibleSearchList
                     tsoup = self.getTableSoup(sectionSoup, searchList, self.ITEM_THRESHOLD)
                     if tsoup != None:
-                        print 'Used searchList:', possibleSearchList
+                        print 'Used searchList:', searchList
                         break
                 if tsoup != None:
                     linkMapping = self.getLinkMapping(tsoup, searchList, self.SECTION_NAMES)
@@ -473,6 +473,7 @@ class SecCrawler():
                         searchList = possibleSearchList
                         linkMapping = self.getLinkMappingFromLinkTexts(sectionSoup, searchList)
                         if linkMapping != None:
+                            print 'Used searchList:', searchList
                             break
 
                 #Still couldn't find anything
