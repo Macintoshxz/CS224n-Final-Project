@@ -218,7 +218,7 @@ class SecCrawler():
         for t in tableList:
             tsoup = BeautifulSoup(str(t), 'lxml')
             sstrings = tsoup.stripped_strings
-            joined_sstrings = ' '.join(sstrings).lower().encode('ascii', 'replace').replace('?', ' ')
+            joined_sstrings = ' '.join(sstrings).encode('ascii', 'replace').replace('?', ' ').lower()
             truthArray = [1*bool(re.search(item, joined_sstrings)) for item in ITEM_STRINGS]
             if sum(truthArray) >= ITEM_THRESHOLD:
                 toc = t
@@ -250,7 +250,7 @@ class SecCrawler():
                     found = td.find('a', href=True)
                     if found:
                         # linkMapping[thisItem] = found['href']
-                        linkArray[curI] = found['href']
+                        linkArray[curI] = found['href'].encode('ascii', 'replace').replace('?', ' ')
                         hasElem = True
                         break
         print "linkarray:"
@@ -265,11 +265,11 @@ class SecCrawler():
         linkArray = [None]*len(ITEM_STRINGS)
 
         for link in links:
-            linkString = unicode(link).encode('ascii', 'replace').lower().replace('?', ' ')
+            linkString = link.encode('ascii', 'replace').replace('?', ' ')
             for i in reversed(range(len(ITEM_STRINGS))):
                 item = ITEM_STRINGS[i]
                 if re.search(item, linkString):
-                    linkArray[i] = unicode(link['href']).encode('ascii', 'replace').replace('?', ' ')
+                    linkArray[i] = link['href'].encode('ascii', 'replace').replace('?', ' ')
         return linkArray
 
     def removeMissingLetteredSections(self, sectionList, sectionIdxList):
@@ -293,11 +293,17 @@ class SecCrawler():
                 return False
             return True
         def findStart(link, text):
-            link = str(link)
-            if not isValidLink(link):
-                return None
-            regexString = r'name=.?' + link
-            res = re.search(regexString, data.encode('ascii', 'replace').lower())
+            res = None
+            try:
+                link = link.encode('ascii', 'replace').replace('?', ' ').lower()
+                # print text.lower()
+                if not isValidLink(link):
+                    return None
+                regexString = r'name=.?' + link
+                res = re.search(regexString, text.encode('ascii', 'replace').replace('?', ' ').lower())
+            except UnicodeEncodeError:
+                print 'ERRORED?'
+                pass
             return res.start() if res else None
         sectionList = [None]*len(linkMapping)
         sectionIdxList = [None]*len(linkMapping)
@@ -354,7 +360,7 @@ class SecCrawler():
                 f = open(savedTargetPath, 'r')
                 data = f.read()
                 f.close()
-                print 'READ FROM CACHED SOURCE FILE'
+                print 'READ FROM CACHED SOURCE FILE\n'
             elif os.path.isfile(oldSavedTargetPath) and '.txt' not in oldSavedTargetPath:
                 f = open(oldSavedTargetPath, 'r')
                 data = f.read()
@@ -365,7 +371,7 @@ class SecCrawler():
                 g = open(savedTargetPath, 'w+')
                 g.write(data)
                 g.close()
-                print 'REPLACED SOURCE FILE!'
+                print 'REPLACED SOURCE FILE!\n'
                 print savedTargetPath
             else: # Make the request and say fuck the SEC.
                 r = self.repeatRequest(target_url)
@@ -378,7 +384,7 @@ class SecCrawler():
                 g = open(savedTargetPath, 'w+')
                 g.write(data)
                 g.close()
-                print 'CACHED SOURCE FILE!'
+                print 'CACHED SOURCE FILE!\n'
                 print savedTargetPath
             return data
 
@@ -488,7 +494,7 @@ class SecCrawler():
                 #Use parsed strings (no tables) to create actual output
                 self.writeFile(parsedStrings, curDocName, target_url, index_url, marketCap, path)
                 t2 = time.time()
-                print "Downloaded " + companyCode + "'s " + filingType + "s: " + str(i) + "/" + str(len(filingURLList)) + ". Time: " + str(t2-t1) + "\n"
+                print "Downloaded " + companyCode + "'s " + filingType + "s: " + str(i+1) + "/" + str(len(filingURLList)) + ". Time: " + str(t2-t1) + "\n"
             
             ##Now we write the sections.
             print "Now writing sections for ", companyCode
@@ -535,7 +541,7 @@ class SecCrawler():
                     # If already written, skip
                     sectionPath = basePath + curDocName.split('.')[0] + '_html_section_' + str(curSectionName) + '.txt'
                     if os.path.isfile(sectionPath):
-                        print 'Section already extracted!  Moving on.'
+                        print 'Section ', curSectionName, 'for ', companyCode, 'already extracted!'
                         continue
 
                     if curIdx == None:
@@ -667,7 +673,10 @@ class SecCrawler():
                             if '10-k' in s and '10-k/a' not in s and '10-k405/a' not in s:
                                 link = tr.find('a', href=True)
                                 if link:
-                                    URL = str(tr.find('a')['href'])
+                                    try:
+                                        URL = str(tr.find('a')['href'])
+                                    except UnicodeEncodeError:
+                                        pass
                                 else:
                                     URL = None
                                 if URL is not None:

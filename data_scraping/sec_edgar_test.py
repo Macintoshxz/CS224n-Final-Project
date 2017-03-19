@@ -87,6 +87,12 @@ def extractSingleSection(inputs):
         seccrawler = SecCrawler() 
         seccrawler.save_in_directory(companyCode, filingURLList, docNameList, indexURLList, filingType)
         t2 = time.time()
+
+        completedFilename = 'extraction_log.txt'
+        f = open(completedFilename, 'a+')
+        f.write(docNameList[0] + '\n')
+        f.close()
+
         logString = "Total Time taken for " + companyCode + "sections: " + str(t2-t1)
     return logString
 
@@ -94,26 +100,39 @@ def extractSingleSection(inputs):
 
 def extractSectionFromExistingFilings(numThreads):
     filename = '../check.txt'
+    completedFilename = 'extraction_log.txt'
+    f = open(completedFilename, 'r')
+    completedLines = f.readlines()
+    f.close()
+    completed = [line.strip() for line in completedLines]
+
     with open(filename) as check:
         lines = check.readlines()
-        lineElems = [[line.split('\t')[0].strip(), [line.split('\t')[6].strip()], \
+        readLines = [[line.split('\t')[0].strip(), [line.split('\t')[6].strip()], \
             [line.split('\t')[5].strip()], [line.split('\t')[6].strip()], '10-K'] for line in lines]
+
+    sectionsToGet = []    
+    for line in reversed(readLines):
+        companyCode, filingURLList, docNameList, indexURLList, filingType = line
+        if docNameList[0] not in completed:
+            sectionsToGet.append(line)
+        else:
+            print 'Already downloaded ', docNameList[0]
 
     if numThreads > 1:
         print 'THREADED'
-        results = calculateParallel(lineElems, extractSingleSection, numThreads)
+        results = calculateParallel(sectionsToGet, extractSingleSection, numThreads)
     else:
         print 'NONTHREADED'
         seccrawler = SecCrawler() 
-        
-        for lineElem in lineElems:
+
+        for lineElem in sectionsToGet:
             companyCode, filingURLList, docNameList, indexURLList, filingType = lineElem
             if '.txt' not in filingURLList[0]:
                 seccrawler.save_in_directory(companyCode, filingURLList, docNameList, indexURLList, filingType)            
-                # if count >= 10:
-                    # break
-                # count += 1
-
+                f = open(completedFilename, 'a+')
+                f.write(docNameList[0] + '\n')
+                f.close()
     
 if __name__ == '__main__':
     threading = sys.argv[1]
