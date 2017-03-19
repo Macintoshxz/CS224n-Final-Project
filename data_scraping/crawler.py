@@ -426,11 +426,11 @@ class SecCrawler():
             basePath = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"
             curDocBase = curDocName.split('.')[0]
             path = basePath + curDocName
-            savedTargetPath = basePath + curDocBase + target_extension
+            savedTargetPath = basePath + curDocBase + '.' + target_extension
 
             # Don't overwrite existing, non-text root files - TEMPORARILY DEPRECATED - MAY USE LATER
-            # fileExists = os.path.isfile(path)
-            # fileExists = False
+            fileExists = os.path.isfile(path)
+            fileExists = False
             # if os.path.isfile(path):
             #     print "ALREADY EXISTS: ", path, ', moving on...'
             #     continue
@@ -446,6 +446,8 @@ class SecCrawler():
                 f = open(savedTargetPath, 'w+')
                 f.write(data)
                 f.close()
+                print 'CACHED SOURCE FILE!'
+                print savedTargetPath
 
             #Use raw (with tables) strings to find the market cap text
             soup, rawStrings, parsedStrings, rawSoup = ingestSoup(data)
