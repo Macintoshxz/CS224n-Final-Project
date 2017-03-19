@@ -288,9 +288,17 @@ class SecCrawler():
 
 
     def getLinkRawIndices(self, linkMapping, data):
+        def isValidLink(link):
+            if '.htm' in link:
+                return False
+            if '(' in link or ')' in link:
+                return False
+            return True
         def findStart(link, text):
-            # print link
-            regexString = r'name=.?' + str(link)
+            link = str(link)
+            if not isValidLink(link):
+                return None
+            regexString = r'name=.?' + link
             res = re.search(regexString, data.encode('ascii', 'replace').lower())
             return res.start() if res else None
         sectionList = [None]*len(linkMapping)
@@ -306,12 +314,6 @@ class SecCrawler():
                 idx += data[idx:].find('</A>') + 4 #4 is the length of the closing tag
                 sectionIdxList[i] = idx
                 sectionList[i] = key
-        # for _ in range(len(linkMapping.keys())):
-        #     key, val = linkMapping.popitem(last=False)
-        #     idx = findStart(val.strip('#'), data)
-        #     idx += data[idx:].find('</A>') + 4 #4 is the length of the closing tag
-        #     sectionList.append(key)
-        #     sectionIdxList.append(idx)
         return sectionList, sectionIdxList
 
     def writeFile(self, parsedStrings, docName, target_url, index_url, marketCap, path):
