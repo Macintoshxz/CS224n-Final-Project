@@ -272,7 +272,6 @@ class SecCrawler():
                     linkArray[i] = link['href']
         return linkArray
 
-
     def removeMissingLetteredSections(self, sectionList, sectionIdxList):
         n = len(sectionList)
         newSectionList = []
@@ -285,7 +284,6 @@ class SecCrawler():
             newSectionList.append(sectionList[i])
             newSectionIdxList.append(sectionIdxList[i])
         return newSectionList, newSectionIdxList
-
 
     def getLinkRawIndices(self, linkMapping, data):
         def isValidLink(link):
@@ -347,6 +345,25 @@ class SecCrawler():
     def save_in_directory(self, companyCode, filingURLList, docNameList, indexURLList, filingType):
         #Attempt normal parsing.  If this fails, try truncating and parsing again
         #If this fails AGAIN, just ignore it completely.
+
+        def getSource(target_url, savedTargetPath):
+            data = None
+            # If its saved, load saved file instead of requesting
+            if os.path.isfile(savedTargetPath):
+                f = open(savedTargetPath, 'r')
+                data = f.read()
+                f.close()
+            else: # Make the request and say fuck the SEC.
+                r = self.repeatRequest(target_url)
+                if r is None:
+                    errorFile = open(self.ERROR_FILENAME, 'a+')
+                    errorFile.write('404 FROM: ' + target_url + '\n')
+                    errorFile.close()
+                    return None
+                data = r.text
+            return data
+
+
         def ingestSoup(data, shouldParse=False):
             soup = None
             rawSoup = None
@@ -398,33 +415,37 @@ class SecCrawler():
             return parsedSoup, rawStrings, parsedStrings, rawSoup
         # Save every text document into its respective folder
         for i in range(len(filingURLList)):
-            curDocName = str(docNameList[i])
-            basePath = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"
-            path = basePath + curDocName
-
-            fileExists = os.path.isfile(path)
-            fileExists = False
-            # Don't overwrite existing, non-text root files
-            # if os.path.isfile(path):
-            #     print "ALREADY EXISTS: ", path, ', moving on...'
-            #     continue
-
             #splits the section based on file existence
             t1 = time.time()
             target_url = filingURLList[i]
             #Removes interactive XBRL
             target_url = target_url.replace('ix?doc=/', '')
+            target_extension = target_url.split('.')[-1]
+
+            curDocName = str(docNameList[i])
+            basePath = "SEC-Edgar-data/"+str(companyCode)+"/"+str(filingType)+"/"
+            curDocBase = curDocName.split('.')[0]
+            path = basePath + curDocName
+            savedTargetPath = basePath + curDocBase + target_extension
+
+            # Don't overwrite existing, non-text root files - TEMPORARILY DEPRECATED - MAY USE LATER
+            # fileExists = os.path.isfile(path)
+            # fileExists = False
+            # if os.path.isfile(path):
+            #     print "ALREADY EXISTS: ", path, ', moving on...'
+            #     continue
+
             index_url = indexURLList[i]
             print "Saving", target_url
             print "From index:", index_url
 
-            r = self.repeatRequest(target_url)
-            if r is None:
-                errorFile = open(self.ERROR_FILENAME, 'a+')
-                errorFile.write('404 FROM: ' + target_url + '\n')
-                errorFile.close()
+            data = getSource(target_url, savedTargetPath)
+            if data == None:
                 continue
-            data = r.text
+            else:
+                f = open(savedTargetPath, 'w+')
+                f.write(data)
+                f.close()
 
             #Use raw (with tables) strings to find the market cap text
             soup, rawStrings, parsedStrings, rawSoup = ingestSoup(data)
@@ -495,6 +516,12 @@ class SecCrawler():
                 for i in range(n):
                     curSectionName = sectionList[i]
                     curIdx = sectionIdxList[i]
+                    
+                    # If already written, skip
+                    sectionPath = basePath + curDocName.split('.')[0] + '_html_section_' + str(curSectionName) + '.txt'
+                    if os.path.isfile(sectionPath):
+                        continue
+
                     if curIdx == None:
                         continue
                     if i < n - 1:
@@ -505,7 +532,6 @@ class SecCrawler():
                     else:
                         sectionData = '<html><body>' + data[curIdx:] + '</body></html/>'
                     # print sectionData
-                    sectionPath = basePath + curDocName.split('.')[0] + '_html_section_' + str(curSectionName) + '.txt'
                     print 'Writing section ', curSectionName, 'for ', companyCode, target_url
                     sectionParsedSoup, sectionRawStrings, sectionParsedStrings, sectionRawSoup = ingestSoup(sectionData)
                     status = self.writeFile(sectionParsedStrings, curDocName, target_url, index_url, marketCap, sectionPath)
