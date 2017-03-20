@@ -1,21 +1,27 @@
 import sys
 from crawler import SecCrawler
 from multiprocessing import Pool as ThreadPool
+import traceback
+import os
 import time 
 
-def getSingleCompanyFiling(inputData):
+def getSingleCompanyFiling(companyCode, logPath='downloaded_companies.txt'):
     date = '20170315' # date from which filings should be downloaded 
     count = '100' # no of filings
 
     seccrawler = SecCrawler() 
-    companyCode, cik = inputData
-    t1 = time.time() 
-    seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "10-K")
+    t1 = time.time()
+    try:
+        seccrawler.getFiling(str(companyCode), str(date), str(count), "10-K")
+    except:
+        raise Exception("".join(traceback.format_exception(*sys.exc_info())))
     # seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "10-Q")
     # seccrawler.getFiling(str(companyCode), str(cik), str(date), str(count), "8-K") 
     t2 = time.time()
     logString = "Total Time taken for " + companyCode + ": " + str(t2-t1)
-    print logString
+    f = open(logPath, 'a+')
+    f.write(companyCode + '\n')
+    f.close()
     return logString
 
 def calculateParallel(inputs, func, threads=1):
@@ -25,24 +31,26 @@ def calculateParallel(inputs, func, threads=1):
     pool.join()
     return results
 
-def get_filings(num_threads, path='sp_500.txt'):
-    print 'GETTING FILINGS USING ', num_threads, 'THREADS!!!!!'
+def get_filings(num_threads, path='sp_500_clean.txt', logPath='downloaded_companies.txt'):
+    print 'GETTING FILINGS USING ', num_threads, 'THREADS!!!!!'   
 
     start = time.time()
     companyFile = open(path, 'r')
     lines = companyFile.readlines()
     companyFile.close()
 
-    companies = [line.split('\t')[1:3] for line in lines]
-    print 'GETTING THESE COMPANIES:' , companies
+    companiesSet = set([line.split('\t')[0].strip() for line in lines])
 
-    companiesToDownload = 10
-    curDownloaded = 0
-    blocking = True
-    scrapeCount = 0
-    queries = [[companyCode, cik] for companyCode, cik in companies]
+    downloadedCompanies = set([])    
+    if os.path.isfile(logPath):
+        downloadedFile = open(logPath, 'r')
+        downloadedCompanies = set([line.split('\t')[0].strip() for line in downloadedFile.readlines()])
+        downloadedFile.close()
 
-    results = calculateParallel(queries, getSingleCompanyFiling, num_threads)
+    companiesToGet = companiesSet - downloadedCompanies
+    print 'GETTING THESE COMPANIES:' , companiesToGet
+
+    results = calculateParallel(companiesToGet, getSingleCompanyFiling, num_threads)
     end = time.time()
     print '\n\n\n FINAL TIME:'
     print end - start
@@ -85,18 +93,21 @@ def extractSingleSection(inputs):
     if '.txt' not in filingURLList[0]:
         t1 = time.time() 
         seccrawler = SecCrawler() 
-        seccrawler.save_in_directory(companyCode, filingURLList, docNameList, indexURLList, filingType)
-        t2 = time.time()
+        try:
+            seccrawler.save_in_directory(companyCode, filingURLList, docNameList, indexURLList, filingType)        
+            # Put all exception text into an exception and raise that
 
-        completedFilename = 'extraction_log.txt'
-        f = open(completedFilename, 'a+')
-        f.write(docNameList[0] + '\n')
-        f.close()
+            t2 = time.time()
 
-        logString = "Total Time taken for " + companyCode + "sections: " + str(t2-t1)
+            completedFilename = 'extraction_log.txt'
+            f = open(completedFilename, 'a+')
+            f.write(docNameList[0] + '\n')
+            f.close()
+            logString = "Total Time taken for " + companyCode + "sections: " + str(t2-t1)
+
+        except:
+            raise Exception("".join(traceback.format_exception(*sys.exc_info())))
     return logString
-
-
 
 def extractSectionFromExistingFilings(numThreads):
     filename = '../check.txt'

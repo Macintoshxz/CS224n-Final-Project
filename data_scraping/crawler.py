@@ -166,18 +166,22 @@ class SecCrawler():
                     break
         return outArray
 
-    def truncateDocumentData(self, data):
-        strings = data.split('\n')
-        endIdx = len(strings)
-        for i in xrange(len(strings)):
-            s = strings[i]
-            if '</DOCUMENT>' in s:
-                endIdx = i
-                break
-        strings = strings[:endIdx]
-        newData = '\n'.join(strings)
+    # def truncateDocumentData(self, data):
+    #     strings = data.split('\n')
+    #     endIdx = len(strings)
+    #     for i in xrange(len(strings)):
+    #         s = strings[i]
+    #         if '</DOCUMENT>' in s:
+    #             endIdx = i
+    #             break
+    #     strings = strings[:endIdx]
+    #     newData = '\n'.join(strings)
+    #     return newData
 
-        return newData
+    def truncateDocumentData(self, data):
+        m = re.search('</DOCUMENT>', data)
+        end = m.end()
+        return data[:end]
 
     ITEM_STRINGS = [r'item.?\s*1', r'item.?\s*1a', r'item.?\s*1b',r'item.?\s*2', r'item.?\s*3', r'item.?\s*5', \
                     r'item.?\s*6', r'item.?\s*7', r'item.?\s*7a', r'item.?\s*8', r'item.?\s*9', r'item.?\s*9a', \
@@ -265,7 +269,13 @@ class SecCrawler():
         linkArray = [None]*len(ITEM_STRINGS)
 
         for link in links:
-            linkString = link.encode('ascii', 'replace').replace('?', ' ')
+            try:
+                linkString = link.encode('ascii', 'replace').replace('?', ' ')
+            except:
+                try:
+                    linkString = str(link).encode('ascii', 'replace').replace('?', ' ')
+                except:
+                    continue
             for i in reversed(range(len(ITEM_STRINGS))):
                 item = ITEM_STRINGS[i]
                 if re.search(item, linkString):
@@ -381,11 +391,18 @@ class SecCrawler():
                     errorFile.close()
                     return None
                 data = r.text
-                g = open(savedTargetPath, 'w+')
-                g.write(data)
-                g.close()
-                print 'CACHED SOURCE FILE!\n'
-                print savedTargetPath
+
+                dataLength = len(r.content)
+
+                # Don't cache if too large (> 5 MB)
+                if dataLength < 5000000:
+                    g = open(savedTargetPath, 'w+')
+                    g.write(data)
+                    g.close()
+                    print 'CACHED SOURCE FILE!\n'
+                    print savedTargetPath
+                else:
+                    print 'DID NOT CACHE, FILE SIZE WAS ', str(dataLength), savedTargetPath
             return data
 
 
@@ -396,6 +413,7 @@ class SecCrawler():
             parsedStrings = None
 
             try:
+                data = self.truncateDocumentData(data)
                 soup = BeautifulSoup(data, "lxml")
                 rawSoup = soup
                 soup = BeautifulSoup(soup.prettify(), "lxml")
@@ -418,7 +436,6 @@ class SecCrawler():
                 errorFile.write('INITIAL SOUPING FAILED: ' + target_url + ' ' + companyCode + '\n')
                 errorFile.close()
                 try:
-                    data = self.truncateDocumentData(data)
                     soup = BeautifulSoup(data, "lxml")
                     soup = BeautifulSoup(soup.prettify(), "lxml")
                     if '.txt' in target_url:
@@ -476,19 +493,21 @@ class SecCrawler():
                 errorFile.close()
                 continue
 
-            # if not fileExists:
-            header = self.getCombinedLineArray(rawStrings, -1)
-            marketCapText = self.findMarketCapText(header)
+            #REMOVING ALL MARKET CAP PARSING
+            # header = self.getCombinedLineArray(rawStrings, -1)
+            # marketCapText = self.findMarketCapText(header)
+
+            # marketCap = -1
+            # if marketCapText is not None:
+            #     marketCap = self.convertTextToAmount(marketCapText)
+            # print 'Market Cap: ', marketCap, companyCode
+            # if marketCap < 100000000:
+            #     print 'BAD MARKET CAP DETECTED: ', str(marketCap), companyCode, target_url
+            #     errorFile = open(self.ERROR_FILENAME, 'a+')
+            #     errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n')# + 'Market cap text was: ' + str(marketCapText))
+            #     errorFile.close()
 
             marketCap = -1
-            if marketCapText is not None:
-                marketCap = self.convertTextToAmount(marketCapText)
-            print 'Market Cap: ', marketCap, companyCode
-            if marketCap < 100000000:
-                print 'BAD MARKET CAP DETECTED: ', str(marketCap), companyCode, target_url
-                errorFile = open(self.ERROR_FILENAME, 'a+')
-                errorFile.write('BAD MARKET CAP: ' + str(marketCap) + ' ' + target_url + ' ' + companyCode + '\n')# + 'Market cap text was: ' + str(marketCapText))
-                errorFile.close()
 
             if not fileExists:
                 #Use parsed strings (no tables) to create actual output
@@ -561,7 +580,7 @@ class SecCrawler():
                     else:
                         print 'Writing section ', curSectionName, 'for ', companyCode, target_url
 
-                print "Done writing sections for ", companyCode, "Time: ", time.time() - sectionStart
+                print "Done writing sections for ", companyCode, "Time: ", str(time.time() - sectionStart)
             else:
                 print 'Target was a .txt, so no sections could be extracted'
 
@@ -699,18 +718,21 @@ class SecCrawler():
 
             #If no filings found, THEN go look for complete submission .txt file
             if not foundFiling:
-                linkID = link.split('/')[-1].strip('-index.html')
-                for linkedDoc in newSoup.find_all('a', href=True):
-                    URL = linkedDoc['href']
-                    if linkID in URL.lower() and '.txt' in URL.lower():
-                        filingURLList.append(base_url + URL)
-                        foundFiling = True
-                        print 'FOUND COMPLETE FILING: ', filingDate, base_url + URL
-                        break
+                if link:
+
+                    ending = str(link).split('/')
+                    linkID = ending[-1].strip('-index.html')
+                    for linkedDoc in newSoup.find_all('a', href=True):
+                        URL = linkedDoc['href']
+                        if linkID in URL.lower() and '.txt' in URL.lower():
+                            filingURLList.append(base_url + URL)
+                            foundFiling = True
+                            print 'FOUND COMPLETE FILING: ', filingDate, base_url + URL
+                            break
             
 
             if foundFiling:
-                indexURLList.append(link)
+                indexURLList.append(str(link))
 
         # try:
         self.save_in_directory(companyCode, filingURLList, docNameList, indexURLList, filingType)
