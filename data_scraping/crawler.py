@@ -19,22 +19,22 @@ class SecCrawler():
         self.hello = "Welcome to Sec Cralwer!"
 
     def repeatRequest(self, target_url):
-        r = requests.get(target_url)
+        r = None
         acceptable_errors = [404]
         REQUEST_THRESHOLD = 5
         requestCounter = 0
-        while r.status_code != self.HTTP_OKAY:
+        while r is None or r.status_code != self.HTTP_OKAY:
+            try:
+                r = requests.get(target_url)
+            except:
+                pass
             if requestCounter >= REQUEST_THRESHOLD:
                 if r.status_code in acceptable_errors:
                     print r.status_code, ": ", target_url, ""
                     return None
                 print r.status_code, ": ", target_url, ".  Sleeping for ", self.REQUEST_SLEEP_TIME, "..."
                 time.sleep(self.REQUEST_SLEEP_TIME)
-                requestCounter =0
-            try:
-                r = requests.get(target_url)
-            except:
-                pass
+                requestCounter = 0
             requestCounter += 1
         print r.status_code, ": ", target_url
         return r
