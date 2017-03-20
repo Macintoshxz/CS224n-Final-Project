@@ -190,8 +190,16 @@ def extractSectionPositions(body, header, targetPath, logFile):
             continue
 
         sectionFirst = targetPath[:targetPath.rfind('\\')]
-        sectionSecond =  targetPath[targetPath.rfind('\\'):].split('.')[0] + '_section_' + curName + '.txt'
-        sectionPath = sectionFirst + sectionSecond
+        sectionSecond =  targetPath[targetPath.rfind('\\'):].split('.')[0]
+        htmlSectionPath = sectionFirst + sectionSecond + '_html_section_' + curName + '.txt'
+        sectionPath = sectionFirst + sectionSecond + '_section_' + curName + '.txt'
+
+        #Don't write if we've already extractd the html or txt sections
+        if os.path.isfile(htmlSectionPath) or os.path.isfile(sectionPath):
+            continue
+
+        sectionPath = sectionFirst + sectionSecond + '_section_' + curName + '.txt'
+
         fullString = '\n'.join(body)
         section = None
         if i < n - 1:
@@ -213,13 +221,13 @@ def extractSectionPositions(body, header, targetPath, logFile):
 def extractSection(lines, startSection, endSection):
     # lines = lines[startHeuristic:]
     # inputs = ['a']
-    pos7 = extractSectionStartPos(lines, startSection)
-    pos8 = extractSectionStartPos(lines, startSection + 1)
-    if pos7 is None or pos8 is None:
-        return None, pos7, pos8
+    pos1 = extractSectionStartPos(lines, startSection)
+    pos2 = extractSectionStartPos(lines, startSection + 1)
+    if pos1 is None or pos2 is None:
+        return None, pos1, pos2
 
     fullString = '\n'.join(lines)
-    return fullString[pos7:pos8], pos7, pos8
+    return fullString[pos1:pos2], pos1, pos2
 
 def isActualSection(text):
     if text is None:
@@ -229,47 +237,46 @@ def isActualSection(text):
         return False
     return True
 
-def extractAllSections():
-    FIRST_LINE = 8 #Defined by our data structure
+    
+def extractAllSections(completedFilename='completed_extractions_from_text.txt', logFilename='extraction_from_text_log.txt'):
     path = "SEC-Edgar-data"
     targetPaths = []
     for subdir, dirs, files in os.walk(path):
         for f in files:
-            if 'embedding' not in f:
-                docPath = os.path.join(subdir, f)
-                targetPaths.append(docPath)
+            if '.txt' in f and 'filing' not in f:
+                if 'embedding' not in f and 'section' not in f:
+                    docPath = os.path.join(subdir, f)
+                    targetPaths.append(docPath)
 
-    totalPaths = len(targetPaths)
-    # targetPaths = targetPaths[300:]
-    count = 0
-    numFindErrors = 0
-    numRefErrors = 0
-    errorFile = open('extractionErrors.txt', 'w+')
-    targetSections = [7]
+    completedFiles = []
+    if os.path.isfile(completedFilename):
+        f = open(completedFilename, 'r')
+        completedFiles = [line.strip() for line in f.readlines()]
+        f.close()
 
-    count = 0
-    logFile = open('extractAllLog.txt', 'w+')
-    skip = True
-    for targetPath in targetPaths:
-        if 'section' not in targetPath:
-            #Don't overwrite
-            # if os.path.isfile(sectionPath):
-            #     continue
+    toExtract = set(targetPaths) - set(completedFiles)
 
-            if 'STI' in targetPath:
-                skip = False
-
-            # if skip:
-            #     continue
-
-            f = open(targetPath, 'r')
-            lines = f.readlines()
-            f.close()
-            
-            header = ''.join(lines[:FIRST_LINE])
-            body = lines[FIRST_LINE:]
-            extractSectionPositions(body, header, targetPath, logFile)
-    logFile.close()
+    f = open(completedFilename, 'a+')
+    print 'Files to extract:', len(toExtract)
+    FIRST_LINE = 8 #Defined by our data structure
+    extractCounter = 0
+    logFile = open(logFilename, 'a+')
+    for targetPath in toExtract:
+        g = open(targetPath, 'r')
+        lines = g.readlines()
+        g.close()
+        
+        header = ''.join(lines[:FIRST_LINE])
+        body = lines[FIRST_LINE:]
+        extractSectionPositions(body, header, targetPath, logFile)
+        print 'WRITE!', targetPath
+        f = open(completedFilename, 'a+')
+        f.write(targetPath + '\n')
+        f.flush()
+        extractCounter += 1
+        if extractCounter % 500 == 0:
+            print '\n\nExtracted', str(extractCounter), '/', len(toExtract), 'files!!!\n\n'
+    f.close()
 
 def test():
     FIRST_LINE = 8 #Defined by our data structure
