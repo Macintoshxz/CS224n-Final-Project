@@ -31,7 +31,10 @@ class SecCrawler():
                 print r.status_code, ": ", target_url, ".  Sleeping for ", self.REQUEST_SLEEP_TIME, "..."
                 time.sleep(self.REQUEST_SLEEP_TIME)
                 requestCounter =0
-            r = requests.get(target_url)
+            try:
+                r = requests.get(target_url)
+            except:
+                pass
             requestCounter += 1
         print r.status_code, ": ", target_url
         return r
@@ -457,7 +460,7 @@ class SecCrawler():
                     errorFile = open(self.ERROR_FILENAME, 'a+')
                     errorFile.write('SOUP CONVERSION FAILED: ' + target_url + ' ' + companyCode +  '\n')
                     errorFile.close()
-                    return None, None, None
+                    return None, None, None, None
             return parsedSoup, rawStrings, parsedStrings, rawSoup
         # Save every text document into its respective folder
         for i in range(len(filingURLList)):
