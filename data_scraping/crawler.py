@@ -370,6 +370,7 @@ class SecCrawler():
                 f = open(savedTargetPath, 'r')
                 data = f.read()
                 f.close()
+                
                 print 'READ FROM CACHED SOURCE FILE\n'
             elif os.path.isfile(oldSavedTargetPath) and '.txt' not in oldSavedTargetPath:
                 f = open(oldSavedTargetPath, 'r')
@@ -377,6 +378,7 @@ class SecCrawler():
                 f.close()
 
                 os.remove(oldSavedTargetPath)
+                data = data.encode('ascii', 'replace')
 
                 g = open(savedTargetPath, 'w+')
                 g.write(data)
@@ -391,9 +393,9 @@ class SecCrawler():
                     errorFile.close()
                     return None
                 data = r.text
-
                 dataLength = len(r.content)
 
+                data = data.encode('ascii', 'replace')
                 # Don't cache if too large (> 5 MB)
                 if dataLength < 5000000:
                     g = open(savedTargetPath, 'w+')
@@ -403,6 +405,8 @@ class SecCrawler():
                     print savedTargetPath
                 else:
                     print 'DID NOT CACHE, FILE SIZE WAS ', str(dataLength), savedTargetPath
+            
+            data = data.encode('ascii', 'replace')    
             return data
 
 
