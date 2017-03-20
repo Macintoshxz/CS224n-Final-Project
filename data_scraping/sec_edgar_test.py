@@ -31,7 +31,7 @@ def calculateParallel(inputs, func, threads=1):
     pool.join()
     return results
 
-def get_filings(num_threads, path='sp_500_clean.txt', logPath='downloaded_companies.txt'):
+def get_filings(num_threads, path='sp_500.txt', logPath='downloaded_companies.txt'):
     print 'GETTING FILINGS USING ', num_threads, 'THREADS!!!!!'   
 
     start = time.time()
