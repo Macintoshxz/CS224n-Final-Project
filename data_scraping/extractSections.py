@@ -1,5 +1,9 @@
 import os
 import re
+import sys
+import traceback
+from multiprocessing import Pool as ThreadPool
+
 
 def createLineWindow(lines, lineIdx):
     MAX_LINES_LOOKAHEAD = 3
@@ -178,7 +182,7 @@ def removeMissingLetteredSections(positions):
             newNames.append(SECTION_NAMES[i])
         return newPositions, newNames
 
-def extractSectionPositions(body, header, targetPath, logFile):
+def extractSectionPositions(body, header, targetPath):
     positions = [extractSectionStartPos(body, section) for section in SECTION_NAMES]
     positions, names = removeMissingLetteredSections(positions)
     print 'Extracting', targetPath, 'positions:\n', str(positions)
@@ -215,7 +219,7 @@ def extractSectionPositions(body, header, targetPath, logFile):
             g.write(header)
             g.write(section)
             g.close()
-    logFile.write(str(positions) + '\t' + targetPath + '\n')
+    # logFile.write(str(positions) + '\t' + targetPath + '\n')
 
 
 def extractSection(lines, startSection, endSection):
@@ -238,7 +242,32 @@ def isActualSection(text):
     return True
 
     
-def extractAllSections(completedFilename='completed_extractions_from_text.txt', logFilename='extraction_from_text_log.txt'):
+def extractSingleSection(targetPath, completedFilename='completed_extractions_from_text.txt'):
+    try:
+        FIRST_LINE = 8 #Defined by our data structure
+        g = open(targetPath, 'r')
+        lines = g.readlines()
+        g.close()
+        
+        header = ''.join(lines[:FIRST_LINE])
+        body = lines[FIRST_LINE:]
+        extractSectionPositions(body, header, targetPath)
+        f = open(completedFilename, 'a+')
+        f.write(targetPath + '\n')
+        f.close()
+    except:
+        raise Exception("".join(traceback.format_exception(*sys.exc_info())))
+
+
+def calculateParallel(inputs, func, threads=1):
+    pool = ThreadPool(threads)
+    results = pool.map(func, inputs)
+    pool.close()
+    pool.join()
+    return results
+
+def extractAllSections(numThreads=1, completedFilename='completed_extractions_from_text.txt'):
+    print 'Extracting with ', str(numThreads), 'threads!'
     path = "SEC-Edgar-data"
     targetPaths = []
     for subdir, dirs, files in os.walk(path):
@@ -256,27 +285,30 @@ def extractAllSections(completedFilename='completed_extractions_from_text.txt', 
 
     toExtract = set(targetPaths) - set(completedFiles)
 
-    f = open(completedFilename, 'a+')
+    # f = open(completedFilename, 'a+')
     print 'Files to extract:', len(toExtract)
-    FIRST_LINE = 8 #Defined by our data structure
     extractCounter = 0
-    logFile = open(logFilename, 'a+')
-    for targetPath in toExtract:
-        g = open(targetPath, 'r')
-        lines = g.readlines()
-        g.close()
-        
-        header = ''.join(lines[:FIRST_LINE])
-        body = lines[FIRST_LINE:]
-        extractSectionPositions(body, header, targetPath, logFile)
-        print 'WRITE!', targetPath
+
+    if numThreads != 1:
+        calculateParallel(list(toExtract), extractSingleSection, numThreads)
+    else:
         f = open(completedFilename, 'a+')
-        f.write(targetPath + '\n')
-        f.flush()
-        extractCounter += 1
-        if extractCounter % 500 == 0:
-            print '\n\nExtracted', str(extractCounter), '/', len(toExtract), 'files!!!\n\n'
-    f.close()
+        for targetPath in toExtract:
+            g = open(targetPath, 'r')
+            lines = g.readlines()
+            g.close()
+            
+            header = ''.join(lines[:FIRST_LINE])
+            body = lines[FIRST_LINE:]
+            extractSectionPositions(body, header, targetPath, logFile)
+            print 'WRITE!', targetPath
+            f = open(completedFilename, 'a+')
+            f.write(targetPath + '\n')
+            f.flush()
+            extractCounter += 1
+            if extractCounter % 500 == 0:
+                print '\n\nExtracted', str(extractCounter), '/', len(toExtract), 'files!!!\n\n'
+        f.close()
 
 def test():
     FIRST_LINE = 8 #Defined by our data structure
@@ -340,4 +372,4 @@ def test():
 
 if __name__ == '__main__':
     # test()
-    extractAllSections()
+    extractAllSections(int(sys.argv[1]))
