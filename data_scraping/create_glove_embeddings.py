@@ -52,6 +52,7 @@ def paragraphWordID(s, dict):
 
 def createDocumentWordIDMapping(targetPath, dict):
 	print targetPath
+	sys.stdout.flush()
 	filename = targetPath.split('/')[-1]
 
 	file_10k = open(targetPath, 'r')

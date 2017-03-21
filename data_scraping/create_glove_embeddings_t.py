@@ -293,7 +293,7 @@ class EmbeddingCreator():
 			print len(filteredPaths)
 
 
-			results = self.calculateParallel(filteredPaths, self.gloveDim, 8)
+			results = self.calculateParallel(filteredPaths, self.gloveDim, 4)
 			# results = [createDocumentWordIDMapping(filteredPath, dict) for filteredPath in filteredPaths]
 			# for targetPath in targetPaths:
 			# 	if targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"):

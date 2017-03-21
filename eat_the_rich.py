@@ -22,6 +22,7 @@ import argparse
 import bisect
 #import create_glove_embeddings
 import csv
+import numpy as np
 
 
 
@@ -87,7 +88,7 @@ def make_labelfile():
 				#year_market_dict = {}
 				for year in range(1, len(row)-1):
 					if row[year]!= "#N/A N/A" and row[year] != "#N/A Invalid Security" and row[year+1]!= "#N/A N/A" and row[year+1] != "#N/A Invalid Security" : #current year and next year have valid market cap data
-						curAdjMc = float(row[year])*inflationDict[1993+year]
+						curAdjMc = float(row[year])*inflationDict[1993+year]				
 						nextAdjMc = float(row[year+1])*inflationDict[1993+year+1]
 						if curAdjMc != 0:
 							key = (row[0],year+1993)
@@ -107,16 +108,19 @@ def make_labelfile():
 				#year_market_dict = {}
 				for year in range(1, len(row)-1):
 					if row[year]!= "#N/A N/A" and row[year]!= "#N/A Invalid Security" and row[year+1]!= "#N/A N/A" and row[year+1]!= "#N/A Invalid Security":
-						key = (row[0],year+1993)
-						value = (nextAdjMc - curAdjMc)/curAdjMc	#change from current year to next year
-						ticker_year_change[key] = value
+						curAdjMc = float(row[year])*inflationDict[1993+year]
+						nextAdjMc = float(row[year+1])*inflationDict[1993+year+1]
+						if curAdjMc != 0:
+							key = (row[0],year+1993)
+							value = (nextAdjMc - curAdjMc)/curAdjMc	#change from current year to next year
+							ticker_year_change[key] = value
 				# if len(year_market_dict) != 0:
 				# 	company_labels[row[0]] = year_market_dict
 	f.close()
 
 	total = len(ticker_year_change)
-	print total
-	print ticker_year_change
+	#print total
+	#print ticker_year_change
 
 	with open(r"labels.pickle", "wb") as output_file:
 		pickle.dump(ticker_year_change, output_file)
@@ -241,6 +245,27 @@ def get_integer_representation(ticker, year, item, file_to_ints):
 		return ir1, ir2
 	return -1
 
+def get_mcmfd(labels):
+
+	year_median = {}
+	year_mcs = {}
+
+	for key in labels:
+		if key[1] in year_mcs:
+			#print (key[0],key[1])
+			#print dic[(key[0],key[1])]
+			year_mcs[key[1]].append(labels[(key[0],key[1])])
+			#print labels[(key[0],key[1])]
+		else:
+			year_mcs[key[1]] = [labels[(key[0],key[1])]]
+	for year in year_mcs:
+		#print year
+		l = year_mcs[year]
+		median = np.median(np.array(l))
+		l.sort()
+		
+		year_median[year] = median
+	return year_median
 
 def make_examples(path, labels, ir_dict):
 	fileCounter = 0
@@ -325,7 +350,9 @@ def make_examples(path, labels, ir_dict):
 	training_examples = []
 	total_examples = 0
 
-	print orderedList
+
+	marketcap_change_median_from_data = get_mcmfd(labels)
+	#print marketcap_change_median_from_data
 
 	for i in range(0, len(orderedList)-1):
 		if orderedList[i][0][0] == orderedList[i+1][0][0]: #symbols match
@@ -333,28 +360,44 @@ def make_examples(path, labels, ir_dict):
 			for item in possible_items:
 				if item in orderedList[i][1] and item in orderedList[i+1][1]:
 					if orderedList[i][0] in labels:
-						print "GOT IT"
+						#print "GOT IT"
 						#print "Stock found in labels"
 						if orderedList[i][0] in labels:
-							ir = get_integer_representation(orderedList[i][0][0], orderedList[i][0][1], possible_items, item, ir_dict) #handle concatenation usage(ticker, year, item)
+							ir = get_integer_representation(orderedList[i][0][0], orderedList[i][0][1], item, ir_dict) #handle concatenation usage(ticker, year, item)
 							if ir != -1:
-								l = labels[orderedList[i][0]]	#change market cap of that year
-								example = []
-								example.append(orderedList[i][0][0])	#ticker symbol
-								example.append(orderedList[i][0][1])	#year 1
-								example.append(orderedList[i+1][0][1])	#year 2
-								example.append(item)	#year 2
-								example.append(ir)
-								example.append(l)	#market cap of year i + 1)
-								training_examples.append(example)
-								total_examples += 1
+								if orderedList[i+1][0] in labels:
+									mc_change = labels[orderedList[i+1][0]]	#change market cap of that year
+									# if mc_change >= marketcap_change_median_from_data:
+									# 	l = 0
+									# else:
+									# 	l = 1
+									example = []
+									example.append(orderedList[i][0][0])	#ticker symbol
+									example.append(orderedList[i][0][1])	#year 1
+									example.append(orderedList[i+1][0][1])	#year 2
+									example.append(item)
+									example.append(ir)
+									example.append(mc_change)	#label 0 = worse than median change, 1 = better than median change
+									training_examples.append(example)
+									total_examples += 1
 
 							if total_examples%1000 == 0:
 								print str(total_examples) + "examples added to training examples..."
 	print str(total_examples) + " total training examples created"
 
-	print training_examples
+	mcs = []
+	for each in training_examples:
+		mcs.append(each[-1])
 
+	mcs.sort()
+	median = mcs[len(mcs)/2]
+
+	for each in training_examples:
+		if each[-1] <= median:
+			each[-1] = 0
+		else:
+			each[-1] = 1
+	return training_examples
 
 	 		
 
@@ -369,10 +412,12 @@ if __name__ == '__main__':
 	parser.add_argument('-d','--directory', help='Directory containing financial documents', required=True)
 	args = vars(parser.parse_args())
 
-	
 	labels = make_labelfile()
-	examples = make_examples(args['directory'], labels)
+	ir = {}
+	examples = make_examples(args['directory'], labels, ir)
 
+	#d = get_mcmfd(labels)
+	#print examples
 
 
 
