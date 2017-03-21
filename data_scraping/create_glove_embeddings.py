@@ -260,15 +260,15 @@ class EmbeddingCreator():
 			print 'Took', str(time.time() - t), 'seconds.'
 			# results = [createDocumentWordIDMapping(targetPath) for targetPath in targetPaths]
 			
-
+			
 			for result in results:
 				t = time.time()
 				filename = result[0]
 				wordsID = result[1]
 				ticker, year, section = parseFilename(filename)
 				DocumentWordIDDict[(ticker, year, section)] = wordsID
-				EmbeddingDict[(ticker, year, section)] = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
-				print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
+				# EmbeddingDict[(ticker, year, section)] = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
+				# print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
 
 				# break
 				# for targetFile in targetPaths:

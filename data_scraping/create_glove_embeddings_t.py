@@ -95,6 +95,7 @@ def createSingleEmbedding(targetPath):
 	return [filename, embedding]
 
 def loopEmbeddings(gloveDim, targetPaths):
+	print "Starting thread with ", str(len(targetPaths)), 'paths'
 	outputs = []
 	try:
 		t = time.time()
@@ -126,6 +127,7 @@ def loopEmbeddings(gloveDim, targetPaths):
 # dictionary to be shared as we're doing things.
 # def createGloveDict(self, gloveDim='50'):
 def createGloveDict(gloveDim='50'):	
+	t = time.time()
 	glovePath = "glove/glove.6B." + gloveDim + 'd.txt'
 
 	
@@ -148,6 +150,7 @@ def createGloveDict(gloveDim='50'):
 		print 'Loading gloveDict'
 		gloveDict = pickle.load(open('glove/gloveDict_' + gloveDim + '.pkl'))
 
+	print "took", str(time.time() - t)
 	return gloveDict
 
 class EmbeddingCreator():
@@ -157,29 +160,42 @@ class EmbeddingCreator():
 	def __init__(self, gloveDim):
 		self.hello = "Let's create some embeddings"
 		self.gloveDim = gloveDim
-		self.gloveDict = createGloveDict(self.gloveDim)
+		# self.gloveDict = createGloveDict(self.gloveDim)
+		self.gloveDict = {}
 		
 
 	def calculateParallel(self, inputs, gloveDim, threads=1):
 		pool = ThreadPool(threads)
-		inputs = self.chunkLists(inputs, threads)
+
+		inputs = list(self.chunkLists(inputs, threads))
+		for inp in inputs:
+			print len(inp), '\n\n'
+		# sleep(10000)
+		# return
 		func = partial(loopEmbeddings, gloveDim)
 		# func = partial(loopEmbeddings, d)
 		results = pool.map(func, inputs)
 		# results = pool.map(func, inputs)
 		pool.close()
 		pool.join()
+		output = []
+		for result in results:
+			output += result
 		return results
 
 	def chunkLists(self, targetFiles, n):
 	    """Yield successive n-sized chunks from l."""
-	    for i in range(0, len(targetFiles), n):
-	        yield targetFiles[i:i + n]
+	    out = []
+	    divs = len(targetFiles)/n
+	    for i in range(n - 1):
+	    	out.append(targetFiles[i*divs:(i+1)*divs])
+	    out.append(targetFiles[(n-1)*divs:])
+	    return out
 
 	
 
 	def wordsIDToEmbedding(self, wordsID, gloveDictKeys):
-		return list(np.mean([self.gloveDict[gloveDictKeys[wordID]] for wordID in wordsID], axis=0))
+		return np.mean([self.gloveDict[gloveDictKeys[wordID]] for wordID in wordsID], axis=0)
 
 	# def makeGloveDirectories(self, companyCodes):
 	# 	for companyCode in companyCodes:
@@ -269,9 +285,12 @@ class EmbeddingCreator():
 			t = time.time()
 			# filteredPaths = [targetPath if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_")) for targetPath in targetPaths]
 			filteredPaths = [targetPath for targetPath in targetPaths if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"))]
-			filteredPaths = filteredPaths[:1000]
-			results = self.calculateParallel(filteredPaths, self.gloveDim, 2)
-			results = [createDocumentWordIDMapping(filteredPath, dict) for filteredPath in filteredPaths]
+			filteredPaths = filteredPaths[:100]
+			print filteredPaths
+
+
+			results = self.calculateParallel(filteredPaths, self.gloveDim, 1)
+			# results = [createDocumentWordIDMapping(filteredPath, dict) for filteredPath in filteredPaths]
 			# for targetPath in targetPaths:
 			# 	if targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"):
 			# 		results.append(createDocumentWordIDMapping(targetPath, dict))
@@ -284,14 +303,22 @@ class EmbeddingCreator():
 			# results = [createDocumentWordIDMapping(targetPath) for targetPath in targetPaths]
 			
 
-			for result in results:
-				t = time.time()
-				filename = result[0]
-				wordsID = result[1]
-				ticker, year, section = parseFilename(filename)
-				DocumentWordIDDict[(ticker, year, section)] = wordsID
-				EmbeddingDict[(ticker, year, section)] = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
-				print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
+			for wrapperResults in results:
+				for result in wrapperResults:
+					print '\n\n\nRESULTTTTT'
+					print result
+					t = time.time()
+					filename = result[0]
+					wordsID = list(result[1])
+					ticker, year, section = parseFilename(filename)
+					embedding = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
+					if isinstance(embedding, float):
+						continue
+					embedding = list(embedding)
+
+					DocumentWordIDDict[(ticker, year, section)] = wordsID
+					# EmbeddingDict[(ticker, year, section)] = embedding
+					print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
 
 				# break
 				# for targetFile in targetPaths:
@@ -309,8 +336,8 @@ class EmbeddingCreator():
 			# 		for filename, embedding in result:
 			# 			embeddingDict[filename] = embedding
 
-			pickle.dump(DocumentWordIDDict, open( "DocumentWordIDDict_" + self.gloveDim + ".pkl", "wb+" ) )
-			pickle.dump(EmbeddingDict, open( "EmbeddingDict_" + self.gloveDim + ".pkl", "wb+" ) )
+			# pickle.dump(DocumentWordIDDict, open( "DocumentWordIDDict_" + self.gloveDim + ".pkl", "wb+" ) )
+			# pickle.dump(EmbeddingDict, open( "EmbeddingDict_" + self.gloveDim + ".pkl", "wb+" ) )
 
 			end = time.time()
 			print '\n\n\n FINAL TIME:'
