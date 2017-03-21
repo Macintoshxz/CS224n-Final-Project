@@ -51,6 +51,7 @@ def paragraphWordID(s, dict):
 
 
 def createDocumentWordIDMapping(targetPath, dict):
+	print targetPath
 	filename = targetPath.split('/')[-1]
 
 	file_10k = open(targetPath, 'r')
@@ -154,6 +155,9 @@ class EmbeddingCreator():
 
 		return gloveDict
 
+	def wordsIDToEmbedding(self, wordsID, gloveDictKeys):
+		return list(np.mean([self.gloveDict[gloveDictKeys[wordID]] for wordID in wordsID], axis=0))
+
 	# def makeGloveDirectories(self, companyCodes):
 	# 	for companyCode in companyCodes:
 	# 		if not os.path.exists("SEC-Edgar-data/"+str(companyCode)+"/glove"):
@@ -219,6 +223,7 @@ class EmbeddingCreator():
 		else: 
 			print "Creating Integer Id Mapping for Words in Documents"
 			DocumentWordIDDict = {}
+			EmbeddingDict = {}
 			totalPaths = len(targetPaths)
 			# targetPaths = targetPaths[:100]
 			# print 'total paths: ', str(totalPaths)
@@ -228,20 +233,42 @@ class EmbeddingCreator():
 			results = []
 
 			gloveDictKeys = self.gloveDict.keys()
+
+			print "Creating glove dict keys"
+			t = time.time()
 			dict = {}
 			for i in range(len(gloveDictKeys)):
 				dict[gloveDictKeys[i]] = i
+			print 'Took', str(time.time() - t), 'seconds.\n\nNow crawling', int(len(targetPaths)), 'paths...'
 
-			for targetPath in targetPaths:
-				if targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"):
-					print "Working on " + targetPath
-					results.append(createDocumentWordIDMapping(targetPath, dict))
+
+			t = time.time()
+			# filteredPaths = [targetPath if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_")) for targetPath in targetPaths]
+			filteredPaths = [targetPath for targetPath in targetPaths if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"))]
+
+			results = [createDocumentWordIDMapping(filteredPath, dict) for filteredPath in filteredPaths]
+			# for targetPath in targetPaths:
+			# 	if targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"):
+			# 		results.append(createDocumentWordIDMapping(targetPath, dict))
+
+			# 	counter += 1
+			# 	if counter % 1 == 0:
+			# 		print int(counter), '/', int(len(targetPaths))
+
+			print 'Took', str(time.time() - t), 'seconds.'
 			# results = [createDocumentWordIDMapping(targetPath) for targetPath in targetPaths]
+			
+
 			for result in results:
+				t = time.time()
 				filename = result[0]
 				wordsID = result[1]
 				ticker, year, section = parseFilename(filename)
 				DocumentWordIDDict[(ticker, year, section)] = wordsID
+				EmbeddingDict[(ticker, year, section)] = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
+				print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
+
+				# break
 				# for targetFile in targetPaths:
 				# 	if counter % 50 == 0:
 				# 		print '\nFinished', str(counter), '/', str(totalPaths), 'in', str(time.time() - start), '\n'
@@ -258,6 +285,8 @@ class EmbeddingCreator():
 			# 			embeddingDict[filename] = embedding
 
 			pickle.dump(DocumentWordIDDict, open( "DocumentWordIDDict_" + self.gloveDim + ".pkl", "wb+" ) )
+			pickle.dump(EmbeddingDict, open( "EmbeddingDict_" + self.gloveDim + ".pkl", "wb+" ) )
+
 			end = time.time()
 			print '\n\n\n FINAL TIME:'
 			print end - start
