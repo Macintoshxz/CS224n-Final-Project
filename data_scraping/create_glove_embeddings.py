@@ -282,7 +282,7 @@ if __name__ == '__main__':
 	embeddingCreator = EmbeddingCreator(sys.argv[1])
 	# Doc = False for word integer id mapping; True for document embeddings
 	embeddingCreator.createEmbeddings(doc = False)
-
+ 
 	#Testing
 	# embeddingCreator.testIntegerMapping("300")
 	# embeddingCreator.testEmbeddings()
