@@ -1,0 +1,11 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000089161802000185/f78349e10-k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000089161802000185/f78349e10-k.htm
+1.054e+12
+A
+2001-10-31
+10-K
+A_2001-10-31_10-K.txt
+
+Item 7A. 
+Quantitative and Qualitative Disclosures About Market Risk We are exposed to foreign currency exchange rate risks inherent in our sales commitments, anticipated sales, and assets and liabilities denominated in currencies other than the United States dollar. Our exposure to exchange rate risks has been managed on an enterprise-wide basis. This strategy utilizes derivative financial instruments, including option and forward contracts, to hedge certain foreign currency exposures, with the intent of offsetting gains and losses that occur on the underlying exposures with gains and loses on the derivative contracts hedging them. We do not currently and do not intend to utilize derivative financial instruments for speculative or trading purposes. 
+We performed a sensitivity analysis assuming a hypothetical 10% adverse movement in foreign exchange rates to the hedging contracts and the underlying exposures described above. As of October 31, 2001 and 2000, the analysis indicated that theses hypothetical market movements would not have a material effect on our consolidated financial position, results of operations or cash flows. 

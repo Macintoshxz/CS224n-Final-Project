@@ -1,0 +1,21 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000109087212000018/a-10312012x10k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000109087212000018/0001090872-12-000018-index.html
+13621000000.0
+A
+2012-10-31
+10-K
+A_2012-10-31_10-K.txt
+
+ Item 7A. 
+
+Quantitative and Qualitative Disclosures About Market Risk We are exposed to foreign currency exchange rate risks inherent in our sales commitments, anticipated sales, and assets and liabilities denominated in currencies other than the functional currency of our subsidiaries. We hedge future cash flows denominated in currencies other than the functional currency using sales forecasts up to twelve months in advance. Our exposure to exchange rate risks is managed on an enterprise-wide basis. This strategy utilizes derivative financial instruments, including option and forward contracts, to hedge certain foreign currency exposures with the intent of offsetting gains and losses that occur on the underlying exposures with gains and losses on the derivative contracts hedging them. We do not currently and do not intend to utilize derivative financial instruments for speculative trading purposes. 
+
+Our operations generate non-functional currency cash flows such as revenues, third party vendor payments and inter-company payments. In anticipation of these foreign currency cash flows and in view of volatility of the currency market, we enter into such foreign exchange contracts as are described above to manage our currency risk. Approximately 63 percent of our revenues in 2012 , 64 percent of our revenues in 2011 and 63 percent of our revenues in 2010 were generated in U.S. dollars. 
+
+We performed a sensitivity analysis assuming a hypothetical 10 percent adverse movement in foreign exchange rates to the hedging contracts and the underlying exposures described above. As of October 31, 2012 and 2011, the analysis indicated that these hypothetical market movements would not have a material effect on our consolidated financial position, results of operations or cash flows. 
+
+We are also exposed to interest rate risk due to the mismatch between the interest expense we pay on our loans at fixed rates and the variable rates of interest we receive from cash, cash equivalents and other short-term investments. We have issued long-term debt in U.S. dollars or foreign currencies at fixed interest rates based on the market conditions at the time of financing. We believe that the fair value of our fixed rate debt changes when the underlying market rates of interest change, and we may use interest rate swaps to modify such market risk. 
+
+We performed a sensitivity analysis assuming a hypothetical 10 percent adverse movement in interest rates relating to the underlying fair value of our fixed rate debt. As of October 31, 2012 and 2011, the sensitivity analyses indicated that a hypothetical 10 percent adverse movement in interest rates would result in an immaterial impact to the fair value of our fixed interest rate debt. 
+
+53

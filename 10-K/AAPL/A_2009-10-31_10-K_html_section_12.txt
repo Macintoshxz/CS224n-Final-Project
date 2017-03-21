@@ -1,0 +1,14 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000104746909010861/a2195875z10-k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000104746909010861/a2195875z10-k.htm
+5.753e+12
+A
+2009-10-31
+10-K
+A_2009-10-31_10-K.txt
+
+Item 12. 
+Security Ownership of Certain Beneficial Owners and Management and Related Stockholder Matters Information about security ownership of certain beneficial owners and management appears under "Common Stock Ownership of Certain Beneficial Owners and Management" in the Proxy Statement. That portion of the Proxy Statement is incorporated by reference into this report. 
+123 EQUITY COMPENSATION PLAN INFORMATION The following table summarizes information about our equity compensation plans as of October 31, 2009. All outstanding awards relate to our common stock. 
+(1) The number of securities remaining available for future issuance in column (c) includes 26,710,768 shares of common stock authorized and available for issuance under the Agilent Technologies, Inc. Employee Stock Purchase Plan (the "423(b) Plan"). The number of shares authorized for issuance under the 423(b) Plan is subject to an automatic annual increase of the lesser of one percent of the outstanding common stock of Agilent on November 1 of each year or an amount determined by the Compensation Committee of our Board of Directors. Under the terms of the 423(b) Plan, in no event shall the aggregate number of shares issued under the Plan exceed 75 million shares. The number of securities to be issued upon exercise of outstanding options, warrants and rights in column (a) does not include shares of common stock issued to participants in consideration of the aggregate participant contributions under the 423(b) Plan totaling $19 million as of October 31, 2009. 
+(2) We issue securities under our equity compensation plans in forms other than options, warrants or rights. On November 19, 2008 and March 11, 2009, the Board and the stockholders, respectively, approved the Agilent Technologies, Inc. 2009 Stock Plan (the "2009 Stock Plan") to replace the company's 1999 Plan and 1999 Non-Employee Director Stock Plan for awards of stock-based incentive compensation to our employees (including officers), directors and consultants. The 2009 Stock Plan provides for the grant of awards in the form of stock options, stock appreciation rights, restricted stock, restricted stock units, performance shares and performance units with performance-based conditions to vesting or exercisability, and cash awards. See Note 3, "Share-Based Compensation" to the consolidated financial statements for more details. 
+(3) We issue securities under our equity compensation plans in forms which do not require a payment by the recipient to us at the time of exercise or vesting, including restricted stock, restricted stock units and performance units. Accordingly, the weighted-average exercise price in column (b) does not take these awards into account. 

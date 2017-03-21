@@ -1,0 +1,17 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000119312504216917/d10k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000119312504216917/d10k.htm
+9.436e+12
+A
+2004-10-31
+10-K
+A_2004-10-31_10-K.txt
+
+Item 2. 
+Properties Our corporate headquarters and Agilent Technologies Laboratories are located in Palo Alto, California. In total, we have 17 primary sites. Of these primary sites, 10 are located in the U.S. and the remaining 7 are located in China, Germany, Japan, Malaysia, Singapore and the United Kingdom. Nearly all of our primary functions are conducted at multi-building campuses. 
+As of October 31, 2004, we owned or leased a total of approximately 16.0 million square feet of space worldwide. Of that, we owned approximately 11.5 million square feet and leased the remaining 4.5 million square feet. Our sales and support facilities occupied a total of approximately 2.0 million square feet. Our manufacturing plants, R&D facilities and warehouse and administrative facilities occupied approximately 14.0 million square feet. Information about each of our businesses appears below: Test and Measurement. 
+Our test and measurement business has manufacturing and R&D facilities in Australia, Canada, China, Germany, Japan, Malaysia, Singapore, the United Kingdom 27 and the U.S. Additionally, we have marketing centers in Germany, Hong Kong, Japan, the United Kingdom, and the U.S., and sales offices throughout the world. 
+Automated Test . Our automated test business has manufacturing and R&D facilities in Germany, Japan, Singapore and the U.S. 
+Semiconductor Products. 
+Our semiconductor products business has manufacturing and R&D facilities in Italy, Malaysia, Singapore, the United Kingdom and the U.S. Additionally, we have marketing centers in Germany, Malaysia, Singapore and the U.S., and sales offices throughout the world. 
+Life Sciences and Chemical Analysis. 
+Our life sciences and chemical analysis business has manufacturing facilities in China, Germany, Japan and the U.S. Additionally, we have marketing centers in Germany, Japan, Singapore and the U.S., and sales offices throughout the world. 

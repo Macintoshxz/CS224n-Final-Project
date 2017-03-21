@@ -1,0 +1,14 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000104746908013312/a2189713z10-k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000104746908013312/a2189713z10-k.htm
+1.025e+12
+A
+2008-10-31
+10-K
+A_2008-10-31_10-K.txt
+
+Item 12. 
+Security Ownership of Certain Beneficial Owners and Management and Related Stockholder Matter Information about security ownership of certain beneficial owners and management appears under "Common Stock Ownership of Certain Beneficial Owners and Management" in the Proxy Statement. That portion of the Proxy Statement is incorporated by reference into this report. 
+110 EQUITY COMPENSATION PLAN INFORMATION The following table summarizes information about our equity compensation plans as of October 31, 2008. All outstanding awards relate to our common stock. 
+(1) The number of securities remaining available for future issuance in column (c) includes 26,222,236 shares of common stock authorized and available for issuance under the Agilent Technologies, Inc. Employee Stock Purchase Plan (the "423(b) Plan"). The number of shares authorized for issuance under the 423(b) Plan is subject to an automatic annual increase of the lesser of one percent of the outstanding common stock of Agilent or an amount determined by the Compensation Committee of our Board of Directors. Under the terms of the 423(b) Plan, in no event shall the aggregate number of shares issued under the Plan exceed 75 million shares. The number of securities to be issued upon exercise of outstanding options, warrants and rights in column (a) does not include shares of common stock issued to participants in consideration of the aggregate participant contributions under the 423(b) Plan totaling $29.4 million as of October 31, 2008. 
+(2) We issue securities under our equity compensation plans in forms other than options, warrants or rights. Under the Agilent Technologies, Inc. 1999 Stock Plan, (the "Stock Plan"), we may issue Stock Awards, including but not limited to restricted stock, restricted stock units, and performance units, as defined in the Stock Plan. Under the terms of the Stock Plan, no more than 10 percent of the total shares available for issuance under the Stock Plan will constitute restricted stock awards. Under the Agilent Technologies, Inc. 1999 Non-Employee Director Stock Plan (the "1999 Non-Employee Director Stock Plan"), we may issue Special Compensation, as that term is defined in Section 7 of the 1999 Non-Employee Director Stock Plan. 
+(3) We issue securities under our equity compensation plans in forms which do not require a payment by the recipient to us at the time of exercise or vesting, including restricted stock, restricted stock units and performance units. Accordingly, the weighted-average exercise price in column (b) does not take these awards into account. 

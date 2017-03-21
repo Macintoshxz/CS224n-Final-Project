@@ -1,0 +1,13 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000119312504216917/d10k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000119312504216917/d10k.htm
+9.436e+12
+A
+2004-10-31
+10-K
+A_2004-10-31_10-K.txt
+
+Item 3. 
+Legal Proceedings In November 2001, a securities class action, Kassin v. Agilent Technologies, Inc., et al., Civil Action No. 01-CV-10639, was filed in United States District Court for the Southern District of New York (the Southern District Court of New York ) against certain investment bank underwriters for our initial public offering ( IPO ), Agilent and various of our officers and directors at the time of the IPO. On February 19, 2003, the Southern District Court of New York granted Agilent s motion to dismiss the claims against the Company based on Section 10 of the Securities Exchange Act of 1934, as amended, but denied Agilent s motion to dismiss the claims based on Section 11 of the Securities Act of 1933, as amended. Agilent and more than 200 other issuer defendants have reached an agreement in principle for a settlement with plaintiffs. Under the settlement, plaintiffs claims against the Company and its directors and officers would be released, in exchange for a contingent payment (which, if made, would be paid by the Company s insurer) and an assignment of certain potential claims. On June 14, 2004, papers formalizing the settlement among the plaintiffs, issuer defendants and insurers were presented to the Southern District Court of New York. The settlement remains subject to Court approval. Plaintiffs continue to prosecute their claims against the underwriter defendants, and discovery is now underway. 
+We are involved in lawsuits, claims, investigations and proceedings, including, but not limited to, patent, commercial and environmental matters, which arise in the ordinary course of business. Other than the matter described above, there are no matters pending that we expect to be material in relation to our business, consolidated financial condition, results of operations or cash flows. 
+Item 4. 
+Submission of Matters to a Vote of Security Holders During the fourth quarter of fiscal 2004, there were no matters submitted to a vote of securities holders, through the solicitation of proxies or otherwise. 

@@ -1,0 +1,14 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000104746906015256/a2175273z10-k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000104746906015256/a2175273z10-k.htm
+1.6359e+13
+A
+2006-10-31
+10-K
+A_2006-10-31_10-K.txt
+
+Item 2. 
+Properties Our corporate headquarters and Agilent Technologies Laboratories are located in Santa Clara, California. In total, we have 13 primary sites. Of these primary sites, 5 are located in the U.S. and the 25 remaining 8 are located in China, Germany, India, Japan, Malaysia, Singapore and the United Kingdom. Nearly all of our primary functions are conducted at multi-building campuses. 
+As of October 31, 2006, we owned or leased a total of approximately 11.2 million square feet of space worldwide. Of that, we owned approximately 7.4 million square feet and leased the remaining 3.8 million square feet. Our sales and support facilities occupied a total of approximately 1.8 million square feet. Our manufacturing plants, R&D facilities and warehouse and administrative facilities occupied approximately 9.4 million square feet. Information about each of our businesses appears below: Electronic Measurement. 
+Our electronic measurement business has manufacturing and R&D facilities in Australia, Canada, China, Germany, Japan, Malaysia, Singapore, the United Kingdom and the U.S. Additionally, we have marketing centers in Germany, Hong Kong, Japan, the United Kingdom, and the U.S., and sales offices throughout the world. 
+Bio-Analytical Measurement. 
+Our bio-analytical measurement business has manufacturing and R&D facilities in China, Germany, Japan and the U.S. Additionally, we have marketing centers in Germany, Japan, Singapore and the U.S., and sales offices throughout the world. 

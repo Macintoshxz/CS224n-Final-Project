@@ -1,0 +1,17 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000104746910010499/a2201423z10-k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000104746910010499/a2201423z10-k.htm
+9.513e+12
+A
+2010-10-31
+10-K
+A_2010-10-31_10-K.txt
+
+Item 2. 
+Properties Our corporate headquarters and Agilent Technologies Research Laboratories are located in Santa Clara, California. In total, with the addition of the Varian Inc. acquisition, we have 30 principle sites. Of these sites, 13 are located in the U.S. and the remaining 17 are located in Australia, China, India, Japan, Malaysia, Singapore, France, Germany, Italy, Netherlands, Poland and the United Kingdom. Many of our primary functions are conducted at multi-building campuses. 
+34 * Agilent owns the facilities at these locations but the land is subject to long-term lease from the governments of the respective countries. 
+As of October 31, 2010, with the addition of the Varian Inc. acquisition we owned or leased a total of approximately 11.6 million square feet of space worldwide. Of that, we owned approximately 8.7 million square feet and leased the remaining 2.9 million square feet. Our sales and support facilities occupied a total of approximately 1.6 million square feet. Our manufacturing plants, R&D facilities and warehouse and administrative facilities occupied approximately 10.0 million square feet. Information about each of our businesses appears below: Electronic Measurement Group. 
+Our electronic measurement business has manufacturing and R&D facilities in China, Germany, Japan, Malaysia, Singapore, India and the U.S. Additionally, we have marketing centers in Germany, Hong Kong, Japan, the United Kingdom, and the U.S., and sales offices throughout the world. 
+Life Sciences Measurement. 
+Our life science measurement business has manufacturing and R&D facilities in Australia, France, Germany, Poland, United Kingdom and the U.S. Additionally, we have marketing centers in Germany, Singapore and the U.S., and sales offices throughout the world. 
+Chemical Analysis Measurement. 
+Our chemical analysis measurement business has manufacturing and R&D facilities in Australia, China, Italy, Japan, Netherlands, United Kingdom and the U.S. Additionally, we have marketing centers in Australia, Italy, Japan, Singapore and the U.S., and sales offices throughout the world. 
