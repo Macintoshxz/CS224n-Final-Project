@@ -23,6 +23,7 @@ import bisect
 #import create_glove_embeddings
 import csv
 import numpy as np
+import time
 
 
 
@@ -64,7 +65,7 @@ def createInflationDict():
     Loads the manual-entry inflation_table.txt into a dict to convert
     the market caps to current day currency.
     '''
-    f = open('/Users/kaikuspa/224n/CS224n-Final-Project/inflation_table.txt', 'r')
+    f = open('inflation_table.txt', 'r')
     lines = f.readlines()
     f.close()
     inflationDict = {}
@@ -79,7 +80,7 @@ def make_labelfile():
 	inflationDict = createInflationDict()
 	print inflationDict
 
-	filename = '/Users/kaikuspa/224n/CS224n-Final-Project/label_data/nyse.csv'
+	filename = 'nyse.csv'
 	with open(filename, 'rU') as f:
 		reader = csv.reader(f)
 		next(f)
@@ -99,7 +100,7 @@ def make_labelfile():
 				# 	company_labels[row[0]] = year_market_dict
 	f.close()
 
-	filename = '/Users/kaikuspa/224n/CS224n-Final-Project/label_data/nasdaq.csv'
+	filename = 'nasdaq.csv'
 	with open(filename, 'rU') as f:
 		reader = csv.reader(f)
 		next(f)
@@ -371,6 +372,7 @@ def make_examples(path, labels, ir_dict):
 									# 	l = 0
 									# else:
 									# 	l = 1
+
 									example = []
 									example.append(orderedList[i][0][0])	#ticker symbol
 									example.append(orderedList[i][0][1])	#year 1
@@ -399,11 +401,35 @@ def make_examples(path, labels, ir_dict):
 			each[-1] = 1
 	return training_examples
 
-	 		
 
 
+# Opens up the given glove file in the path, creates
+# dictionary to be shared as we're doing things.
+def createGloveDict(gloveDim='50'):
+	t = time.time()
+	glovePath = "data_scraping/glove/glove.6B." + gloveDim + 'd.txt'
 
+	if not os.path.isfile('data_scraping/glove/gloveDict_' + gloveDim + '.pkl'):
+		print 'Creating new gloveDict'
+		newGloveDict = {}
+		gloveFile = open(glovePath)
+		lines = gloveFile.readlines();
+		gloveFile.close()
 
+		for line in lines:
+		    split = line.split()
+		    word = split[0]
+		    embedding = np.float32(split[1:])
+		    newGloveDict[word] = embedding
+
+		gloveDict = OrderedDict(newGloveDict)
+		pickle.dump(gloveDict, open('glove/gloveDict_' + gloveDim + '.pkl', "wb+" ) )
+	else:
+		print 'Loading gloveDict'
+		gloveDict = pickle.load(open('glove/gloveDict_' + gloveDim + '.pkl'))
+
+	print "took", str(time.time() - t)
+	return gloveDict
 
 
 
@@ -411,11 +437,50 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Scrapes Market Cap from SEC db.')
 	parser.add_argument('-d','--directory', help='Directory containing financial documents', required=True)
 	args = vars(parser.parse_args())
-
+	print 'Looking in directory: ', 
 	labels = make_labelfile()
-	ir = {}
-	examples = make_examples(args['directory'], labels, ir)
 
+	if not os.exists(args['directory']):
+		return
+
+	t = time.time()
+	print 'Loading gloveDict...'
+	gloveDict = createGloveDict(gloveDim='50')
+	print 'Took ', str(time.time() - t), 'seconds.'
+
+	t = time.time()
+	print 'Loading pickle...'
+	ir = pickle.load(open('data_scraping/DocumentWordIDDict_60k.pkl'))
+	print 'Took ', str(time.time() - t), 'seconds.'
+
+	t = time.time()
+	print 'Making examples...'
+	examples = make_examples(args['directory'], labels, ir)
+	print 'Took ', str(time.time() - t), 'seconds.'
+
+	t = time.time()
+	print 'Writing manifest...'
+	out = open("manifest_50.txt", 'wb+')
+	for i in xrange(len(examples)):
+		examples = examples[i]
+		ticker, y1, y2, section, ir, label = example
+		ir0 = ir[0]
+		ir1 = ir[1]
+		embedded0 = list(np.mean([gloveDict[integer] for integer in ir0], axis=0))
+		embedded1 = list(np.mean([gloveDict[integer] for integer in ir1], axis=0))
+
+		outList = [i, label, ','.join(embedded0), ','.join(embedded1)]
+		outString = ','.join(outList)
+		out.write(outString + '\n')
+	out.close()
+	print 'Took ', str(time.time() - t), 'seconds.'
+
+									# example.append(orderedList[i][0][0])	#ticker symbol
+									# example.append(orderedList[i][0][1])	#year 1
+									# example.append(orderedList[i+1][0][1])	#year 2
+									# example.append(item)
+									# example.append(ir)
+									# example.append(mc_change)	#label 0 = worse than median change, 1 = better than median change
 	#d = get_mcmfd(labels)
 	#print examples
 
