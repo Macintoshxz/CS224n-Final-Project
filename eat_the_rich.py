@@ -280,6 +280,15 @@ def make_examples(path, labels, ir_dict):
 	 		if "section" in fileTokens:
 	 			filedate = fileTokens[1].split("-")
 
+	 			#YEAR MODIFICATION
+	 			year = filedate[0]
+	 			month = filedate[1]
+	 			day = filedate[2]
+
+ 				if month <= "06" and day <= "30" and year != "1994":
+					year = year - 1
+				filedate[0] = year
+
 	 			if (fileTokens[0], int(filedate[0])) not in ticker_year_dict:
 	 				ticker_year_dict[(fileTokens[0], int(filedate[0]))] = [fileTokens[-1]]
 	 			else:
@@ -452,6 +461,12 @@ if __name__ == '__main__':
 	t = time.time()
 	print 'Loading pickle...'
 	ir = pickle.load(open('data_scraping/DocumentWordIDDict_60k.pkl'))
+	print 'Took ', str(time.time() - t), 'seconds.'
+
+	t = time.time()
+	print 'Processing pickle...'
+	for key in ir:
+		ir[key] = list(ir[key])
 	print 'Took ', str(time.time() - t), 'seconds.'
 
 	t = time.time()
