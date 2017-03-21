@@ -14,20 +14,24 @@ def splitData(arr, valPercentage, testPercentage):
 
 
 def feedforward(embedding):
-    net = tflearn.input_data([None, 2]) #[Batch Size, Sequence Length] Sequence is sliding window length
-    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = True) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
-    net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.fully_connected(net, 5, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
-    net = tflearn.regression(net, optimizer='adam', learning_rate=1e-8,
+    net = tflearn.input_data([None, 1]) #[Batch Size, Sequence Length] Sequence is sliding window length
+    net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = False) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
+    # net = tflearn.fully_connected(net, 200, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.fully_connected(net, 100, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.fully_connected(net, 2, activation='relu', weights_init = "xavier") #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.regression(net, optimizer='adam', learning_rate=1e-10,
+                             # loss='softmax', metric = 'Accuracy')
                              loss='categorical_crossentropy', metric = 'Accuracy')
+
     return net
 
 
 
 if __name__ == '__main__':
-	X, Y, embedding = construct_single_input_feedforward_from_manifest("manifest_50.txt")
-	Y = tflearn.data_utils.to_categorical (Y, max(Y) + 1)
+	X, Y, embedding = construct_single_input_feedforward_from_manifest("manifest_50_21k.txt", 0)
+	# X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifest_50_21k.txt")
+
+	Y = tflearn.data_utils.to_categorical(Y, max(Y) + 1)
 	#X = [[x] for x in X]
 
 	# splitIdx = len(X)/5

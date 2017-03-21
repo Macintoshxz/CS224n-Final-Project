@@ -178,7 +178,7 @@ def construct_differential_feedforward_data(filename, embeddingDim, maxClasses):
 
     return indices, labels, embeddings
 
-def construct_single_input_feedforward_from_manifest(filename):
+def construct_single_input_feedforward_from_manifest(filename, embedding_to_use):
     f = open(filename, 'r')
     lines = f.readlines()
     f.close()
@@ -190,7 +190,42 @@ def construct_single_input_feedforward_from_manifest(filename):
     E_master = []
     splits = [line.split(',') for line in lines]
     idx = 0
+    n = len(splits)
+    count = 0
     for split in splits:
+        if count % 1000 == 0:
+            print str(count), '/', str(n)
+        curY = int(split[1])
+        curE1 = [float(e) for e in split[2:52]]
+        curE2 = [float(e) for e in split[52:]]
+        Y.append(curY)
+        if embedding_to_use == 0:
+            E_master.append(curE1)
+        if embedding_to_use == 1:
+            E_master.append(curE2)
+
+        X.append([idx])
+        idx += 1
+        count += 1
+    return X, Y, E_master
+
+def construct_dual_input_feedforward_from_manifest(filename):
+    f = open(filename, 'r')
+    lines = f.readlines()
+    f.close()
+
+    X = []
+    Y = []
+    # E1 = []
+    # E2 = []
+    E_master = []
+    splits = [line.split(',') for line in lines]
+    idx = 0
+    n = len(splits)
+    count = 0
+    for split in splits:
+        if count % 1000 == 0:
+            print str(count), '/', str(n)
         curY = int(split[1])
         curE1 = [float(e) for e in split[2:52]]
         curE2 = [float(e) for e in split[52:]]
@@ -204,7 +239,8 @@ def construct_single_input_feedforward_from_manifest(filename):
         E_master.append(curE2)
 
         X.append([E1_idx, E2_idx])
-        idx = idx + 2
+        idx += 2
+        count += 1
     return X, Y, E_master
 
     
