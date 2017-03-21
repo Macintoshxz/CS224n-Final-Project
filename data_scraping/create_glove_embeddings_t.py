@@ -9,6 +9,7 @@ import os
 from functools import partial
 import pickle
 from collections import OrderedDict
+import traceback
 
 replace_punctuation = string.maketrans(string.punctuation, ' '*len(string.punctuation))
 replace_digits = string.maketrans(string.digits, ' '*len(string.digits))
@@ -93,14 +94,61 @@ def createSingleEmbedding(targetPath):
 	print 'embedded', filename
 	return [filename, embedding]
 
-# def loopEmbeddings(targetPaths):
+def loopEmbeddings(gloveDim, targetPaths):
+	outputs = []
+	try:
+		t = time.time()
+		print gloveDim
+		print 'creating new glove dict in thread'
+		dict = createGloveDict(gloveDim)
+		gloveDictKeys = dict.keys()
+		print 'done creating glove dict in thread.'
+		print 'this took', str(time.time() - t), 'seconds'
+		print "Creating glove dict keys"
+		t = time.time()
+		dict = {}
+		for i in range(len(gloveDictKeys)):
+			dict[gloveDictKeys[i]] = i
+		print 'Took', str(time.time() - t), 'seconds.\n\nNow crawling', str(len(targetPaths)), 'paths...'
 
-# 	outputs = []
-# 	for targetPath in targetPaths:
-# 		output = createSingleEmbedding(targetPath)
-# 		# output = createSingleEmbedding(gloveDict, targetPath)
-# 		outputs.append(output)
-# 	return outputs
+		# outputs = []
+		outputs = [createDocumentWordIDMapping(filteredPath, dict) for filteredPath in targetPaths]
+	# 	for targetPath in targetPaths:
+	# 		outputs.append(createDocumentWordIDMapping(filteredPath, dict))
+	# # 		output = createSingleEmbedding(targetPath)
+	# # 		# output = createSingleEmbedding(gloveDict, targetPath)
+	# 		outputs.append(output)
+	except:
+		raise Exception("".join(traceback.format_exception(*sys.exc_info())))
+	return outputs
+
+# Opens up the given glove file in the path, creates
+# dictionary to be shared as we're doing things.
+# def createGloveDict(self, gloveDim='50'):
+def createGloveDict(gloveDim='50'):	
+	glovePath = "glove/glove.6B." + gloveDim + 'd.txt'
+
+	
+	if not os.path.isfile('glove/gloveDict_' + gloveDim + '.pkl'):
+		print 'Creating new gloveDict'
+		newGloveDict = {}
+		gloveFile = open(glovePath)
+		lines = gloveFile.readlines();
+		gloveFile.close()
+
+		for line in lines:
+		    split = line.split()
+		    word = split[0]
+		    embedding = np.float32(split[1:])
+		    newGloveDict[word] = embedding
+
+		gloveDict = OrderedDict(newGloveDict)
+		pickle.dump(gloveDict, open('glove/gloveDict_' + gloveDim + '.pkl', "wb+" ) )
+	else:
+		print 'Loading gloveDict'
+		gloveDict = pickle.load(open('glove/gloveDict_' + gloveDim + '.pkl'))
+
+	return gloveDict
 
 class EmbeddingCreator():
 	# Class variable to be shared
@@ -109,53 +157,26 @@ class EmbeddingCreator():
 	def __init__(self, gloveDim):
 		self.hello = "Let's create some embeddings"
 		self.gloveDim = gloveDim
-		self.gloveDict = self.createGloveDict(self.gloveDim)
+		self.gloveDict = createGloveDict(self.gloveDim)
 		
 
-	# def calculateParallel(self, inputs, threads=1):
-	# 	pool = ThreadPool(threads)
-	# 	inputs = self.chunkLists(inputs, threads)
-	# 	# func = partial(createSingleEmbedding, self.gloveDict)
-	# 	# func = partial(loopEmbeddings, d)
-	# 	results = pool.map(loopEmbeddings, inputs)
-	# 	# results = pool.map(func, inputs)
-	# 	pool.close()
-	# 	pool.join()
-	# 	return results
+	def calculateParallel(self, inputs, gloveDim, threads=1):
+		pool = ThreadPool(threads)
+		inputs = self.chunkLists(inputs, threads)
+		func = partial(loopEmbeddings, gloveDim)
+		# func = partial(loopEmbeddings, d)
+		results = pool.map(func, inputs)
+		# results = pool.map(func, inputs)
+		pool.close()
+		pool.join()
+		return results
 
 	def chunkLists(self, targetFiles, n):
 	    """Yield successive n-sized chunks from l."""
 	    for i in range(0, len(targetFiles), n):
 	        yield targetFiles[i:i + n]
 
-	# Opens up the given glove file in the path, creates
-	# dictionary to be shared as we're doing things.
-	def createGloveDict(self, gloveDim='50'):
-		t = time.time()
-		glovePath = "glove/glove.6B." + gloveDim + 'd.txt'
-
-		
-		if not os.path.isfile('glove/gloveDict_' + gloveDim + '.pkl'):
-			print 'Creating new gloveDict'
-			newGloveDict = {}
-			gloveFile = open(glovePath)
-			lines = gloveFile.readlines();
-			gloveFile.close()
-
-			for line in lines:
-			    split = line.split()
-			    word = split[0]
-			    embedding = np.float32(split[1:])
-			    newGloveDict[word] = embedding
-
-			gloveDict = OrderedDict(newGloveDict)
-			pickle.dump(gloveDict, open('glove/gloveDict_' + gloveDim + '.pkl', "wb+" ) )
-		else:
-			print 'Loading gloveDict'
-			gloveDict = pickle.load(open('glove/gloveDict_' + gloveDim + '.pkl'))
-
-		print "took", str(time.time() - t)
-		return gloveDict
+	
 
 	def wordsIDToEmbedding(self, wordsID, gloveDictKeys):
 		return list(np.mean([self.gloveDict[gloveDictKeys[wordID]] for wordID in wordsID], axis=0))
@@ -196,6 +217,7 @@ class EmbeddingCreator():
 			# if num_threads == 1:
 			# 	print 'SINGLE THREAD'
 			counter = 0
+
 			results = [createSingleEmbedding(targetPath) for targetPath in targetPaths if targetPath.split(".")[-1] == "txt"]
 			for result in results:
 				filename = result[0]
@@ -241,13 +263,14 @@ class EmbeddingCreator():
 			dict = {}
 			for i in range(len(gloveDictKeys)):
 				dict[gloveDictKeys[i]] = i
-			print 'Took', str(time.time() - t), 'seconds.\n\nNow crawling', int(len(targetPaths)), 'paths...'
+			print 'Took', str(time.time() - t), 'seconds.\n\nNow crawling', str(len(targetPaths)), 'paths...'
 
 
 			t = time.time()
 			# filteredPaths = [targetPath if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_")) for targetPath in targetPaths]
 			filteredPaths = [targetPath for targetPath in targetPaths if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"))]
-
+			filteredPaths = filteredPaths[:1000]
+			results = self.calculateParallel(filteredPaths, self.gloveDim, 2)
 			results = [createDocumentWordIDMapping(filteredPath, dict) for filteredPath in filteredPaths]
 			# for targetPath in targetPaths:
 			# 	if targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"):
