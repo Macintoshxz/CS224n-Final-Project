@@ -142,6 +142,8 @@ def get_integer_representation(ticker, year, item, file_to_ints):
 		return file_to_ints.get((ticker,year,'1b')), file_to_ints.get((ticker,year+1,'1b'))
 	elif item == '1f':
 		ir1 = file_to_ints.get((ticker,year,'1'))
+		if ir1 == None:
+			return None
 		if (ticker,year,'1a') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'1a')))
 		ir2 = file_to_ints.get((ticker,year+1,'1'))
@@ -150,23 +152,31 @@ def get_integer_representation(ticker, year, item, file_to_ints):
 		return ir1, ir2
 	elif item == '1g':
 		ir1 = file_to_ints.get((ticker,year,'1a'))
+		if ir1 == None:
+			return None
 		if (ticker,year,'1b') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'1b')))
 		ir2 = file_to_ints.get((ticker,year+1,'1a'))
+		if ir2 == None:
+			return None
 		if (ticker,year+1,'1b') in file_to_ints:
 			ir2.extend(file_to_ints.get((ticker,year+1,'1b')))
 		return ir1, ir2
 	elif item == '1h':
 		ir1 = file_to_ints.get((ticker,year,'1'))
+		if ir1 == None:
+			return None
 		if (ticker,year,'1a') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'1a')))
 		if (ticker,year,'1b') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'1b')))
 		ir2 = file_to_ints.get((ticker,year+1,'1'))
+		if ir2 == None:
+			return None
 		if (ticker,year+1,'1a') in file_to_ints:
-			ir1.extend(file_to_ints.get((ticker,year+1,'1a')))
+			ir2.extend(file_to_ints.get((ticker,year+1,'1a')))
 		if (ticker,year+1,'1b') in file_to_ints:
-			ir1.extend(file_to_ints.get((ticker,year+1,'1b')))
+			ir2.extend(file_to_ints.get((ticker,year+1,'1b')))
 		return ir1, ir2
 	elif item == '2':
 		return file_to_ints.get((ticker,year,'2')), file_to_ints.get((ticker,year+1,'2'))
@@ -182,9 +192,13 @@ def get_integer_representation(ticker, year, item, file_to_ints):
 		return file_to_ints.get((ticker,year,'7a')), file_to_ints.get((ticker,year+1,'7a'))
 	elif item == '7d':
 		ir1 = file_to_ints.get((ticker,year,'7'))
+		if ir1 == None:
+			return None
 		if (ticker,year,'7a') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'1a')))
 		ir2 = file_to_ints.get((ticker,year+1,'7'))
+		if ir2 == None:
+			return None
 		if (ticker,year+1,'1a') in file_to_ints:
 			ir2.extend(file_to_ints.get((ticker,year+1,'7a')))
 		return ir1, ir2
@@ -198,31 +212,43 @@ def get_integer_representation(ticker, year, item, file_to_ints):
 		return file_to_ints.get((ticker,year,'9b')), file_to_ints.get((ticker,year+1,'9b'))
 	elif item == '9f':
 		ir1 = file_to_ints.get((ticker,year,'9'))
+		if ir1 == None:
+			return None
 		if (ticker,year,'9a') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'9a')))
 		ir2 = file_to_ints.get((ticker,year+1,'9'))
+		if ir2 == None:
+			return None
 		if (ticker,year+1,'9a') in file_to_ints:
 			ir2.extend(file_to_ints.get((ticker,year+1,'9a')))
 		return ir1, ir2
 	elif item == '9g':
 		ir1 = file_to_ints.get((ticker,year,'9a'))
+		if ir1 == None:
+			return None
 		if (ticker,year,'9b') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'9b')))
 		ir2 = file_to_ints.get((ticker,year+1,'9a'))
+		if ir2 == None:
+			return None
 		if (ticker,year+1,'9b') in file_to_ints:
 			ir2.extend(file_to_ints.get((ticker,year+1,'9b')))
 		return ir1, ir2
 	elif item == '9h':
 		ir1 = file_to_ints.get((ticker,year,'9'))
+		if ir1 == None:
+			return None
 		if (ticker,year,'9a') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'9a')))
 		if (ticker,year,'9b') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'9b')))
 		ir2 = file_to_ints.get((ticker,year+1,'9'))
+		if ir2 == None:
+			return None
 		if (ticker,year+1,'9a') in file_to_ints:
-			ir1.extend(file_to_ints.get((ticker,year+1,'9a')))
+			ir2.extend(file_to_ints.get((ticker,year+1,'9a')))
 		if (ticker,year+1,'9b') in file_to_ints:
-			ir1.extend(file_to_ints.get((ticker,year+1,'9b')))
+			ir2.extend(file_to_ints.get((ticker,year+1,'9b')))
 		return ir1, ir2
 	elif item =='10':
 		return file_to_ints.get((ticker,year,'10')), file_to_ints.get((ticker,year+1,'10'))
@@ -238,9 +264,13 @@ def get_integer_representation(ticker, year, item, file_to_ints):
 		return file_to_ints.get((ticker,year,'15')), file_to_ints.get((ticker,year+1,'15'))
 	elif item == '16d':
 		ir1 = file_to_ints.get((ticker,year,'14'))
+		if ir1 == None:
+			return None
 		if (ticker,year,'15') in file_to_ints:
 			ir1.extend(file_to_ints.get((ticker,year,'15')))
 		ir2 = file_to_ints.get((ticker,year+1,'14'))
+		if ir2 == None:
+			return None
 		if (ticker,year+1,'15') in file_to_ints:
 			ir2.extend(file_to_ints.get((ticker,year+1,'15')))
 		return ir1, ir2
@@ -286,8 +316,8 @@ def make_examples(path, labels, ir_dict):
 	 			day = filedate[2]
 
  				if month <= "06" and day <= "30" and year != "1994":
-					year = year - 1
-				filedate[0] = year
+					year = int(year) - 1
+				filedate[0] = str(year)
 
 	 			if (fileTokens[0], int(filedate[0])) not in ticker_year_dict:
 	 				ticker_year_dict[(fileTokens[0], int(filedate[0]))] = [fileTokens[-1]]
