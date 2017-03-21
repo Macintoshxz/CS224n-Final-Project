@@ -441,6 +441,7 @@ if __name__ == '__main__':
 	labels = make_labelfile()
 
 	if not os.exists(args['directory']):
+		print 'Directory is not a path!'
 		return
 
 	t = time.time()
