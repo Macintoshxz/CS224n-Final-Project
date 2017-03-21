@@ -111,7 +111,7 @@ def loopEmbeddings(gloveDim, targetPaths):
 		for i in range(len(gloveDictKeys)):
 			dict[gloveDictKeys[i]] = i
 		print 'Took', str(time.time() - t), 'seconds.\n\nNow crawling', str(len(targetPaths)), 'paths...'
-
+		sys.stdout.flush()
 		# outputs = []
 		outputs = [createDocumentWordIDMapping(filteredPath, dict) for filteredPath in targetPaths]
 	# 	for targetPath in targetPaths:
@@ -168,8 +168,6 @@ class EmbeddingCreator():
 		pool = ThreadPool(threads)
 
 		inputs = list(self.chunkLists(inputs, threads))
-		for inp in inputs:
-			print len(inp), '\n\n'
 		# sleep(10000)
 		# return
 		func = partial(loopEmbeddings, gloveDim)

@@ -135,116 +135,116 @@ def make_labelfile():
 def get_integer_representation(ticker, year, item, file_to_ints):
 
 	if item == '1c':
-		return file_to_ints[(ticker,year,'1')], file_to_ints[(ticker,year+1,'1')]
+		return file_to_ints.get((ticker,year,'1')), file_to_ints.get((ticker,year+1,'1'))
 	elif item == '1d':
-		return file_to_ints[(ticker,year,'1a')], file_to_ints[(ticker,year+1,'1a')]
+		return file_to_ints.get((ticker,year,'1a')), file_to_ints.get((ticker,year+1,'1a'))
 	elif item == '1e':
-		return file_to_ints[(ticker,year,'1b')], file_to_ints[(ticker,year+1,'1b')]
+		return file_to_ints.get((ticker,year,'1b')), file_to_ints.get((ticker,year+1,'1b'))
 	elif item == '1f':
-		ir1 = file_to_ints[(ticker,year,'1')]
+		ir1 = file_to_ints.get((ticker,year,'1'))
 		if (ticker,year,'1a') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'1a')])
-		ir2 = file_to_ints[(ticker,year+1,'1')]
+			ir1.extend(file_to_ints.get((ticker,year,'1a')))
+		ir2 = file_to_ints.get((ticker,year+1,'1'))
 		if (ticker,year+1,'1a') in file_to_ints:
-			ir2.extend(file_to_ints[(ticker,year+1,'1a')])
+			ir2.extend(file_to_ints.get((ticker,year+1,'1a')))
 		return ir1, ir2
 	elif item == '1g':
-		ir1 = file_to_ints[(ticker,year,'1a')]
+		ir1 = file_to_ints.get((ticker,year,'1a'))
 		if (ticker,year,'1b') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'1b')])
-		ir2 = file_to_ints[(ticker,year+1,'1a')]
+			ir1.extend(file_to_ints.get((ticker,year,'1b')))
+		ir2 = file_to_ints.get((ticker,year+1,'1a'))
 		if (ticker,year+1,'1b') in file_to_ints:
-			ir2.extend(file_to_ints[(ticker,year+1,'1b')])
+			ir2.extend(file_to_ints.get((ticker,year+1,'1b')))
 		return ir1, ir2
 	elif item == '1h':
-		ir1 = file_to_ints[(ticker,year,'1')]
+		ir1 = file_to_ints.get((ticker,year,'1'))
 		if (ticker,year,'1a') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'1a')])
+			ir1.extend(file_to_ints.get((ticker,year,'1a')))
 		if (ticker,year,'1b') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'1b')])
-		ir2 = file_to_ints[(ticker,year+1,'1')]
+			ir1.extend(file_to_ints.get((ticker,year,'1b')))
+		ir2 = file_to_ints.get((ticker,year+1,'1'))
 		if (ticker,year+1,'1a') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year+1,'1a')])
+			ir1.extend(file_to_ints.get((ticker,year+1,'1a')))
 		if (ticker,year+1,'1b') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year+1,'1b')])
+			ir1.extend(file_to_ints.get((ticker,year+1,'1b')))
 		return ir1, ir2
 	elif item == '2':
-		return file_to_ints[(ticker,year,'2')], file_to_ints[(ticker,year+1,'2')]
+		return file_to_ints.get((ticker,year,'2')), file_to_ints.get((ticker,year+1,'2'))
 	elif item == '3':
-		return file_to_ints[(ticker,year,'3')], file_to_ints[(ticker,year+1,'3')]
+		return file_to_ints.get((ticker,year,'3')), file_to_ints.get((ticker,year+1,'3'))
 	elif item == '5':
-		return file_to_ints[(ticker,year,'5')], file_to_ints[(ticker,year+1,'5')]
+		return file_to_ints.get((ticker,year,'5')), file_to_ints.get((ticker,year+1,'5'))
 	elif item == '6':
-		return file_to_ints[(ticker,year,'6')], file_to_ints[(ticker,year+1,'6')]
+		return file_to_ints.get((ticker,year,'6')), file_to_ints.get((ticker,year+1,'6'))
 	elif item == '7b':
-		return file_to_ints[(ticker,year,'7')], file_to_ints[(ticker,year+1,'7')]
+		return file_to_ints.get((ticker,year,'7')), file_to_ints.get((ticker,year+1,'7'))
 	elif item == '7c':
-		return file_to_ints[(ticker,year,'7a')], file_to_ints[(ticker,year+1,'7a')]
+		return file_to_ints.get((ticker,year,'7a')), file_to_ints.get((ticker,year+1,'7a'))
 	elif item == '7d':
-		ir1 = file_to_ints[(ticker,year,'7')]
+		ir1 = file_to_ints.get((ticker,year,'7'))
 		if (ticker,year,'7a') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'1a')])
-		ir2 = file_to_ints[(ticker,year+1,'7')]
+			ir1.extend(file_to_ints.get((ticker,year,'1a')))
+		ir2 = file_to_ints.get((ticker,year+1,'7'))
 		if (ticker,year+1,'1a') in file_to_ints:
-			ir2.extend(file_to_ints[(ticker,year+1,'7a')])
+			ir2.extend(file_to_ints.get((ticker,year+1,'7a')))
 		return ir1, ir2
 	elif item == '8':
-		return file_to_ints[(ticker,year,'8')], file_to_ints[(ticker,year+1,'8')]
+		return file_to_ints.get((ticker,year,'8')), file_to_ints.get((ticker,year+1,'8'))
 	if item == '9c':
-		return file_to_ints[(ticker,year,'9')], file_to_ints[(ticker,year+1,'9')]
+		return file_to_ints.get((ticker,year,'9')), file_to_ints.get((ticker,year+1,'9'))
 	elif item == '9d':
-		return file_to_ints[(ticker,year,'9a')], file_to_ints[(ticker,year+1,'9a')]
+		return file_to_ints.get((ticker,year,'9a')), file_to_ints.get((ticker,year+1,'9a'))
 	elif item == '9e':
-		return file_to_ints[(ticker,year,'9b')], file_to_ints[(ticker,year+1,'9b')]
+		return file_to_ints.get((ticker,year,'9b')), file_to_ints.get((ticker,year+1,'9b'))
 	elif item == '9f':
-		ir1 = file_to_ints[(ticker,year,'9')]
+		ir1 = file_to_ints.get((ticker,year,'9'))
 		if (ticker,year,'9a') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'9a')])
-		ir2 = file_to_ints[(ticker,year+1,'9')]
+			ir1.extend(file_to_ints.get((ticker,year,'9a')))
+		ir2 = file_to_ints.get((ticker,year+1,'9'))
 		if (ticker,year+1,'9a') in file_to_ints:
-			ir2.extend(file_to_ints[(ticker,year+1,'9a')])
+			ir2.extend(file_to_ints.get((ticker,year+1,'9a')))
 		return ir1, ir2
 	elif item == '9g':
-		ir1 = file_to_ints[(ticker,year,'9a')]
+		ir1 = file_to_ints.get((ticker,year,'9a'))
 		if (ticker,year,'9b') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'9b')])
-		ir2 = file_to_ints[(ticker,year+1,'9a')]
+			ir1.extend(file_to_ints.get((ticker,year,'9b')))
+		ir2 = file_to_ints.get((ticker,year+1,'9a'))
 		if (ticker,year+1,'9b') in file_to_ints:
-			ir2.extend(file_to_ints[(ticker,year+1,'9b')])
+			ir2.extend(file_to_ints.get((ticker,year+1,'9b')))
 		return ir1, ir2
 	elif item == '9h':
-		ir1 = file_to_ints[(ticker,year,'9')]
+		ir1 = file_to_ints.get((ticker,year,'9'))
 		if (ticker,year,'9a') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'9a')])
+			ir1.extend(file_to_ints.get((ticker,year,'9a')))
 		if (ticker,year,'9b') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'9b')])
-		ir2 = file_to_ints[(ticker,year+1,'9')]
+			ir1.extend(file_to_ints.get((ticker,year,'9b')))
+		ir2 = file_to_ints.get((ticker,year+1,'9'))
 		if (ticker,year+1,'9a') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year+1,'9a')])
+			ir1.extend(file_to_ints.get((ticker,year+1,'9a')))
 		if (ticker,year+1,'9b') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year+1,'9b')])
+			ir1.extend(file_to_ints.get((ticker,year+1,'9b')))
 		return ir1, ir2
 	elif item =='10':
-		return file_to_ints[(ticker,year,'10')], file_to_ints[(ticker,year+1,'10')]
+		return file_to_ints.get((ticker,year,'10')), file_to_ints.get((ticker,year+1,'10'))
 	elif item =='11':
-		return file_to_ints[(ticker,year,'11')], file_to_ints[(ticker,year+1,'11')]
+		return file_to_ints.get((ticker,year,'11')), file_to_ints.get((ticker,year+1,'11'))
 	elif item =='12':
-		return file_to_ints[(ticker,year,'12')], file_to_ints[(ticker,year+1,'12')]
+		return file_to_ints.get((ticker,year,'12')), file_to_ints.get((ticker,year+1,'12'))
 	elif item =='13':
-		return file_to_ints[(ticker,year,'13')], file_to_ints[(ticker,year+1,'13')]
+		return file_to_ints.get((ticker,year,'13')), file_to_ints.get((ticker,year+1,'13'))
 	elif item == '16b':
-		return file_to_ints[(ticker,year,'14')], file_to_ints[(ticker,year+1,'14')]
+		return file_to_ints.get((ticker,year,'14')), file_to_ints.get((ticker,year+1,'14'))
 	elif item == '16c':
-		return file_to_ints[(ticker,year,'15')], file_to_ints[(ticker,year+1,'15')]
+		return file_to_ints.get((ticker,year,'15')), file_to_ints.get((ticker,year+1,'15'))
 	elif item == '16d':
-		ir1 = file_to_ints[(ticker,year,'14')]
+		ir1 = file_to_ints.get((ticker,year,'14'))
 		if (ticker,year,'15') in file_to_ints:
-			ir1.extend(file_to_ints[(ticker,year,'15')])
-		ir2 = file_to_ints[(ticker,year+1,'14')]
+			ir1.extend(file_to_ints.get((ticker,year,'15')))
+		ir2 = file_to_ints.get((ticker,year+1,'14'))
 		if (ticker,year+1,'15') in file_to_ints:
-			ir2.extend(file_to_ints[(ticker,year+1,'15')])
+			ir2.extend(file_to_ints.get((ticker,year+1,'15')))
 		return ir1, ir2
-	return -1
+	return None
 
 def get_mcmfd(labels):
 
@@ -365,26 +365,27 @@ def make_examples(path, labels, ir_dict):
 						#print "Stock found in labels"
 						if orderedList[i][0] in labels:
 							ir = get_integer_representation(orderedList[i][0][0], orderedList[i][0][1], item, ir_dict) #handle concatenation usage(ticker, year, item)
-							if ir != -1:
-								if orderedList[i+1][0] in labels:
-									mc_change = labels[orderedList[i+1][0]]	#change market cap of that year
-									# if mc_change >= marketcap_change_median_from_data:
-									# 	l = 0
-									# else:
-									# 	l = 1
+							if ir != None:
+								if ir[0] != None and ir[1] != None: 
+									if orderedList[i+1][0] in labels:
+										mc_change = labels[orderedList[i+1][0]]	#change market cap of that year
+										# if mc_change >= marketcap_change_median_from_data:
+										# 	l = 0
+										# else:
+										# 	l = 1
 
-									example = []
-									example.append(orderedList[i][0][0])	#ticker symbol
-									example.append(orderedList[i][0][1])	#year 1
-									example.append(orderedList[i+1][0][1])	#year 2
-									example.append(item)
-									example.append(ir)
-									example.append(mc_change)	#label 0 = worse than median change, 1 = better than median change
-									training_examples.append(example)
-									total_examples += 1
+										example = []
+										example.append(orderedList[i][0][0])	#ticker symbol
+										example.append(orderedList[i][0][1])	#year 1
+										example.append(orderedList[i+1][0][1])	#year 2
+										example.append(item)
+										example.append(ir)
+										example.append(mc_change)	#label 0 = worse than median change, 1 = better than median change
+										training_examples.append(example)
+										total_examples += 1
 
-							if total_examples%1000 == 0:
-								print str(total_examples) + "examples added to training examples..."
+								if total_examples%1000 == 0:
+									print str(total_examples) + "examples added to training examples..."
 	print str(total_examples) + " total training examples created"
 
 	mcs = []
@@ -423,10 +424,10 @@ def createGloveDict(gloveDim='50'):
 		    newGloveDict[word] = embedding
 
 		gloveDict = OrderedDict(newGloveDict)
-		pickle.dump(gloveDict, open('glove/gloveDict_' + gloveDim + '.pkl', "wb+" ) )
+		pickle.dump(gloveDict, open('data_scraping/glove/gloveDict_' + gloveDim + '.pkl', "wb+" ) )
 	else:
 		print 'Loading gloveDict'
-		gloveDict = pickle.load(open('glove/gloveDict_' + gloveDim + '.pkl'))
+		gloveDict = pickle.load(open('data_scraping/glove/gloveDict_' + gloveDim + '.pkl'))
 
 	print "took", str(time.time() - t)
 	return gloveDict
@@ -440,9 +441,8 @@ if __name__ == '__main__':
 	print 'Looking in directory: ', 
 	labels = make_labelfile()
 
-	if not os.exists(args['directory']):
+	if not os.path.exists(args['directory']):
 		print 'Directory is not a path!'
-		return
 
 	t = time.time()
 	print 'Loading gloveDict...'
