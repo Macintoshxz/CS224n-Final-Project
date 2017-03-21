@@ -178,6 +178,37 @@ def construct_differential_feedforward_data(filename, embeddingDim, maxClasses):
 
     return indices, labels, embeddings
 
+def construct_single_input_feedforward_from_manifest(filename):
+    f = open(filename, 'r')
+    lines = f.readlines()
+    f.close()
+
+    X = []
+    Y = []
+    # E1 = []
+    # E2 = []
+    E_master = []
+    splits = [line.split(',') for line in lines]
+    idx = 0
+    for split in splits:
+        curY = int(split[1])
+        curE1 = [float(e) for e in split[2:52]]
+        curE2 = [float(e) for e in split[52:]]
+        Y.append(curY)
+        E1_idx = idx
+        E2_idx = idx + 1
+
+        # E1.append(curE1)
+        E_master.append(curE1)
+        # E2.append(curE2)
+        E_master.append(curE2)
+
+        X.append([E1_idx, E2_idx])
+        idx = idx + 2
+    return X, Y, E_master
+
+    
+
 
 def construct_single_feedforward_data(filename, embeddingDim):
     '''
@@ -193,7 +224,6 @@ def construct_single_feedforward_data(filename, embeddingDim):
     #dict of change : (ticker, year) mapping
     embeddingBase = 'embeddingDicts/embeddingDict_'
     embeddingFile = embeddingBase + str(embeddingDim) + '.pkl'
-
 
 
     dict = {}

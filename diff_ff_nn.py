@@ -2,7 +2,7 @@
 import tflearn
 from tflearn.data_utils import to_categorical, pad_sequences
 from tflearn.datasets import imdb
-from ingestion import construct_single_feedforward_data
+from ingestion import construct_single_input_feedforward_from_manifest
 import random
 import numpy as np
 
@@ -26,7 +26,7 @@ def feedforward(embedding):
 
 
 if __name__ == '__main__':
-	X, Y, embedding = construct_single_feedforward_data("check.txt", 50, 2)
+	X, Y, embedding = construct_single_input_feedforward_from_manifest("manifest_50.txt")
 	Y = tflearn.data_utils.to_categorical (Y, max(Y) + 1)
 	#X = [[x] for x in X]
 

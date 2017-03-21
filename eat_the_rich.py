@@ -507,26 +507,27 @@ if __name__ == '__main__':
 	t = time.time()
 	print 'Writing manifest...'
 	out = open("manifest_50.txt", 'wb+')
+	
+	gloveDictKeys = gloveDict.keys()
 	for i in xrange(len(examples)):
-		examples = examples[i]
+		if i % 1000:
+			print str(i), '/', str(len(examples))
+		example = examples[i]
 		ticker, y1, y2, section, ir, label = example
 		ir0 = ir[0]
 		ir1 = ir[1]
-		embedded0 = list(np.mean([gloveDict[integer] for integer in ir0], axis=0))
-		embedded1 = list(np.mean([gloveDict[integer] for integer in ir1], axis=0))
+			
+		embedded0 = list(np.mean([gloveDict[gloveDictKeys[integer]] for integer in ir0], axis=0))
+		embedded1 = list(np.mean([gloveDict[gloveDictKeys[integer]] for integer in ir1], axis=0))
+		embedded0 = [str(l) for l in embedded0]
+		embedded1 = [str(l) for l in embedded1]
 
-		outList = [i, label, ','.join(embedded0), ','.join(embedded1)]
+		outList = [str(i), str(label), ','.join(embedded0), ','.join(embedded1)]
 		outString = ','.join(outList)
 		out.write(outString + '\n')
 	out.close()
 	print 'Took ', str(time.time() - t), 'seconds.'
 
-									# example.append(orderedList[i][0][0])	#ticker symbol
-									# example.append(orderedList[i][0][1])	#year 1
-									# example.append(orderedList[i+1][0][1])	#year 2
-									# example.append(item)
-									# example.append(ir)
-									# example.append(mc_change)	#label 0 = worse than median change, 1 = better than median change
 	#d = get_mcmfd(labels)
 	#print examples
 
