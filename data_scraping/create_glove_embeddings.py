@@ -273,7 +273,7 @@ class EmbeddingCreator():
 				wordsID = result[1]
 				DocumentWordIDDict[(ticker, year, section)] = wordsID
 				# EmbeddingDict[(ticker, year, section)] = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
-				# print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
+				print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
 
 				# break
 				# for targetFile in targetPaths:
