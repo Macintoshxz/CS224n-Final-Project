@@ -1,7 +1,7 @@
 import sys
+import traceback
 from crawler import SecCrawler
 from multiprocessing import Pool as ThreadPool
-import traceback
 import os
 import time 
 
