@@ -6,3 +6,6 @@ data_scraping/glove/*
 data_scraping/logs/*
 *.npy
 *.d2v
+data_scraping/downloaded_companies.txt
+data_scraping/completed_extractions_from_text.txt
+data_scraping/extraction_from_text_log.txt
