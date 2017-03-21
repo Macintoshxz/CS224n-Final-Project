@@ -1,0 +1,18 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000091205700002160/0000912057-00-002160.txt
+http://www.sec.gov/Archives/edgar/data/1090872/0000912057-00-002160-index.html
+5570000000.0
+A
+1999-10-31
+10-K
+A_1999-10-31_10-K.txt
+
+
+ITEM 7A. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK. 
+
+We are exposed to foreign currency exchange rate risks inherent in our sales commitments, anticipated sales, and assets and liabilities denominated in currencies other than the United States dollar. Historically, our exposure to exchange rate risks has been managed on an enterprise-wide basis as part of Hewlett-Packard's risk management strategy. This strategy has utilized derivative financial instruments, including forwards, swaps and purchased options, to hedge certain foreign currency exposures, with the intent of offsetting gains and losses that occur on the underlying exposures with gains and losses on the derivative contracts hedging them. We do not currently and do not intend to utilize derivative financial instruments for trading purposes. 
+
+We performed a sensitivity analysis assuming a hypothetical 10% adverse movement in foreign exchange rates to the hedging contracts and the underlying exposures described above. As of October 31, 1999, the analysis indicated that these hypothetical market movements would not have a material effect on our consolidated financial position, results of operations or cash flows. Prior to the fourth quarter of 1999, we had no specifically identified hedging contracts and, accordingly, it was not practicable to perform a similar analysis on only our exposures. The sensitivity analysis described above was performed by Hewlett-Packard during the prior year and indicated that a hypothetical 10% movement in foreign exchange rates would not have a material effect on Hewlett-Packard's consolidated financial position, results of operations or cash flows. It is unlikely that the results of such an analysis on our exposures as of October 31, 1998 would indicate a material impact on our consolidated financial position, results of operations or cash flows. 
+
+As of October 31, 1999, all debt has been retained by Hewlett-Packard. 
+
+Therefore, no debt has been directly attributed to us. Accordingly, we have not been exposed to interest rate risk. 

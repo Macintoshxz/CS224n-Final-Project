@@ -1,0 +1,25 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000119312503098260/d10k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000119312503098260/0001193125-03-098260-index.html
+9217000000.0
+A
+2003-10-31
+10-K
+A_2003-10-31_10-K.txt
+
+ Item 2. 
+
+Properties Our corporate headquarters and Agilent Technologies Laboratories are located in Palo Alto, California. In total, we have 18 primary sites. Of these primary sites, 11 are located in the U.S. and the remaining 7 are located in China, Germany, Japan, Malaysia, Singapore and the United Kingdom. Nearly all of our primary functions are conducted at multi-building campuses. We have consolidated our operations during the last year, and as a result, most of our major sites that were listed as Primarily Owned last year are now listed as Owned . 
+
+As of October 31, 2003, we owned or leased a total of approximately 17.1 million square feet of space worldwide. Of that, we owned approximately 12 million square feet and leased the remaining 5.1 million square feet. Our sales and support facilities occupied a total of approximately 2.1 million square feet. Our manufacturing plants, R&D facilities and warehouse and administrative facilities occupied approximately 15 million square feet. Information about each of our businesses appears below: Test and Measurement. 
+
+Our test and measurement business has manufacturing and R&D facilities in Australia, Canada, China, Germany, Japan, Malaysia, Singapore, the United Kingdom and the U.S. Additionally, we have marketing centers in Germany, Hong Kong, Japan, the United Kingdom, and the U.S., and sales offices throughout the world. 
+
+26 Automated Test . Our automated test business has manufacturing and R&D facilities in Germany, Ireland, Japan, Singapore and the U.S. 
+
+Semiconductor Products. 
+
+Our semiconductor products business operates manufacturing and R&D facilities in Italy, Malaysia, Singapore, the United Kingdom and the U.S. Additionally, we have marketing centers in Germany, Malaysia Singapore and the U.S., and sales offices throughout the world. 
+
+Life Sciences and Chemical Analysis. 
+
+Our life sciences and chemical analysis business has manufacturing facilities in China, Germany, Japan and the U.S. Additionally, we have marketing centers in Germany, Japan, Singapore and the U.S., and sales offices throughout the world. 

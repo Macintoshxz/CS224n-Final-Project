@@ -1,0 +1,14 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000119312503098260/d10k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000119312503098260/d10k.htm
+9.217e+12
+A
+2003-10-31
+10-K
+A_2003-10-31_10-K.txt
+
+Item 3. 
+Legal Proceedings In November 2001, a securities class action, Kassin v. Agilent Technologies, Inc., et al., Civil Action No. 01-CV-10639, was filed in United States District Court for the Southern District of New York (the Southern District Court of New York ) against certain investment bank underwriters for our initial public offering ( IPO ), Agilent and various of our officers and directors at the time of the IPO. On February 19, 2003 the Southern District Court of New York issued a ruling dismissing claims against Agilent based upon Section 10 of the Securities Exchange Act of 1934, as amended, but denying the motion to dismiss as to claims against Agilent founded upon Section 11 of the Securities Act of 1933, as amended. This case is similar to numerous other cases filed in the Southern District Court of New York concerning the IPO market of the late 1990 s. 
+A proposal has been made for the settlement and release of claims against the issuer defendants, including Agilent. The settlement is subject to a number of conditions, including approval of the proposed settling parties and the court. Under the terms of the proposed settlement, plaintiffs would dismiss and release all claims against the Agilent defendants. In exchange, the company would agree to assign or surrender certain potential claims, and plaintiffs would be assured that they will achieve a minimum recovery in the litigation (including amounts recovered from the underwriters). If any cash payment becomes necessary to fulfill the terms of that assurance, payment would be made by the company s insurers, and not by Agilent. Agilent has elected to participate in the proposed settlement. Under our separation agreements with Hewlett-Packard, Hewlett-Packard agreed to indemnify us for a substantial portion of IPO-related liabilities. If the settlement does not occur, and the litigation against the company continues, Agilent believes it has meritorious defenses and intends to defend the case vigorously. 
+We are involved in lawsuits, claims, investigations and proceedings, including, but not limited to, patent, commercial and environmental matters, which arise in the ordinary course of business. Other than the matter described above, there are no matters pending that we expect to be material in relation to our business, consolidated financial condition, results of operations or cash flows. 
+Item 4. 
+Submission of Matters to a Vote of Security Holders During the fourth quarter of fiscal 2003, there were no matters submitted to a vote of securities holders, through the solicitation of proxies or otherwise. 

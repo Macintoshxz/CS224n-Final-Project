@@ -1,0 +1,15 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000104746911010124/a2206674z10-k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000104746911010124/a2206674z10-k.htm
+1.2848e+13
+A
+2011-10-31
+10-K
+A_2011-10-31_10-K.txt
+
+Item 2. 
+Properties As of October 31, 2011 we owned or leased a total of approximately 10.5 million square feet of space worldwide. Of that, we owned approximately 7.9 million square feet and leased the remaining 2.6 million square feet. Our sales and support facilities occupied a total of approximately 1.3 million square feet. Our manufacturing plants, R&D facilities and warehouse and administrative facilities occupied approximately 9.2 million square feet. Information about each of our businesses appears below: Electronic Measurement Group. 
+Our electronic measurement business has manufacturing and R&D facilities in China, Germany, Japan, Malaysia, Singapore, India and the U.S. Additionally, we have marketing centers in Germany, Hong Kong, Japan, the U.K., and the U.S., and sales offices throughout the world. 
+Life Sciences Group. 
+Our life science measurement business has manufacturing and R&D facilities in Singapore, Malaysia, Germany, Poland, U.K. and the U.S. Additionally, we have marketing centers in Germany, Singapore and the U.S., and sales offices throughout the world. 
+Chemical Analysis Group. 
+Our chemical analysis measurement business has manufacturing and R&D facilities in Australia, China, Malaysia, Italy, Japan, Netherlands, U.K. and the U.S. Additionally, we have marketing centers in Australia, Italy, Japan, Singapore and the U.S., and sales offices throughout the world. 

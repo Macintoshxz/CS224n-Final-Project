@@ -1,0 +1,21 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000104746906000516/a2166540z10-k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000104746906000516/0001047469-06-000516-index.html
+15244000000.0
+A
+2005-10-31
+10-K
+A_2005-10-31_10-K.txt
+
+ Item 6. 
+
+Selected Financial Data SELECTED FINANCIAL DATA (Unaudited) 35 (1) Consolidated financial data and notes for all periods present our semiconductor products and healthcare solutions businesses as discontinued operations. 
+
+(2) Income from continuing operations for the year ended October 31, 2005 includes a pre-tax restructuring charge of $113 million, including a pre-tax asset impairment charge of $5 million. Income from continuing operations for the year ended October 31, 2004 includes a pre-tax restructuring charge of $135 million, including a pre-tax asset impairment charge of $18 million. Loss from continuing operations for the year ended October 31, 2003 includes a pre-tax restructuring charge of $294 million, including a pre-tax asset impairment charge of $8 million and a non-cash charge recorded during the third quarter of 2003 to establish a tax valuation allowance of $1.4 billion. The $1.4 billion included $0.4 billion of tax benefits recorded during the first six months of 2003 resulting in approximately $1.0 billion net tax provision recorded within provision for taxes for the year ended October 31, 2003; the valuation allowance essentially eliminated our net deferred tax assets. Loss from continuing operations for the year ended October 31, 2002 includes a pre-tax restructuring charge of $357 million including a pre-tax asset impairment charge of $123 million. Income from continuing operations for the year ended October 31, 2001 includes a pre-tax gain of $269 million relating to the sale of surplus land in California, inventory charges of $376 million, a pre-tax restructuring charge of $116 million primarily relating to severance expenses and a pre-tax asset impairment charge of $56 million for our customer support software. 
+
+(3) Consolidated statement of operations data for the year ended October 31, 2001 includes the impact of the sale of our portfolio of lease assets to CIT Group Inc. (formerly known as Tyco Capital Corporation). In 2001, net proceeds from this sales transaction were $287 million, and we recognized $254 million in net revenue from continuing operations and $131 million in cost of products from continuing operations. 
+
+(4) We have restated our historical consolidated financial statements for fiscal 2004, quarterly financial data for the fourth quarter ended October 31, 2004, and selected financial data for fiscal 2004 ("the Restatement"). The determination to restate these consolidated financial statements and selected financial data was made by our management in consultation with the Audit & Finance Committee on January 13, 2006, as a result of our identification of an error related to the accounting for income taxes. During the October 31, 2004 year-end close process, the Company miscalculated and understated its estimate of U.S. jurisdictional loss. By correcting the error and revising the estimate of U.S. loss, this resulted in the recognition of additional tax benefit associated with the loss and a corresponding additional income tax expense associated with Accumulated Other Comprehensive Income pursuant to Statement of Financial Accounting Standards No. 109, "Accounting for Income Taxes". This error was identified through the operation of our internal control over financial reporting in 2005. The Restatement decreases our provision for income taxes for fiscal 2004 by $20 million and increases net income by $20 million, or $0.04 per diluted share. 
+
+(5) We have reclassified certain consolidated balance sheet data items in prior years to conform to the current years' presentation. See Note 5, "Tax Valuation Allowance and Provision (Benefit) for Taxes", to our consolidated financial statements. 
+
+36

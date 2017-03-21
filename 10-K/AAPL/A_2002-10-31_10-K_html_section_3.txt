@@ -1,0 +1,13 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000089161802005622/f86150e10vk.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000089161802005622/f86150e10vk.htm
+1.181e+12
+A
+2002-10-31
+10-K
+A_2002-10-31_10-K.txt
+
+Item 3. 
+Legal Proceedings In November 2001, a securities class action, Kassin v. Agilent Technologies, Inc., et al., Civil Action No. 01-CV-10639, was filed in United States District Court for the Southern District of New York (the Southern District Court of New York ) against certain investment bank underwriters for our initial public offering ( IPO ), Agilent and various of our officers and directors at the time of the IPO. On October 9, 2002, those Agilent directors and officers who had been named as individual defendants were dismissed without prejudice from the suit. The complaint alleges undisclosed and improper practices by the underwriters concerning the allocation of Agilent s IPO shares, in violation of the federal securities laws, and seeks unspecified damages on behalf of persons who purchased our stock during the period November 17, 1999 through December 6, 2000. This case is similar to numerous other cases filed in the Southern District Court of New York concerning the IPO market of the late 1990 s. We believe we have meritorious defenses to the claims against us and will defend ourselves vigorously. Under our separation agreements with Hewlett-Packard, Hewlett-Packard agreed to indemnify us for a substantial portion of IPO-related liabilities. 
+We are involved in lawsuits, claims, investigations and proceedings, including, but not limited to, patent, commercial and environmental matters, which arise in the ordinary course of business. Other than the matter described above, there are no matters pending that we expect to be material in relation to our business, consolidated financial condition, results of operations or cash flows. 
+Item 4. 
+Submission of Matters to a Vote of Security Holders During the fourth quarter of fiscal 2002, there were no matters submitted to a vote of securities holders, through the solicitation of proxies or otherwise. 

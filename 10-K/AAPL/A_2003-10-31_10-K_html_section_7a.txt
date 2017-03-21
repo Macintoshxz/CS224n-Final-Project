@@ -1,0 +1,12 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000119312503098260/d10k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000119312503098260/d10k.htm
+9.217e+12
+A
+2003-10-31
+10-K
+A_2003-10-31_10-K.txt
+
+Item 7A. 
+Quantitative and Qualitative Disclosures About Market Risk We are exposed to foreign currency exchange rate risks inherent in our sales commitments, anticipated sales, and assets and liabilities denominated in currencies other than the functional currency of our subsidiaries. We hedge future cash flows denominated in currencies other than the functional currency using sales forecasts up to twelve months in advance. Our exposure to exchange rate risks is managed on an enterprise-wide basis. This strategy utilizes derivative financial instruments, including option and forward contracts, to hedge foreign currency exposures with the intent of offsetting gains and losses that occur on the underlying exposures with gains and losses on the derivative contracts hedging them. We do not currently and do not intend to utilize derivative financial instruments for trading purposes. 
+Our operations generate non-functional currency cash flows such as revenues, third party vendor payments and inter-company payments. In anticipation of these foreign currency cash flows and in view of volatility of the currency market, we enter into such foreign exchange contracts as are described above to manage our currency risk. Approximately 74 percent of our revenues in 2003 and 75 percent of our revenues in 2002 and 70 percent of our revenues in 2001 were generated in U.S. dollars. 
+We performed a sensitivity analysis assuming a hypothetical 10 percent adverse movement in foreign exchange rates to the hedging contracts and the underlying exposures described above. As of October 31, 2003 and October 31, 2002, the analysis indicated that these hypothetical market movements would not have a material effect on our consolidated financial position, results of operations or cash flows. 

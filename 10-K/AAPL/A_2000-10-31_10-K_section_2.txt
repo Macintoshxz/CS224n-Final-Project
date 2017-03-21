@@ -1,0 +1,22 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000109581101000226/f67706e10-k.txt
+http://www.sec.gov/Archives/edgar/data/1090872/000109581101000226/0001095811-01-000226-index.html
+18550000000.0
+A
+2000-10-31
+10-K
+A_2000-10-31_10-K.txt
+
+
+ITEM 2. PROPERTIES. 
+
+Our corporate headquarters are located in Palo Alto, California. We operate Agilent Technologies Laboratories in Palo Alto, California, and we also have 35 manufacturing sites, including eleven primary sites. Of the primary sites, five are located in the United States, and an additional six sites are located in China, Germany, Japan, Malaysia, Singapore and the United Kingdom. 
+
+26 29 As of December 31, 2000, we owned or leased a total of approximately 196 million square feet of space worldwide. Agilent's sales and support occupy a total of approximately 62.4 million square feet. Of that, we own approximately 9.3 million square feet and lease the remaining 53.1 million. Agilent's manufacturing plants, research and development facilities and warehouse and administrative facilities occupy approximately 133.5 million square feet of space. Of that, approximately 92.1 million square feet was owned and the remaining 41.4 million was leased. Information about each of our businesses appears below: Test and Measurement. Our test and measurement business has manufacturing and research and development facilities in Australia, Canada, China, Germany, Japan, Korea, Malaysia, Singapore, the United Kingdom and the United States, and marketing centers in Hong Kong, the Netherlands, Japan and the United States, and sales offices throughout the world. 
+
+Semiconductor Products. Our semiconductor products business operates eight manufacturing sites located in California and Colorado in the United States, Malaysia, Singapore and the United Kingdom. The majority of our silicon and gallium arsenide wafer fabrication is done in the United States and Singapore, while our assembly and test operations are in Malaysia, Singapore and the United Kingdom. We have a research and development facility in Italy. We have regional sales and customer support centers in Germany, Hong Kong, Japan, Singapore, the United Kingdom and the United States, and sales offices throughout the world. 
+
+Healthcare Solutions. Our healthcare solutions business has five manufacturing locations sited in California, Massachusetts and Washington in the United States, China and Germany. We have marketing centers in Hong Kong, Japan, Germany, California and Massachusetts, and sales offices throughout the world. 
+
+We have a development facility in Pennsylvania. 
+
+Chemical Analysis. Our chemical analysis business has manufacturing facilities in California and Delaware in the United States, China, Germany and Japan. We have marketing centers in Germany, the United States and Singapore, and sales offices throughout the world. 

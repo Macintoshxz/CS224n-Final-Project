@@ -1,0 +1,15 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000104746910010499/a2201423z10-k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000104746910010499/a2201423z10-k.htm
+9.513e+12
+A
+2010-10-31
+10-K
+A_2010-10-31_10-K.txt
+
+Item 9A. 
+Controls and Procedures Evaluation of Disclosure Controls and Procedures Our management has evaluated, under the supervision and with the participation of our Chief Executive Officer and Chief Financial Officer, the effectiveness of our disclosure controls and procedures as of October 31, 2010, pursuant to and as required by Rule 13a-15(b) under the Securities Exchange Act of 1934 (the "Exchange Act"). Based on that evaluation, our Chief Executive Officer and Chief Financial Officer have concluded that, as of October 31, 2010, the company's disclosure controls and procedures, as defined by Rule 13a-15(e) under the Exchange Act, were effective and designed to ensure that (i) information required to be disclosed in the company's reports filed under the Exchange Act is recorded, processed, summarized and reported within the time periods specified in the SEC's rules and forms, and (ii) information is accumulated and communicated to management, including the Chief Executive Officer and Chief Financial Officer, as appropriate to allow timely decisions regarding required disclosures. 
+Management's Report on Internal Control over Financial Reporting Our management is responsible for establishing and maintaining adequate internal control over financial reporting, as such term is defined in Exchange Act Rule 13a-15(f). Under the supervision and with the participation of our management, including our Chief Executive Officer and Chief Financial Officer, we conducted an evaluation of the effectiveness of our internal control over financial reporting based on the framework in Internal Control Integrated Framework issued by the Committee of Sponsoring Organizations of the Treadway Commission. Based on the results of this evaluation, our management concluded that our internal control over financial reporting was effective as of October 31, 2010. 
+The effectiveness of our internal control over financial reporting as of October 31, 2010 has been audited by PricewaterhouseCoopers LLP, an independent registered public accounting firm, as stated in their report which appears in Item 8 of this Annual Report on Form 10-K. 
+Changes in Internal Control Over Financial Reporting There were no changes in our internal control over financial reporting that occurred during Agilent's last fiscal quarter that have materially affected, or are reasonably likely to materially affect, our internal control over financial reporting. 
+Item 9B. 
+Other Information None. 

@@ -1,0 +1,13 @@
+http://www.sec.gov/Archives/edgar/data/1090872/000089161802000185/f78349e10-k.htm
+http://www.sec.gov/Archives/edgar/data/1090872/000089161802000185/f78349e10-k.htm
+1.054e+12
+A
+2001-10-31
+10-K
+A_2001-10-31_10-K.txt
+
+Item 3. 
+Legal Proceedings In November 2001, a securities class action, Kassin v. Agilent Technologies, Inc., et al., Civil Action No. 01-CV-10639, was filed in United States District Court for the Southern District of New York against certain investment bank underwriters for Agilent s initial public offering ( IPO ), Agilent, and various of Agilent s officers and directors. The complaint alleges undisclosed and improper practices by the underwriters concerning the allocation of Agilent s IPO shares, in violation of the federal securities laws, and seeks unspecified damages on behalf of persons who purchased our stock during the period from November 17, 1999 through December 6, 2000. Other actions have been 24 filed making similar allegations regarding the IPOs of more than 300 other companies. All of these lawsuits have been coordinated for pretrial purposes as In re Initial Public Offering Securities Litigation, Civil Action No. 21-MC-92. We believe we have meritorious defenses to the claims against us and will defend ourselves vigorously. Under our separation agreements with Hewlett-Packard, HP agreed to indemnify us for a substantial portion of IPO-related liabilities. 
+We are also involved in lawsuits, claims, investigations and proceedings, including patent, commercial and environmental matters, which arise in the ordinary course of business. Other than the matter described above, there are no matters pending that we expect to be material in relation to our business, consolidated financial condition, results of operations or cash flows. There have been no material developments in the litigation previously reported in our Form 10-Q for the period ended July 31, 2001. 
+Item 4. 
+Submission of Matters to a Vote of Security Holders During the fourth quarter of fiscal 2001, there were no matters submitted to a vote of securities holders, through the solicitation of proxies or otherwise. 
