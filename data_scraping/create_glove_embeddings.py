@@ -249,6 +249,7 @@ class EmbeddingCreator():
 			t = time.time()
 			# filteredPaths = [targetPath if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_")) for targetPath in targetPaths]
 			filteredPaths = [targetPath for targetPath in targetPaths if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"))]
+			filteredPaths = [filteredPath for filteredPath in filteredPaths if parseFilename(filteredPath) not in DocumentWordIDDict]
 
 			results = [createDocumentWordIDMapping(filteredPath, dict) for filteredPath in filteredPaths]
 			# for targetPath in targetPaths:
@@ -268,9 +269,9 @@ class EmbeddingCreator():
 				filename = result[0]
 				ticker, year, section = parseFilename(filename)
 
-				if (ticker, year, section) not in DocumentWordIDDict:
-					wordsID = result[1]
-					DocumentWordIDDict[(ticker, year, section)] = wordsID
+				# if (ticker, year, section) not in DocumentWordIDDict:
+				wordsID = result[1]
+				DocumentWordIDDict[(ticker, year, section)] = wordsID
 				# EmbeddingDict[(ticker, year, section)] = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
 				# print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
 

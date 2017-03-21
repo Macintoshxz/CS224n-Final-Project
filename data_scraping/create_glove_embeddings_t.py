@@ -289,7 +289,7 @@ class EmbeddingCreator():
 			t = time.time()
 			# filteredPaths = [targetPath if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_")) for targetPath in targetPaths]
 			filteredPaths = [targetPath for targetPath in targetPaths if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"))]
-
+			filteredPaths = [filteredPath for filteredPath in filteredPaths if parseFilename(filteredPath) not in DocumentWordIDDict]
 			print len(filteredPaths)
 
 
@@ -311,18 +311,18 @@ class EmbeddingCreator():
 				for result in wrapperResults:
 					filename = result[0]
 					ticker, year, section = parseFilename(filename)
-					if (ticker, year, section) not in DocumentWordIDDict:
-						t = time.time()
-						wordsID = list(result[1])
+					# if (ticker, year, section) not in DocumentWordIDDict:
+					t = time.time()
+					wordsID = list(result[1])
 						
 						# embedding = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
 						# if isinstance(embedding, float):
 						# 	continue
 						# embedding = list(embedding)
 
-						DocumentWordIDDict[(ticker, year, section)] = wordsID
-						# EmbeddingDict[(ticker, year, section)] = embedding
-						print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
+					DocumentWordIDDict[(ticker, year, section)] = wordsID
+					# EmbeddingDict[(ticker, year, section)] = embedding
+					print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
 
 				# break
 				# for targetFile in targetPaths:
