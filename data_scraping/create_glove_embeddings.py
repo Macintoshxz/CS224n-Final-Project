@@ -225,7 +225,9 @@ class EmbeddingCreator():
 		else: 
 			print "Creating Integer Id Mapping for Words in Documents"
 			DocumentWordIDDict = {}
-			EmbeddingDict = {}
+			if os.path.isfile("DocumentWordIDDict_" + str(self.gloveDim) + ".pkl"):
+				DocumentWordIDDict = pickle.load(open( "DocumentWordIDDict_" + str(self.gloveDim) + ".pkl", "r" ) )
+
 			totalPaths = len(targetPaths)
 			# targetPaths = targetPaths[:100]
 			# print 'total paths: ', str(totalPaths)
@@ -260,13 +262,15 @@ class EmbeddingCreator():
 			print 'Took', str(time.time() - t), 'seconds.'
 			# results = [createDocumentWordIDMapping(targetPath) for targetPath in targetPaths]
 			
-			
+
 			for result in results:
 				t = time.time()
 				filename = result[0]
-				wordsID = result[1]
 				ticker, year, section = parseFilename(filename)
-				DocumentWordIDDict[(ticker, year, section)] = wordsID
+
+				if (ticker, year, section) not in DocumentWordIDDict:
+					wordsID = result[1]
+					DocumentWordIDDict[(ticker, year, section)] = wordsID
 				# EmbeddingDict[(ticker, year, section)] = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
 				# print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
 
@@ -287,7 +291,7 @@ class EmbeddingCreator():
 			# 			embeddingDict[filename] = embedding
 
 			pickle.dump(DocumentWordIDDict, open( "DocumentWordIDDict_" + self.gloveDim + ".pkl", "wb+" ) )
-			pickle.dump(EmbeddingDict, open( "EmbeddingDict_" + self.gloveDim + ".pkl", "wb+" ) )
+			# pickle.dump(EmbeddingDict, open( "EmbeddingDict_" + self.gloveDim + ".pkl", "wb+" ) )
 
 			end = time.time()
 			print '\n\n\n FINAL TIME:'

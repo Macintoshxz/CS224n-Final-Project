@@ -160,8 +160,8 @@ class EmbeddingCreator():
 	def __init__(self, gloveDim):
 		self.hello = "Let's create some embeddings"
 		self.gloveDim = gloveDim
-		# self.gloveDict = createGloveDict(self.gloveDim)
-		self.gloveDict = {}
+		self.gloveDict = createGloveDict(self.gloveDim)
+		# self.gloveDict = {}
 		
 
 	def calculateParallel(self, inputs, gloveDim, threads=1):
@@ -262,7 +262,11 @@ class EmbeddingCreator():
 
 		else: 
 			print "Creating Integer Id Mapping for Words in Documents"
+
 			DocumentWordIDDict = {}
+			if os.path.isfile("DocumentWordIDDict_" + str(self.gloveDim) + ".pkl"):
+				DocumentWordIDDict = pickle.load(open( "DocumentWordIDDict_" + str(self.gloveDim) + ".pkl", "r" ) )
+
 			EmbeddingDict = {}
 			totalPaths = len(targetPaths)
 			# targetPaths = targetPaths[:100]
@@ -285,11 +289,11 @@ class EmbeddingCreator():
 			t = time.time()
 			# filteredPaths = [targetPath if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_")) for targetPath in targetPaths]
 			filteredPaths = [targetPath for targetPath in targetPaths if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"))]
-			filteredPaths = filteredPaths[:100]
-			print filteredPaths
+
+			print len(filteredPaths)
 
 
-			results = self.calculateParallel(filteredPaths, self.gloveDim, 1)
+			results = self.calculateParallel(filteredPaths, self.gloveDim, 8)
 			# results = [createDocumentWordIDMapping(filteredPath, dict) for filteredPath in filteredPaths]
 			# for targetPath in targetPaths:
 			# 	if targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"):
@@ -305,20 +309,20 @@ class EmbeddingCreator():
 
 			for wrapperResults in results:
 				for result in wrapperResults:
-					print '\n\n\nRESULTTTTT'
-					print result
-					t = time.time()
 					filename = result[0]
-					wordsID = list(result[1])
 					ticker, year, section = parseFilename(filename)
-					embedding = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
-					if isinstance(embedding, float):
-						continue
-					embedding = list(embedding)
+					if (ticker, year, section) not in DocumentWordIDDict:
+						t = time.time()
+						wordsID = list(result[1])
+						
+						# embedding = self.wordsIDToEmbedding(wordsID, gloveDictKeys)
+						# if isinstance(embedding, float):
+						# 	continue
+						# embedding = list(embedding)
 
-					DocumentWordIDDict[(ticker, year, section)] = wordsID
-					# EmbeddingDict[(ticker, year, section)] = embedding
-					print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
+						DocumentWordIDDict[(ticker, year, section)] = wordsID
+						# EmbeddingDict[(ticker, year, section)] = embedding
+						print 'Processed', filename, '.  took', str(time.time() - t), 'seconds.'
 
 				# break
 				# for targetFile in targetPaths:
@@ -336,7 +340,7 @@ class EmbeddingCreator():
 			# 		for filename, embedding in result:
 			# 			embeddingDict[filename] = embedding
 
-			# pickle.dump(DocumentWordIDDict, open( "DocumentWordIDDict_" + self.gloveDim + ".pkl", "wb+" ) )
+			pickle.dump(DocumentWordIDDict, open( "DocumentWordIDDict_" + self.gloveDim + ".pkl", "wb+" ) )
 			# pickle.dump(EmbeddingDict, open( "EmbeddingDict_" + self.gloveDim + ".pkl", "wb+" ) )
 
 			end = time.time()
