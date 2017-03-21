@@ -196,13 +196,17 @@ def construct_single_input_feedforward_from_manifest(filename, embedding_to_use)
         if count % 1000 == 0:
             print str(count), '/', str(n)
         curY = int(split[1])
-        curE1 = [float(e) for e in split[2:52]]
-        curE2 = [float(e) for e in split[52:]]
+        curE1 = np.array([float(e) for e in split[2:52]])
+        curE2 = np.array([float(e) for e in split[52:]])
+
+        diff = curE1 - curE2
+        diff = list(diff)
         Y.append(curY)
-        if embedding_to_use == 0:
-            E_master.append(curE1)
-        if embedding_to_use == 1:
-            E_master.append(curE2)
+        # if embedding_to_use == 0:
+        #     # E_master.append(curE1)
+        # if embedding_to_use == 1:
+        #     E_master.append(curE2)
+        E_master.append(diff)
 
         X.append([idx])
         idx += 1

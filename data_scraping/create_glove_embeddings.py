@@ -74,9 +74,10 @@ def stringToEmbedding(s):
 
 	tokens = s.split(' ')
 	numTokens = len(tokens)
-	tokenVals = np.array([gloveDict.get(token, 0) for token in tokens])
+	tokenVals = np.array([gloveDict.get(token, 0) for token in tokens if token in gloveDict])
+	tokenCount = len(tokenVals)
 	tokenAverage = np.mean(tokenVals, axis=0)
-	return tokenAverage
+	return tokenAverage, tokenCount
 
 # This is top-level to play nice with multiprocessing - 
 # pass it a gloveDict to open the file.
@@ -89,10 +90,10 @@ def createSingleEmbedding(targetPath):
 	file_10k.close()
 
 	# embedding = stringToEmbedding(fileString, gloveDict)
-	embedding = stringToEmbedding(fileString)
+	embedding, length = stringToEmbedding(fileString)
 
 	print 'embedded', filename
-	return [filename, embedding]
+	return [filename, embedding, length]
 
 # def loopEmbeddings(targetPaths):
 
@@ -197,12 +198,12 @@ class EmbeddingCreator():
 			# if num_threads == 1:
 			# 	print 'SINGLE THREAD'
 			counter = 0
-			results = [createSingleEmbedding(targetPath) for targetPath in targetPaths if targetPath.split(".")[-1] == "txt"]
+			filteredPaths = [targetPath for targetPath in targetPaths if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"))]
+			results = [createSingleEmbedding(filteredPath) for filteredPath in filteredPaths]
 			for result in results:
-				filename = result[0]
-				embedding = result[1]
+				filename, embedding, length = result
 				ticker, year, section = parseFilename(filename)
-				embeddingDict[(ticker, year, section)] = embedding
+				embeddingDict[(ticker, year, section)] = [embedding, length]
 				# for targetFile in targetPaths:
 				# 	if counter % 50 == 0:
 				# 		print '\nFinished', str(counter), '/', str(totalPaths), 'in', str(time.time() - start), '\n'
@@ -218,7 +219,7 @@ class EmbeddingCreator():
 			# 		for filename, embedding in result:
 			# 			embeddingDict[filename] = embedding
 
-			pickle.dump(embeddingDict, open( "../embeddingDicts/embeddingDict_" + self.gloveDim + ".pkl", "wb+" ) )
+			pickle.dump(embeddingDict, open( "embeddingDict_" + self.gloveDim + ".pkl", "wb+" ) )
 			end = time.time()
 			print '\n\n\n FINAL TIME:'
 			print end - start
@@ -318,7 +319,8 @@ class EmbeddingCreator():
 if __name__ == '__main__':
 	embeddingCreator = EmbeddingCreator(sys.argv[1])
 	# Doc = False for word integer id mapping; True for document embeddings
-	embeddingCreator.createEmbeddings(doc = False)
+	flag = sys.argv[2]
+	embeddingCreator.createEmbeddings(flag == '-t')
  
 	#Testing
 	# embeddingCreator.testIntegerMapping("300")

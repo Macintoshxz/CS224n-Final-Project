@@ -298,34 +298,49 @@ def get_mcmfd(labels):
 		year_median[year] = median
 	return year_median
 
-def make_examples(path, labels, ir_dict):
+def make_examples(path, labels, ir_dict, shouldEmbed=False):
 	fileCounter = 0
 	checkfile_lines = []
 	ticker_year_dict = {}
-	for subdir, dirs, files in os.walk(path):
-	 	for f in files:
 
-	 		fileTokens = f.split("_")
-	 		fileTokens[-1] = fileTokens[-1].strip(".txt")
-	 		if "section" in fileTokens:
-	 			filedate = fileTokens[1].split("-")
+	if not shouldEmbed:
+		for subdir, dirs, files in os.walk(path):
+		 	for f in files:
 
-	 			#YEAR MODIFICATION
-	 			year = filedate[0]
-	 			month = filedate[1]
-	 			day = filedate[2]
+		 		fileTokens = f.split("_")
+		 		fileTokens[-1] = fileTokens[-1].strip(".txt")
+		 		if "section" in fileTokens:
+		 			filedate = fileTokens[1].split("-")
 
- 				if month <= "06" and day <= "30" and year != "1994":
-					year = int(year) - 1
-				filedate[0] = str(year)
+		 			#YEAR MODIFICATION
+		 			year = filedate[0]
+		 			month = filedate[1]
+		 			day = filedate[2]
+		 			section = fileTokens[-1]
+		 			ticker = fileTokens[0]
 
-	 			if (fileTokens[0], int(filedate[0])) not in ticker_year_dict:
-	 				ticker_year_dict[(fileTokens[0], int(filedate[0]))] = [fileTokens[-1]]
-	 			else:
-	 				if fileTokens[-1] not in ticker_year_dict[(fileTokens[0], int(filedate[0]))]:
-	 					bisect.insort(ticker_year_dict[(fileTokens[0], int(filedate[0]))], fileTokens[-1])
-	 					#ticker_year_dict[(fileTokens[0], filedate[0])].append(fileTokens[-1])
-	
+	 				if month <= "06" and day <= "30" and year != "1994":
+						year = int(year) - 1
+					filedate[0] = str(year)
+		 			year = filedate[0]
+
+
+		 			if (ticker, int(year)) not in ticker_year_dict:
+		 				ticker_year_dict[(ticker, int(year))] = [section]
+		 			else:
+		 				if section not in ticker_year_dict[(ticker, int(year))]:
+		 					bisect.insort(ticker_year_dict[(ticker, int(year))], ticker)
+		 					#ticker_year_dict[(fileTokens[0], filedate[0])].append(ticker)
+	else:
+		for key in ir_dict:
+			ticker, year, section = key
+ 			if (ticker, int(year)) not in ticker_year_dict:
+ 				ticker_year_dict[(ticker, int(year))] = [section]
+ 			else:
+ 				if section not in ticker_year_dict[(ticker, int(year))]:
+ 					bisect.insort(ticker_year_dict[(ticker, int(year))], ticker)
+
+
 	orderedList = ticker_year_dict.items()
 	orderedList = sorted(orderedList, key = lambda t: t[0])
 
@@ -405,13 +420,32 @@ def make_examples(path, labels, ir_dict):
 						if orderedList[i][0] in labels:
 							ir = get_integer_representation(orderedList[i][0][0], orderedList[i][0][1], item, ir_dict) #handle concatenation usage(ticker, year, item)
 							if ir != None:
-								if ir[0] != None and ir[1] != None: 
-									if orderedList[i+1][0] in labels:
+								if orderedList[i+1][0] in labels:
+									if ir[0] != None and ir[1] != None: 
 										mc_change = labels[orderedList[i+1][0]]	#change market cap of that year
-										# if mc_change >= marketcap_change_median_from_data:
-										# 	l = 0
-										# else:
-										# 	l = 1
+
+										if shouldEmbed:
+											if len(ir) < 4 or ir[0] = None or ir[2] == None:
+												continue
+
+											ir1, ir2 = ir
+											if len(ir1) > 2:
+												embed1, length1, embed2, length2 = ir1
+												scaledEmbed1 = np.array(embed1)*length1
+												scaledEmbed2 = np.array(embed2)*length2
+												embedOut = (scaledEmbed1+scaledEmbed2)/(length1 + length2)
+												ir1 = embedOut
+											else:
+												ir1 = ir1[0]
+											if len(ir1) > 2:
+												embed1, length1, embed2, length2 = ir1
+												scaledEmbed1 = np.array(embed1)*length1
+												scaledEmbed2 = np.array(embed2)*length2
+												embedOut = (scaledEmbed1+scaledEmbed2)/(length1 + length2)
+												ir2 = embedOut
+											else:
+												ir2 = ir2[0]
+											ir = [ir1, ir2]
 
 										example = []
 										example.append(orderedList[i][0][0])	#ticker symbol
@@ -422,9 +456,8 @@ def make_examples(path, labels, ir_dict):
 										example.append(mc_change)	#label 0 = worse than median change, 1 = better than median change
 										training_examples.append(example)
 										total_examples += 1
-
-								if total_examples%1000 == 0:
-									print str(total_examples) + "examples added to training examples..."
+										if total_examples%1000 == 0:
+											print str(total_examples) + "examples added to training examples..."
 	print str(total_examples) + " total training examples created"
 
 	mcs = []
@@ -435,10 +468,14 @@ def make_examples(path, labels, ir_dict):
 	median = mcs[len(mcs)/2]
 
 	for each in training_examples:
-		if each[-1] <= median:
+		if each[-1] <= 0:
 			each[-1] = 0
 		else:
 			each[-1] = 1
+		# if each[-1] <= median:
+		# 	each[-1] = 0
+		# else:
+		# 	each[-1] = 1
 	return training_examples
 
 
@@ -476,9 +513,13 @@ def createGloveDict(gloveDim='50'):
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Scrapes Market Cap from SEC db.')
 	parser.add_argument('-d','--directory', help='Directory containing financial documents', required=True)
+	parser.add_argument('-se','--should-embed', help='If we should bypass path walk and use tickers directly from embeddingDict', required=True)
+
 	args = vars(parser.parse_args())
 	print 'Looking in directory: ', 
 	labels = make_labelfile()
+
+	shouldEmbed = (args['should-embed'].lower() == 'true')
 
 	if not os.path.exists(args['directory']):
 		print 'Directory is not a path!'
@@ -501,12 +542,13 @@ if __name__ == '__main__':
 
 	t = time.time()
 	print 'Making examples...'
-	examples = make_examples(args['directory'], labels, ir)
+	examples = make_examples(args['directory'], labels, ir, shouldEmbed)
 	print 'Took ', str(time.time() - t), 'seconds.'
 
 	t = time.time()
 	print 'Writing manifest...'
-	out = open("manifest_50.txt", 'wb+')
+	filename = 'manifest_50.txt' if not shouldEmbed else 'manifest_50_embedded.txt'
+	out = open(filename, 'wb+')
 	
 	gloveDictKeys = gloveDict.keys()
 	for i in xrange(len(examples)):
@@ -514,16 +556,23 @@ if __name__ == '__main__':
 			print str(i), '/', str(len(examples))
 		example = examples[i]
 		ticker, y1, y2, section, ir, label = example
-		ir0 = ir[0]
-		ir1 = ir[1]
-			
-		embedded0 = list(np.mean([gloveDict[gloveDictKeys[integer]] for integer in ir0], axis=0))
-		embedded1 = list(np.mean([gloveDict[gloveDictKeys[integer]] for integer in ir1], axis=0))
+		if not shouldEmbed:
+			ir0 = ir[0]
+			ir1 = ir[1]
+				
+			embedded0 = list(np.mean([gloveDict[gloveDictKeys[integer]] for integer in ir0], axis=0))
+			embedded1 = list(np.mean([gloveDict[gloveDictKeys[integer]] for integer in ir1], axis=0))
+		else:
+			embedded0 = ir[0]
+			embedded1 = ir[1]
+
 		embedded0 = [str(l) for l in embedded0]
 		embedded1 = [str(l) for l in embedded1]
 
 		outList = [str(i), str(label), ','.join(embedded0), ','.join(embedded1)]
 		outString = ','.join(outList)
+
+
 		out.write(outString + '\n')
 	out.close()
 	print 'Took ', str(time.time() - t), 'seconds.'
