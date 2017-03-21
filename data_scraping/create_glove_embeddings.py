@@ -65,7 +65,7 @@ def createDocumentWordIDMapping(targetPath, dict):
 
 # Actually formats, then converts a string to
 # an embedding.
-def stringToEmbedding(s):
+def stringToEmbedding(s, gloveDict):
 
 	s = s.lower()
 	s = s.translate(replace_punctuation)
@@ -82,7 +82,7 @@ def stringToEmbedding(s):
 # This is top-level to play nice with multiprocessing - 
 # pass it a gloveDict to open the file.
 
-def createSingleEmbedding(targetPath):
+def createSingleEmbedding(targetPath, gloveDict):
 	filename = targetPath.split('/')[-1]
 
 	file_10k = open(targetPath, 'r')
@@ -90,7 +90,7 @@ def createSingleEmbedding(targetPath):
 	file_10k.close()
 
 	# embedding = stringToEmbedding(fileString, gloveDict)
-	embedding, length = stringToEmbedding(fileString)
+	embedding, length = stringToEmbedding(fileString, gloveDict)
 
 	print 'embedded', filename
 	return [filename, embedding, length]
@@ -174,7 +174,7 @@ class EmbeddingCreator():
 	#
 	# If doc = True, creates document embeddings via averaged glove vectors.
 	# If doc = False, creates word integer id mappings. 
-	def createEmbeddings(self, path="SEC-Edgar-data/", doc = True):
+	def createEmbeddings(self, doc=True, path="SEC-Edgar-data/",):
 		# startDict = time.time()
 		# self.gloveDict = self.createGloveDict(gloveDim)
 		# endDict = time.time()
@@ -199,7 +199,7 @@ class EmbeddingCreator():
 			# 	print 'SINGLE THREAD'
 			counter = 0
 			filteredPaths = [targetPath for targetPath in targetPaths if (targetPath.split(".")[-1] == "txt" and "section" in targetPath.split("_"))]
-			results = [createSingleEmbedding(filteredPath) for filteredPath in filteredPaths]
+			results = [createSingleEmbedding(filteredPath, self.gloveDict) for filteredPath in filteredPaths]
 			for result in results:
 				filename, embedding, length = result
 				ticker, year, section = parseFilename(filename)
@@ -317,10 +317,13 @@ class EmbeddingCreator():
 	
 # argv[1] = gloveDim
 if __name__ == '__main__':
-	embeddingCreator = EmbeddingCreator(sys.argv[1])
 	# Doc = False for word integer id mapping; True for document embeddings
 	flag = sys.argv[2]
-	embeddingCreator.createEmbeddings(flag == '-t')
+	if flag == '-doc':
+		print 'Embedding entire doc'
+	embeddingCreator = EmbeddingCreator(sys.argv[1])
+	
+	embeddingCreator.createEmbeddings(flag == '-doc')
  
 	#Testing
 	# embeddingCreator.testIntegerMapping("300")
