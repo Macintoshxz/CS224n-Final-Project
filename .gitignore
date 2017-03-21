@@ -10,3 +10,4 @@ data_scraping/downloaded_companies.txt
 data_scraping/completed_extractions_from_text.txt
 data_scraping/extraction_from_text_log.txt
 10-K/*
+*.DS_Store
