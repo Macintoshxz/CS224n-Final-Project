@@ -5,7 +5,6 @@ from tflearn.datasets import imdb
 from ingestion import construct_single_feedforward_data
 import random
 import numpy as np
-from rnn.py import splitData
 
 def splitData(arr, valPercentage, testPercentage):
     n = len(arr)
@@ -27,11 +26,11 @@ def feedforward(embedding):
 
 
 if __name__ == '__main__':
-	X, Y, embedding = construct_single_feedforward_data("check.txt", 50, 5)
+	X, Y, embedding = construct_single_feedforward_data("check.txt", 50, 2)
 	Y = tflearn.data_utils.to_categorical (Y, max(Y) + 1)
-	X = [[x] for x in X]
+	#X = [[x] for x in X]
 
-	splitIdx = len(X)/5
+	# splitIdx = len(X)/5
 	trainX, valX, testX = splitData(X, 0.7, 0.1)
 	trainY, valY, testY = splitData(Y, 0.7, 0.1)
 
