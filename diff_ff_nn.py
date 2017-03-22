@@ -47,9 +47,9 @@ def feedforward(embedding):
     return net
 
 if __name__ == '__main__':
-	# X, Y, embedding = construct_single_input_feedforward_from_manifest("manifest_50_sign.txt", 0)
-	# X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifest_50_embedded.txt")
-	X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifest_50_large_median.txt")
+	# X, Y, embedding = construct_single_input_feedforward_from_manifest("manifests/manifest_50_sign.txt", 0)
+	# X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifests/manifest_50_embedded.txt")
+	X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifests/manifest_50_large_median.txt")
 
 
 	# X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifest_50_21k.txt")
