@@ -447,7 +447,7 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 												scaledEmbed1 = np.array(embed1)*length1
 												scaledEmbed2 = np.array(embed2)*length2
 												embedOut = (scaledEmbed1+scaledEmbed2)/(length1 + length2)
-												ir1 = embedOut
+												ir2 = embedOut
 											elif len(ir2) == 6:
 												embed1, length1, embed2, length2, embed3, length3 = ir2
 												scaledEmbed1 = np.array(embed1)*length1

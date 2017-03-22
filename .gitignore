@@ -12,3 +12,4 @@ data_scraping/extraction_from_text_log.txt
 10-K/*
 *.DS_Store
 *.pkl
+manifests/*

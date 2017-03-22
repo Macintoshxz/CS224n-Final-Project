@@ -32,11 +32,11 @@ def splitData(arr, valPercentage, testPercentage):
 def feedforward(embedding):
     net = tflearn.input_data([None, 2]) #[Batch Size, Sequence Length] Sequence is sliding window length
     net = tflearn.embedding(net, input_dim=len(embedding), output_dim=len(embedding[0]), trainable = True) #Input_Dim = Vocabulary size = #of IDs = #10ks; output_dim = Embedding length
-    net = tflearn.fully_connected(net, 50, activation='relu', weights_init = "xavier", regularizer='L2') #fully_connected is output layer; num units is number of outputs wanted
+    net = tflearn.fully_connected(net, 50, activation='relu', weights_init = "xavier")#, regularizer='L2') #fully_connected is output layer; num units is number of outputs wanted
     # net = tflearn.fully_connected(net, 30, activation='sigmoid', weights_init = "xavier", regularizer='L2') #fully_connected is output layer; num units is number of outputs wanted
 
-    net = tflearn.layers.core.dropout(net, keep_prob=0.5)
-    net = tflearn.fully_connected(net, 50, activation='relu', weights_init = "xavier", regularizer='L2') #fully_connected is output layer; num units is number of outputs wanted
+    # net = tflearn.layers.core.dropout(net, keep_prob=0.5)
+    # net = tflearn.fully_connected(net, 50, activation='relu', weights_init = "xavier", regularizer='L2') #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.fully_connected(net, 2, activation='softmax', weights_init = "xavier", regularizer='L2') #fully_connected is output layer; num units is number of outputs wanted
     net = tflearn.regression(net, optimizer='adam', learning_rate=1e-5,
                              # loss='softmax', metric = 'Accuracy')
@@ -48,7 +48,9 @@ def feedforward(embedding):
 
 if __name__ == '__main__':
 	# X, Y, embedding = construct_single_input_feedforward_from_manifest("manifest_50_sign.txt", 0)
-	X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifest_50_embedded.txt")
+	# X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifest_50_embedded.txt")
+	X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifest_50_large_median.txt")
+
 
 	# X, Y, embedding = construct_dual_input_feedforward_from_manifest("manifest_50_21k.txt")
 
