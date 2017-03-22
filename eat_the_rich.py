@@ -406,7 +406,7 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 	total_examples = 0
 
 
-	marketcap_change_median_from_data = get_mcmfd(labels)
+	
 	#print marketcap_change_median_from_data
 
 	for i in range(0, len(orderedList)-1):
@@ -422,7 +422,7 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 							if ir != None:
 								if orderedList[i+1][0] in labels:
 									if ir[0] != None and ir[1] != None: 
-										mc_change = labels[orderedList[i+1][0]]	#change market cap of that year
+										mc_change = labels[orderedList[i+1][0]]	#change market cap of that next year
 
 										if shouldEmbed:
 											ir1, ir2 = ir
@@ -474,13 +474,16 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 
 	mcs = []
 	for each in training_examples:
+
 		mcs.append(each[-1])
 
 	mcs.sort()
 	median = mcs[len(mcs)/2]
 
+	''' NAIVE MEDIAN
+
 	for each in training_examples:
-		# if each[-1] <= 0:
+		# if each[-1] <= 0:	#pos/neg
 		# 	each[-1] = 0
 		# else:
 		# 	each[-1] = 1
@@ -488,6 +491,21 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 			each[-1] = 0
 		else:
 			each[-1] = 1
+	'''
+
+	mcmfd_yr_dict = get_mcmfd(labels) #marketcap_change_median_from_data
+	print mcmfd_yr_dict
+
+	''' MEDIAN PER YEAR '''
+	for each in training_examples:
+		if each[2] in mcmfd_yr_dict:
+			if each[-1] <= mcmfd_yr_dict[each[2]]:#median change mc for that year
+				each[-1] = 0
+			else:
+				each[-1] = 1
+
+
+
 	return training_examples
 
 
