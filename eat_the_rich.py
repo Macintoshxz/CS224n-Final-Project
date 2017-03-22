@@ -298,7 +298,7 @@ def get_mcmfd(labels):
 		year_median[year] = median
 	return year_median
 
-def make_examples(path, labels, ir_dict, shouldEmbed=False):
+def make_examples(path, labels, ir_dict, shouldEmbed=False, management):
 	fileCounter = 0
 	checkfile_lines = []
 	ticker_year_dict = {}
@@ -493,6 +493,14 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 			each[-1] = 1
 	'''
 
+	sevens = []
+	for each in training_examples:
+		if each[3] == '7b' or each[3] == '7c' or each[3] '7d':
+			sevens.append(each)
+
+	
+
+
 	mcmfd_yr_dict = get_mcmfd(labels) #marketcap_change_median_from_data
 	print mcmfd_yr_dict
 
@@ -504,6 +512,8 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 			else:
 				each[-1] = 1
 
+	if management == True:
+		return sevens
 
 
 	return training_examples
@@ -576,7 +586,7 @@ if __name__ == '__main__':
 
 	t = time.time()
 	print 'Making examples...'
-	examples = make_examples(args['directory'], labels, ir, shouldEmbed)
+	examples = make_examples(args['directory'], labels, ir, shouldEmbed, False)
 	print 'Took ', str(time.time() - t), 'seconds.'
 
 	t = time.time()
