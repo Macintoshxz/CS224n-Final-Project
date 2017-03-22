@@ -530,8 +530,12 @@ if __name__ == '__main__':
 	print 'Took ', str(time.time() - t), 'seconds.'
 
 	t = time.time()
-	print 'Loading pickle...'
-	ir = pickle.load(open('data_scraping/DocumentWordIDDict_60k.pkl'))
+	if shouldEmbed:
+		print 'Loading embedding pickle...'
+		ir = pickle.load(open('embeddingDict_50_large.pkl'))
+	else:
+		print 'Loading Word ID Pickle...'
+		ir = pickle.load(open('data_scraping/DocumentWordIDDict_60k.pkl'))
 	print 'Took ', str(time.time() - t), 'seconds.'
 
 	t = time.time()
@@ -548,7 +552,7 @@ if __name__ == '__main__':
 	t = time.time()
 	print 'Writing manifest...'
 	filename = 'manifest_50.txt' if not shouldEmbed else 'manifest_50_embedded.txt'
-	out = open(filename, 'wb+')
+	out = open(filename , 'wb+')
 	
 	gloveDictKeys = gloveDict.keys()
 	for i in xrange(len(examples)):
