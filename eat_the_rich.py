@@ -329,7 +329,7 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 		 				ticker_year_dict[(ticker, int(year))] = [section]
 		 			else:
 		 				if section not in ticker_year_dict[(ticker, int(year))]:
-		 					bisect.insort(ticker_year_dict[(ticker, int(year))], ticker)
+		 					bisect.insort(ticker_year_dict[(ticker, int(year))], section)
 		 					#ticker_year_dict[(fileTokens[0], filedate[0])].append(ticker)
 	else:
 		for key in ir_dict:
@@ -338,11 +338,11 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
  				ticker_year_dict[(ticker, int(year))] = [section]
  			else:
  				if section not in ticker_year_dict[(ticker, int(year))]:
- 					bisect.insort(ticker_year_dict[(ticker, int(year))], ticker)
-
+ 					bisect.insort(ticker_year_dict[(ticker, int(year))], section)
 
 	orderedList = ticker_year_dict.items()
 	orderedList = sorted(orderedList, key = lambda t: t[0])
+	print 'ORDERED LIST HAS ', len(orderedList)
 
 	for i in range(0, len(orderedList)):
 		if '1' not in orderedList[i][1] and '1a' not in orderedList[i][1] and '1b' not in orderedList[i][1]:
@@ -425,23 +425,35 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 										mc_change = labels[orderedList[i+1][0]]	#change market cap of that year
 
 										if shouldEmbed:
-											if len(ir) < 4 or ir[0] = None or ir[2] == None:
-												continue
-
 											ir1, ir2 = ir
-											if len(ir1) > 2:
+											if len(ir1) == 4:
 												embed1, length1, embed2, length2 = ir1
 												scaledEmbed1 = np.array(embed1)*length1
 												scaledEmbed2 = np.array(embed2)*length2
 												embedOut = (scaledEmbed1+scaledEmbed2)/(length1 + length2)
 												ir1 = embedOut
+											elif len(ir1) == 6:
+												embed1, length1, embed2, length2, embed3, length3 = ir1
+												scaledEmbed1 = np.array(embed1)*length1
+												scaledEmbed2 = np.array(embed2)*length2
+												scaledEmbed3 = np.array(embed3)*length3
+												embedOut = (scaledEmbed1+scaledEmbed2+scaledEmbed3)/(length1 + length2 + length3)
+												ir1 = embedOut
 											else:
 												ir1 = ir1[0]
-											if len(ir1) > 2:
-												embed1, length1, embed2, length2 = ir1
+											
+											if len(ir2) == 4:
+												embed1, length1, embed2, length2 = ir2
 												scaledEmbed1 = np.array(embed1)*length1
 												scaledEmbed2 = np.array(embed2)*length2
 												embedOut = (scaledEmbed1+scaledEmbed2)/(length1 + length2)
+												ir1 = embedOut
+											elif len(ir2) == 6:
+												embed1, length1, embed2, length2, embed3, length3 = ir2
+												scaledEmbed1 = np.array(embed1)*length1
+												scaledEmbed2 = np.array(embed2)*length2
+												scaledEmbed3 = np.array(embed3)*length3
+												embedOut = (scaledEmbed1+scaledEmbed2+scaledEmbed3)/(length1 + length2 + length3)
 												ir2 = embedOut
 											else:
 												ir2 = ir2[0]
@@ -468,14 +480,14 @@ def make_examples(path, labels, ir_dict, shouldEmbed=False):
 	median = mcs[len(mcs)/2]
 
 	for each in training_examples:
-		if each[-1] <= 0:
-			each[-1] = 0
-		else:
-			each[-1] = 1
-		# if each[-1] <= median:
+		# if each[-1] <= 0:
 		# 	each[-1] = 0
 		# else:
 		# 	each[-1] = 1
+		if each[-1] <= median:
+			each[-1] = 0
+		else:
+			each[-1] = 1
 	return training_examples
 
 
@@ -513,13 +525,13 @@ def createGloveDict(gloveDim='50'):
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Scrapes Market Cap from SEC db.')
 	parser.add_argument('-d','--directory', help='Directory containing financial documents', required=True)
-	parser.add_argument('-se','--should-embed', help='If we should bypass path walk and use tickers directly from embeddingDict', required=True)
+	parser.add_argument('-e','--embed', help='If we should bypass path walk and use tickers directly from embeddingDict', required=True)
 
 	args = vars(parser.parse_args())
 	print 'Looking in directory: ', 
 	labels = make_labelfile()
 
-	shouldEmbed = (args['should-embed'].lower() == 'true')
+	shouldEmbed = (args['embed'].lower() == 'true')
 
 	if not os.path.exists(args['directory']):
 		print 'Directory is not a path!'
@@ -532,17 +544,17 @@ if __name__ == '__main__':
 	t = time.time()
 	if shouldEmbed:
 		print 'Loading embedding pickle...'
-		ir = pickle.load(open('embeddingDict_50_large.pkl'))
+		ir = pickle.load(open('embeddingDicts/embeddingDict_50_large.pkl'))
 	else:
 		print 'Loading Word ID Pickle...'
 		ir = pickle.load(open('data_scraping/DocumentWordIDDict_60k.pkl'))
 	print 'Took ', str(time.time() - t), 'seconds.'
 
-	t = time.time()
-	print 'Processing pickle...'
-	for key in ir:
-		ir[key] = list(ir[key])
-	print 'Took ', str(time.time() - t), 'seconds.'
+	# t = time.time()
+	# print 'Processing pickle...'
+	# for key in ir:
+	# 	ir[key] = list(ir[key])
+	# print 'Took ', str(time.time() - t), 'seconds.'
 
 	t = time.time()
 	print 'Making examples...'
@@ -551,12 +563,12 @@ if __name__ == '__main__':
 
 	t = time.time()
 	print 'Writing manifest...'
-	filename = 'manifest_50.txt' if not shouldEmbed else 'manifest_50_embedded.txt'
+	filename = 'manifest_50.txt' if not shouldEmbed else 'manifest_50_large_median.txt'
 	out = open(filename , 'wb+')
 	
 	gloveDictKeys = gloveDict.keys()
 	for i in xrange(len(examples)):
-		if i % 1000:
+		if i % 1000 == 0:
 			print str(i), '/', str(len(examples))
 		example = examples[i]
 		ticker, y1, y2, section, ir, label = example
