@@ -586,7 +586,7 @@ if __name__ == '__main__':
 
 	t = time.time()
 	print 'Making examples...'
-	examples = make_examples(args['directory'], labels, ir, shouldEmbed, False)
+	examples = make_examples(args['directory'], labels, ir, shouldEmbed, True)
 	print 'Took ', str(time.time() - t), 'seconds.'
 
 	t = time.time()
